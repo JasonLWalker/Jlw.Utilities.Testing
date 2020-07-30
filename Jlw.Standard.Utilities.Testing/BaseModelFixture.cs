@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Jlw.Standard.Utilities.Testing
 {
 
-    class BaseModelFixture
+    public class BaseModelFixture
     {
         public object GetPublicPropertyValueByName(object o, string sMemberName)
         {
