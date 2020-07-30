@@ -67,13 +67,18 @@ namespace Jlw.Standard.Utilities.Testing
             return p.GetValue(o);
         }
 
-        public void AssertTypeForObjectPublicMemberModel(TModel o, string sMemberName, Type type)
+        public void AssertTypeAssignmentForObjectProperty(TModel o, string sMemberName, Type type, BindingFlags flags)
         {
-            Assert.IsNotNull(type, "type argument cannot be null");
-
-            var p = AssertGetPublicPropertyValueByName(o, sMemberName);
-            Assert.IsInstanceOfType(p, type, $"{sMemberName} is not an instance of {type}");
-
+            var v = AssertGetPropertyValueByName(o, sMemberName, flags);
+            if (v != null)
+            {
+                Assert.IsInstanceOfType(v, type, $"'{sMemberName}' ({v.GetType()}) is not an instance of {type}");
+            }
+            else
+            {
+                var p = GetPropertyInfoByName(sMemberName, flags);
+                Assert.IsTrue(type.IsAssignableFrom(p.PropertyType), $"'{sMemberName}' ({type}) is not assignable from {p.PropertyType}");
+            }
         }
     }
 }
