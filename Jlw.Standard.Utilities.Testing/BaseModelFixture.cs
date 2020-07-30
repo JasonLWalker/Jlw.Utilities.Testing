@@ -7,14 +7,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Jlw.Standard.Utilities.Testing
 {
 
-    public class BaseModelFixture
+    public class BaseModelFixture<TModel>
     {
-        public object GetPublicPropertyValueByName(object o, string sMemberName)
+        public object GetPublicPropertyValueByName(TModel o, string sMemberName)
         {
-            var p = typeof(object).GetProperty(sMemberName);
+            var p = typeof(TModel).GetProperty(sMemberName);
             Assert.IsNotNull(p, $"Object does not contain a propery with the name '{sMemberName}'");
 
-            p = typeof(object).GetProperty(sMemberName, BindingFlags.Public);
+            p = typeof(TModel).GetProperty(sMemberName, BindingFlags.Public);
             Assert.IsNotNull(p, $"Object does not contain a Public member with the name '{sMemberName}'");
 
             Assert.IsTrue(p.CanRead, $"Object does not contain a readable member with the name '{sMemberName}'");
@@ -22,7 +22,7 @@ namespace Jlw.Standard.Utilities.Testing
             return p.GetValue(o);
         }
 
-        public void AssertTypeForObjectPublicMemberModel(object o, string sMemberName, Type type)
+        public void AssertTypeForObjectPublicMemberModel(TModel o, string sMemberName, Type type)
         {
             Assert.IsInstanceOfType(type, typeof(Type), "type argument cannot be null");
 
