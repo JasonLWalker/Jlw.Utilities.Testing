@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Standard.Utilities.Testing
 {
-
     public class BaseModelFixture<TModel>
     {
         public PropertyInfo GetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default)
@@ -34,12 +33,42 @@ namespace Jlw.Standard.Utilities.Testing
         }
 
 
-        public void AssertPropertyIsReadable(string sMemberName)
+        public PropertyInfo AssertPropertyIsReadable(string sMemberName)
         {
             var p = AssertPropertyExists(sMemberName);
 
             Assert.IsTrue(p.CanRead, $"{sMemberName} is not a readable property.");
+            return p;
         }
+
+        public PropertyInfo AssertPropertyIsWritable(string sMemberName)
+        {
+            var p = AssertPropertyExists(sMemberName);
+
+            Assert.IsTrue(p.CanWrite, $"{sMemberName} is not a readable property.");
+            return p;
+        }
+
+        public PropertyInfo AssertPropertyGet(string sMemberName, BindingFlags flags)
+        {
+            AssertPropertyIsReadable(sMemberName);
+            var p = GetPropertyInfoByName(sMemberName, flags);
+            var m = p.GetGetMethod();
+            Assert.IsNotNull(m, $"'{sMemberName}' does not have a get accessor.");
+            
+            return p;
+        }
+
+        public PropertyInfo AssertPropertySet(string sMemberName, BindingFlags flags)
+        {
+            AssertPropertyIsWritable(sMemberName);
+            var p = GetPropertyInfoByName(sMemberName, flags);
+            Assert.IsTrue(p.CanWrite, $"{sMemberName} is not a writable property.");
+            return p;
+        }
+
+
+
 
 
         public object AssertGetPropertyValueByName(TModel o, string sMemberName, BindingFlags flags)
@@ -72,12 +101,12 @@ namespace Jlw.Standard.Utilities.Testing
             var v = AssertGetPropertyValueByName(o, sMemberName, flags);
             if (v != null)
             {
-                Assert.IsInstanceOfType(v, type, $"'{sMemberName}' ({v.GetType()}) is not an instance of {type}");
+                Assert.IsInstanceOfType(v, type, $"'{sMemberName}' <{v.GetType()}> is not an instance of <{type}>");
             }
             else
             {
                 var p = GetPropertyInfoByName(sMemberName, flags);
-                Assert.IsTrue(type.IsAssignableFrom(p.PropertyType), $"'{sMemberName}' ({type}) is not assignable from {p.PropertyType}");
+                Assert.IsTrue(type.IsAssignableFrom(p.PropertyType), $"'{sMemberName}' <{type}> is not assignable from <{p.PropertyType}>");
             }
         }
     }
