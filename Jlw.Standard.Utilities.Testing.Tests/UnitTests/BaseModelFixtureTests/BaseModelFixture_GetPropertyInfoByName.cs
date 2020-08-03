@@ -216,6 +216,7 @@ namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
             Assert.IsNotNull(p);
         }
 
+        // Use local assertion helpers to ensure only GetPropertyInfoByName is tested
         #region Assert helpers
         public void AssertPropertyAccessMatches(string name, MethodAttributes attrExpected)
         {
