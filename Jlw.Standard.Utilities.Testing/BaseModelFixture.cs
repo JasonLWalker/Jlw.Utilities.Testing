@@ -20,7 +20,7 @@ namespace Jlw.Standard.Utilities.Testing
 
         public PropertyInfo AssertPropertyExists(string sMemberName)
         {
-            var p = GetPropertyInfoByName(sMemberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var p = GetPropertyInfoByName(sMemberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
             Assert.IsNotNull(p, $"{typeof(TModel)} does not contain a property with the name '{sMemberName}'");
 
             return p;
