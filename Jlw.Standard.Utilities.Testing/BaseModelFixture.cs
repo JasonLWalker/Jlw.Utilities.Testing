@@ -8,6 +8,10 @@ namespace Jlw.Standard.Utilities.Testing
 {
     public class BaseModelFixture<TModel>
     {
+        protected static TModel DefaultInstance { get; set; }
+        protected Type ModelType => typeof(TModel);
+
+
         public PropertyInfo GetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default)
         {
             return typeof(TModel).GetProperty(sMemberName, flags);
@@ -108,6 +112,14 @@ namespace Jlw.Standard.Utilities.Testing
                 var p = GetPropertyInfoByName(sMemberName, flags);
                 Assert.IsTrue(type.IsAssignableFrom(p.PropertyType), $"'{sMemberName}' <{type}> is not assignable from <{p.PropertyType}>");
             }
+        }
+
+        public void AssertInstanceImplementsType(object instance = null)
+        {
+            if (instance == null)
+                instance = DefaultInstance;
+
+            Assert.IsInstanceOfType(instance, typeof(TModel), $"<{instance.GetType().Name}> is not an instance of <{typeof(TModel).Name}>" );
         }
     }
 }
