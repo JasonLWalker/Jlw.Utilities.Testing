@@ -17,8 +17,4 @@
     <ProjectReference Include="..\Jlw.Standard.Utilities.Testing\Jlw.Standard.Utilities.Testing.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UnitTests\BaseModelFixtureTests\MemberFunctions\" />
-  </ItemGroup>
-
 </Project>
