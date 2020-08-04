@@ -11,7 +11,7 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
             true
         };
 
-        public static readonly KeyValuePair<object, bool?>[] ObjectBoolData = {
+        public static readonly KeyValuePair<object, bool?>[] KvpObjectBoolData = {
             new KeyValuePair<object, bool?>(0, false),
             new KeyValuePair<object, bool?>(1, true),
             new KeyValuePair<object, bool?>(10, false),
