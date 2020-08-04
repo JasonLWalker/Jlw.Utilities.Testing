@@ -92,41 +92,33 @@ namespace Jlw.Standard.Utilities.Testing
 
 
 
-        public object AssertGetPropertyValueByName(TModel o, string sMemberName, BindingFlags flags)
+        public object AssertGetPropertyValueByName(TModel o, string sMemberName, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public)
         {
             // Assert member is public
             var p = GetPropertyInfoByName(sMemberName, flags);
-            Assert.IsNotNull(p, $"{typeof(TModel)} does not contain a member with the name '{sMemberName}'.");
-
+            object val = null;
+            Assert.IsNotNull(p, $"{typeof(TModel)} does not contain a property with the name '{sMemberName}'.");
             AssertPropertyIsReadable(sMemberName);
-
-            return p.GetValue(o);
+            Assert.ThrowsException<AssertSucceededException>(() =>
+            {
+                val = p.GetValue(o);
+                throw new AssertSucceededException($"Successfully retrieved value {val}");
+            });
+            return val;
         }
 
-
-        public object AssertGetPublicPropertyValueByName(TModel o, string sMemberName)
-        {
-            // Assert member exists at all?
-
-            // Assert member is public
-            var p = GetPropertyInfoByName(sMemberName, BindingFlags.Instance | BindingFlags.Public);
-            Assert.IsNotNull(p, $"{typeof(TModel)} does not contain a public member with the name '{sMemberName}'.");
-
-            AssertPropertyIsReadable(sMemberName);
-
-            return p.GetValue(o);
-        }
 
         public void AssertTypeAssignmentForObjectProperty(TModel o, string sMemberName, Type type, BindingFlags flags)
         {
-            var v = AssertGetPropertyValueByName(o, sMemberName, flags);
+            //var v = AssertGetPropertyValueByName(o, sMemberName, flags);
+            var p = AssertGetPropertyInfoByName(sMemberName, flags);
+            var v = DataUtility.ParseAs(p.PropertyType, "1234567890.1234567890");
             if (v != null)
             {
                 Assert.IsInstanceOfType(v, type, $"'{sMemberName}' <{v.GetType()}> is not an instance of <{type}>");
             }
             else
             {
-                var p = GetPropertyInfoByName(sMemberName, flags);
                 Assert.IsTrue(type.IsAssignableFrom(p.PropertyType), $"'{sMemberName}' <{type}> is not assignable from <{p.PropertyType}>");
             }
         }
