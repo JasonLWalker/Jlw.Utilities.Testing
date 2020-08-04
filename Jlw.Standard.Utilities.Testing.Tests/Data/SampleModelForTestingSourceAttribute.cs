@@ -16,6 +16,7 @@ namespace Jlw.Standard.Utilities.Testing.Tests.Data
         class GrandChild1 : Child1 { }
         class GrandChild2 : Child2 { }
 
+        /*
         class AdoptedChild1 : ISampleModelForTesting
         {
             public int PublicReadWriteInt { get; set; }
@@ -26,7 +27,7 @@ namespace Jlw.Standard.Utilities.Testing.Tests.Data
                 throw new NotImplementedException();
             }
         }
-
+        */
 
         public IEnumerable<object[]> GetData(MethodInfo methodInfo)
         {
