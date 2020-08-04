@@ -52,22 +52,5 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
                 yield return new object[] { DataUtility.GenerateRandom<string>(_minLength, _maxLength, _validChars)};
             }
         }
-
-        /*
-        public static string Generate(int minLength = 10, int? maxLength = null, string validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopsrstuvwxyz1234567890")
-        {
-            int min = Math.Min(minLength, maxLength ?? minLength);
-            int max = Math.Max(minLength, maxLength ?? minLength);
-            int len = Rand.Next(min, max);
-            var s = new StringBuilder("", max);
-
-            while (s.Length < len)
-            {
-                s.Append(validChars[Rand.Next(0, validChars.Length)]);
-            }
-
-            return s.ToString();
-        }
-        */
     }
 }

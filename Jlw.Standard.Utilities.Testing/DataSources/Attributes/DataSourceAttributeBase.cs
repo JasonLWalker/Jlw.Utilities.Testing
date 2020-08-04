@@ -17,7 +17,5 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
                     return string.Format(CultureInfo.CurrentCulture, "{0} ({1})", methodInfo.Name, (data[0] != null ? "" + data[0]?.GetType().Name + "<" + JsonConvert.SerializeObject(data[0]) + ">" : "null"));
             }
         }
-
-
     }
 }
