@@ -5,6 +5,7 @@ namespace Jlw.Standard.Utilities.Testing
 {
     public class AssertSucceededException : UnitTestAssertException
     {
+        /*
         /// <summary>
         /// Initializes a new instance of the <see cref="T:AssertSucceededException" /> class.
         /// </summary>
@@ -14,7 +15,8 @@ namespace Jlw.Standard.Utilities.Testing
             : base(msg, ex)
         {
         }
-
+        */
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="T:AssertSucceededException" /> class.
         /// </summary>
@@ -24,12 +26,13 @@ namespace Jlw.Standard.Utilities.Testing
         {
         }
 
+        /*
         /// <summary>
         /// Initializes a new instance of the <see cref="T:AssertSucceededException" /> class.
         /// </summary>
         public AssertSucceededException()
         {
         }
-
+        */
     }
 }
