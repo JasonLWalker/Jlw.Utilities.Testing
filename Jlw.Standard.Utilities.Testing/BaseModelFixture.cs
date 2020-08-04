@@ -10,8 +10,7 @@ namespace Jlw.Standard.Utilities.Testing
 {
     public class BaseModelFixture<TModel> where TModel : class, new()
     {
-        protected static TModel DefaultInstance { get; set; }
-        protected Type ModelType => typeof(TModel);
+        protected static TModel DefaultInstance { get; set; } = new TModel();
 
 
         public PropertyInfo GetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default)
