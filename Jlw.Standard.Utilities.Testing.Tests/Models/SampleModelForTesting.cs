@@ -1,6 +1,6 @@
 ﻿namespace Jlw.Standard.Utilities.Testing.Tests
 {
-    public class SampleModelForTesting
+    public class SampleModelForTesting : ISampleModelForTesting
     {
         internal int _publicWriteInt = int.MinValue;
         internal short _privateWriteShort = short.MinValue;
