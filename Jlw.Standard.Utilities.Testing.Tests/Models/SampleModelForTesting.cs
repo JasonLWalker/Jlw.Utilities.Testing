@@ -1,4 +1,6 @@
-﻿namespace Jlw.Standard.Utilities.Testing.Tests
+﻿using System;
+
+namespace Jlw.Standard.Utilities.Testing.Tests
 {
     public class SampleModelForTesting : ISampleModelForTesting
     {
@@ -73,6 +75,6 @@
 
         protected internal double ProtectedInternalDoubleInfinity() => double.PositiveInfinity;
 
-
+        public DateTime? NullDateTest => null;
     }
 }
