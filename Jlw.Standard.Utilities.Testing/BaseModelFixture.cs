@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
+using Jlw.Standard.Utilities.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Standard.Utilities.Testing
 {
-    public class BaseModelFixture<TModel>
+    public class BaseModelFixture<TModel> where TModel : class, new()
     {
         protected static TModel DefaultInstance { get; set; }
         protected Type ModelType => typeof(TModel);
@@ -49,26 +51,42 @@ namespace Jlw.Standard.Utilities.Testing
         {
             var p = AssertPropertyExists(sMemberName);
 
-            Assert.IsTrue(p.CanWrite, $"{sMemberName} is not a readable property.");
+            Assert.IsTrue(p.CanWrite, $"{sMemberName} is not a writable property.");
             return p;
         }
 
-        public PropertyInfo AssertPropertyGet(string sMemberName, BindingFlags flags)
+        public object AssertPropertyGet(string sMemberName, BindingFlags flags)
         {
             AssertPropertyIsReadable(sMemberName);
             var p = GetPropertyInfoByName(sMemberName, flags);
-            var m = p.GetGetMethod();
+            var m = p.GetMethod;
+            object o = null;
             Assert.IsNotNull(m, $"'{sMemberName}' does not have a get accessor.");
-            
-            return p;
+            Assert.ThrowsException<AssertSucceededException>(() =>
+            {
+                object t = Activator.CreateInstance(typeof(TModel));
+                o = m.Invoke(t, new object[] { });
+                throw new AssertSucceededException($"Successfully retrieved value {o}");
+            });
+
+            return o;
         }
 
-        public PropertyInfo AssertPropertySet(string sMemberName, BindingFlags flags)
+        public object AssertPropertySet(string sMemberName, BindingFlags flags)
         {
             AssertPropertyIsWritable(sMemberName);
+            object t = Activator.CreateInstance(typeof(TModel));
             var p = GetPropertyInfoByName(sMemberName, flags);
             Assert.IsTrue(p.CanWrite, $"{sMemberName} is not a writable property.");
-            return p;
+            var m = p.SetMethod;
+            object o = null;
+            Assert.IsNotNull(m, $"'{sMemberName}' does not have a set accessor.");
+            Assert.ThrowsException<AssertSucceededException>(() =>
+            {
+                m.Invoke(t, new object[] { DataUtility.ParseAs(p.PropertyType, "1234567890.1234567890") });
+                throw new AssertSucceededException($"Successfully set value {o}");
+            });
+            return t;
         }
 
 
@@ -122,4 +140,5 @@ namespace Jlw.Standard.Utilities.Testing
             Assert.IsInstanceOfType(instance, typeof(TModel), $"<{instance.GetType().Name}> is not an instance of <{typeof(TModel).Name}>" );
         }
     }
+
 }

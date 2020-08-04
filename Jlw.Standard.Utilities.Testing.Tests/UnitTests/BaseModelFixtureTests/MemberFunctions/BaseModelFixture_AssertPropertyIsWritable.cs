@@ -8,15 +8,15 @@ using Newtonsoft.Json;
 namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
 {
     [TestClass]
-    public class BaseModelFixture_AssertPropertyIsReadable : BaseModelFixture<SampleModelForTesting>
+    public class BaseModelFixture_AssertPropertyIsWritable : BaseModelFixture<SampleModelForTesting>
     {
         const MethodAttributes KeywordMask = MethodAttributes.MemberAccessMask | MethodAttributes.Static;
 
         [TestMethod]
-        [ReadWritePropertyNameSource(typeof(SampleModelForTesting), true, false)]
-        public void Should_Succeed_ForReadonlyProperties(string name)
+        [ReadWritePropertyNameSource(typeof(SampleModelForTesting), false, true)]
+        public void Should_Succeed_ForWriteonlyProperties(string name)
         {
-            AssertPropertyIsReadable(name);
+            AssertPropertyIsWritable(name);
         }
 
 
@@ -24,19 +24,19 @@ namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
         [ReadWritePropertyNameSource(typeof(SampleModelForTesting), true, true)]
         public void Should_Succeed_ForReadWriteProperties(string name)
         {
-            AssertPropertyIsReadable(name);
+            AssertPropertyIsWritable(name);
         }
 
         [TestMethod]
-        [ReadWritePropertyNameSource(typeof(SampleModelForTesting), false, true)]
-        public void Should_Fail_ForWriteonlyProperties(string name)
+        [ReadWritePropertyNameSource(typeof(SampleModelForTesting), true, false)]
+        public void Should_Fail_ForReadonlyProperties(string name)
         {
             var ex = Assert.ThrowsException<AssertFailedException>(() =>
             {
-                AssertPropertyIsReadable(name);
+                AssertPropertyIsWritable(name);
                 throw new Exception($"the property '{name}' should fail, but didn't.");
             });
-            StringAssert.Contains(ex.Message, $"{name} is not a readable property");
+            StringAssert.Contains(ex.Message, $"{name} is not a writable property");
         }
 
 
@@ -51,7 +51,7 @@ namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
         {
             var ex = Assert.ThrowsException<AssertFailedException>(() =>
             {
-                AssertPropertyIsReadable(name);
+                AssertPropertyIsWritable(name);
                 throw new Exception($"the property '{name}' should not be found, but was.");
             });
             StringAssert.Contains(ex.Message, $"does not contain a property with the name '{name}'");

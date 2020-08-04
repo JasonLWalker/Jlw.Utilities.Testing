@@ -199,17 +199,14 @@ namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
         [DataRow("")]
         [DataRow(" \t\n\r")]
 
-        public void Should_ReturnNull_ForNonexistentProperty(string name)
+        public void Should_Fail_ForNonexistentProperty(string name)
         {
-            try
+            var ex = Assert.ThrowsException<AssertFailedException>(() =>
             {
                 var p = AssertGetPropertyInfoByName(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
                 throw new Exception($"the property '{name}' should not be found, but was.");
-            }
-            catch (AssertFailedException ex)
-            {
-                StringAssert.Contains(ex.Message, $"does not contain a property with the name '{name}'");
-            }
+            });
+            StringAssert.Contains(ex.Message, $"does not contain a property with the name '{name}'");
         }
 
         [TestMethod]
