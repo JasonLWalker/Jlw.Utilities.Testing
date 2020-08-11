@@ -22,7 +22,7 @@ namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.DataSourceTests
         public void Should_BeInstanceOf_Bool_ForSecondArgument(object o, object b)
         {
             Assert.IsNotNull(b);
-            Assert.IsInstanceOfType(b, typeof(object));
+            Assert.IsInstanceOfType(b, typeof(bool));
         }
 
         [TestMethod]
