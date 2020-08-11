@@ -23,7 +23,7 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
             long.MaxValue,
         };
 
-        public static readonly KeyValuePair<object, long?>[] ObjectInt64Data = {
+        public static readonly KeyValuePair<object, long?>[] KvpObjectInt64Data = {
             new KeyValuePair<object, long?>(0, 0),
             new KeyValuePair<object, long?>(1, 1),
             new KeyValuePair<object, long?>(10, 10),

@@ -21,7 +21,7 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
             Int16.MaxValue,
         };
 
-        public static readonly KeyValuePair<object, int?>[] ObjectInt32Data = {
+        public static readonly KeyValuePair<object, int?>[] KvpObjectInt32Data = {
             new KeyValuePair<object, int?>(0, 0),
             new KeyValuePair<object, int?>(1, 1),
             new KeyValuePair<object, int?>(10, 10),

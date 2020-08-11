@@ -27,7 +27,7 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
         public static readonly DateTime dtNow = DateTime.Now;
         public static readonly DateTime dtUtcNow = DateTime.UtcNow;
 
-        public static readonly KeyValuePair<object, DateTime?>[] ObjectNullableDateTimeData = {
+        public static readonly KeyValuePair<object, DateTime?>[] KvpObjectNullableDateTimeData = {
             new KeyValuePair<object, DateTime?>(0, DateTime.MinValue),
             new KeyValuePair<object, DateTime?>(1, DateTime.MinValue),
             new KeyValuePair<object, DateTime?>(10, DateTime.MinValue),
