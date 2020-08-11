@@ -27,7 +27,7 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
             Single.PositiveInfinity,
         };
 
-        public static readonly KeyValuePair<object, float?>[] ObjectSingleData = {
+        public static readonly KeyValuePair<object, float?>[] KvpObjectSingleData = {
             new KeyValuePair<object, float?>(0, 0),
             new KeyValuePair<object, float?>(1, 1),
             new KeyValuePair<object, float?>(10, 10),

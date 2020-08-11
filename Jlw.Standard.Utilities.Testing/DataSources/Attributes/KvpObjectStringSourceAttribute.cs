@@ -4,13 +4,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Standard.Utilities.Testing.DataSources
 {
-    public class ObjectDoubleSourceAttribute : DataSourceAttributeBase, ITestDataSource
+    public class KvpObjectStringSourceAttribute : DataSourceAttributeBase, ITestDataSource
     {
         public IEnumerable<object[]> GetData(MethodInfo methodInfo)
         {
-             foreach (var kvp in DataSourceValues.ObjectDoubleData)
+             foreach (var o in DataSourceValues.ObjectData)
              {
-                 yield return new object[] {kvp.Key, kvp.Value};
+                 yield return new object[] {o, o?.ToString()};
              }
         }
     }

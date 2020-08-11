@@ -30,7 +30,7 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
             Double.Epsilon,
         };
 
-        public static readonly KeyValuePair<object, double?>[] ObjectDoubleData = {
+        public static readonly KeyValuePair<object, double?>[] KvpObjectDoubleData = {
             new KeyValuePair<object, double?>(0, 0),
             new KeyValuePair<object, double?>(1, 1),
             new KeyValuePair<object, double?>(10, 10),
