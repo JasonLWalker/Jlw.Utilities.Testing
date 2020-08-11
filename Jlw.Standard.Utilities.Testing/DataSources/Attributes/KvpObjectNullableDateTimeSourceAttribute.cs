@@ -4,11 +4,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Standard.Utilities.Testing.DataSources
 {
-    public class ObjectInt64SourceAttribute : DataSourceAttributeBase, ITestDataSource
+    public class KvpObjectNullableDateTimeSourceAttribute : DataSourceAttributeBase, ITestDataSource
     {
         public IEnumerable<object[]> GetData(MethodInfo methodInfo)
         {
-             foreach (var kvp in DataSourceValues.ObjectInt64Data)
+             foreach (var kvp in DataSourceValues.KvpObjectNullableDateTimeData)
              {
                  yield return new object[] {kvp.Key, kvp.Value};
              }
