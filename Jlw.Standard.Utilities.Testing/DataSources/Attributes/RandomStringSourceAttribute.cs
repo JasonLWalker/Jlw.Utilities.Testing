@@ -11,15 +11,12 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
     {
         private string _validChars = null;
         private int _stringsToReturn = 10;
-        private int _minLength = 0;
-        private int _maxLength = 0;
-        private static readonly Random Rand = new Random();
-        
-        
+        private int _minLength = 1;
+        private int _maxLength = 15;
+
         public RandomStringSourceAttribute()
         {
         }
-        
 
         public RandomStringSourceAttribute(int numStrings, int length = 0, string validChars = null)
         {
@@ -49,7 +46,7 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
         {
             for (int n = 0; n < _stringsToReturn; n++)
             {
-                yield return new object[] { DataUtility.GenerateRandom<string>(_minLength, _maxLength, _validChars)};
+                yield return new object[] { DataUtility.GenerateRandom<string>(_minLength, _maxLength, _validChars) };
             }
         }
     }
