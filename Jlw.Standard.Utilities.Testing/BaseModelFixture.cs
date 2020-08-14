@@ -227,6 +227,8 @@ namespace Jlw.Standard.Utilities.Testing
 
         public virtual void Should_BeInstanceOf(Type t)
         {
+            Assert.IsNotNull(DefaultInstance);
+            Assert.IsNotNull(t);
             Assert.IsInstanceOfType(DefaultInstance, t);
         }
 

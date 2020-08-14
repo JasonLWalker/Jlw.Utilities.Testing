@@ -9,7 +9,7 @@ namespace Jlw.Standard.Utilities.Testing
         where TModel : class, new() 
     {
         protected static string PropertyName = "";
-        protected static TProperty DefaultProperty = default;
+        protected static TProperty PropertyInstance = default;
 
         [TestMethod]
         public virtual void Should_Exist()
@@ -20,9 +20,9 @@ namespace Jlw.Standard.Utilities.Testing
         [TestMethod]
         public override void Should_BeInstanceOf(Type t)
         {
-            Assert.IsNotNull(DefaultInstance);
+            Assert.IsNotNull(PropertyInstance);
             Assert.IsNotNull(t);
-            Assert.IsInstanceOfType(DefaultProperty, t);
+            Assert.IsInstanceOfType(PropertyInstance, t);
         }
 
         [TestMethod]
