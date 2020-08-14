@@ -10,7 +10,7 @@ namespace Jlw.Standard.Utilities.Testing
 {
     public class BaseModelFixture<TModel> where TModel : class, new()
     {
-        protected static TModel DefaultInstance { get; set; } = new TModel();
+        protected TModel DefaultInstance { get; set; } = new TModel();
 
 
         public PropertyInfo GetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default)
@@ -115,6 +115,13 @@ namespace Jlw.Standard.Utilities.Testing
                     Assert.Fail($"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor has attributes that don't match expected values <{m?.Attributes}>");
                     break;
             }
+
+            if (
+                m.IsStatic && ((attrs & MethodAttributes.Static) != MethodAttributes.Static)
+            ) {
+                Assert.Fail($"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor has attributes that don't match expected values <{m?.Attributes}>");
+            }
+
             return p;
         }
 
@@ -143,6 +150,13 @@ namespace Jlw.Standard.Utilities.Testing
                     Assert.Fail($"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor has attributes that don't match expected values <{m?.Attributes}>");
                     break;
             }
+
+            if (
+                m.IsStatic && ((attrs & MethodAttributes.Static) != MethodAttributes.Static)
+            ) {
+                Assert.Fail($"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor has attributes that don't match expected values <{m?.Attributes}>");
+            }
+
             return p;
         }
 

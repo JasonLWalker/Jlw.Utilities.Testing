@@ -8,8 +8,8 @@ namespace Jlw.Standard.Utilities.Testing
     public class BasePropertyFixture<TModel, TProperty> : BaseModelFixture<TModel> 
         where TModel : class, new() 
     {
-        protected static string PropertyName = "";
-        protected static TProperty PropertyInstance = default;
+        protected string PropertyName = "";
+        protected TProperty PropertyInstance = default;
 
         [TestMethod]
         public virtual void Should_Exist()
@@ -23,24 +23,44 @@ namespace Jlw.Standard.Utilities.Testing
             AssertTypeAssignmentForObjectProperty(DefaultInstance, PropertyName, typeof(TProperty), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
         }
 
+
+        /// <summary>
+        /// Test method that should be overridden in descendant class with correct DataRow attributes for derived class.
+        /// Can call base method in overridden class.
+        /// </summary>
+        /// <param name="t"></param>
         public override void Should_BeInstanceOf(Type t)
         {
             Assert.IsNotNull(t);
             AssertTypeAssignmentForObjectProperty(DefaultInstance, PropertyName, t, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
         }
 
+
+        /// <summary>
+        /// Test method that should be overridden in descendant class with correct DataRow attributes for derived class.
+        /// Can call base method in overridden class.
+        /// </summary>
+        /// <param name="attr"></param>
         [TestMethod]
+        [DataRow(MethodAttributes.Public)]
         public virtual void Should_MatchAccessScope_ForGet(MethodAttributes attr)
         {
             var propInfo = AssertPropertyScopeForGetAccessor(PropertyName, attr);
         }
 
 
+        /// <summary>
+        /// Test method that should be overridden in descendant class with correct DataRow attributes for derived class.
+        /// Can call base method in overridden class.
+        /// </summary>
+        /// <param name="attr"></param>
         [TestMethod]
+        [DataRow(MethodAttributes.Public)]
         public virtual void Should_MatchAccessScope_ForSet(MethodAttributes attr)
         {
             var propInfo = AssertPropertyScopeForSetAccessor(PropertyName, attr);
         }
+
 
         public virtual void Should_MatchValue(TModel o, TProperty expected)
         {

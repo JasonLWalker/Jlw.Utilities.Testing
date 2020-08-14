@@ -9,31 +9,9 @@ namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BasePropertyFixtureTest
     [TestClass]
     public class PublicReadWriteIntFixture : BasePropertyFixture<SampleModelForTesting, int>
     {
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext ctx)
+        public PublicReadWriteIntFixture()
         {
             PropertyName = "PublicReadWriteInt";
-        }
-
-        [TestMethod]
-        [DataRow(typeof(int))]
-        public override void Should_BeInstanceOf(Type t)
-        {
-            base.Should_BeInstanceOf(t);
-        }
-
-        [TestMethod]
-        [DataRow(MethodAttributes.Public)]
-        public override void Should_MatchAccessScope_ForGet(MethodAttributes attr)
-        {
-            base.Should_MatchAccessScope_ForGet(attr);
-        }
-
-        [TestMethod]
-        [DataRow(MethodAttributes.Public)]
-        public override void Should_MatchAccessScope_ForSet(MethodAttributes attr)
-        {
-            base.Should_MatchAccessScope_ForSet(attr);
         }
 
         [TestMethod]
