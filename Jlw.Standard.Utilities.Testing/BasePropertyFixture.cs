@@ -5,9 +5,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Jlw.Standard.Utilities.Testing
 {
     [TestClass]
-    public class BasePropertyFixture<TModel, TProperty> : BaseModelFixture<TModel> where TModel : class, new()
+    public class BasePropertyFixture<TModel, TProperty> : BaseModelFixture<TModel> 
+        where TModel : class, new() 
     {
         protected static string PropertyName = "";
+        protected static TProperty DefaultProperty = default;
 
         [TestMethod]
         public virtual void Should_Exist()
@@ -16,18 +18,21 @@ namespace Jlw.Standard.Utilities.Testing
         }
 
         [TestMethod]
-        public virtual void Should_BeInstanceOf(Type t = null)
+        public override void Should_BeInstanceOf(Type t)
         {
-            AssertTypeMatches(DefaultInstance, t ?? typeof(TProperty));
+            Assert.IsNotNull(DefaultInstance);
+            Assert.IsNotNull(t);
+            Assert.IsInstanceOfType(DefaultProperty, t);
         }
 
-
+        [TestMethod]
         public virtual void Should_MatchAccessScope_ForGet(MethodAttributes attr)
         {
             var propInfo = AssertPropertyScopeForGetAccessor(PropertyName, attr);
         }
 
 
+        [TestMethod]
         public virtual void Should_MatchAccessScope_ForSet(MethodAttributes attr)
         {
             var propInfo = AssertPropertyScopeForSetAccessor(PropertyName, attr);

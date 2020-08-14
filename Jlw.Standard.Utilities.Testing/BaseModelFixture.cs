@@ -215,16 +215,20 @@ namespace Jlw.Standard.Utilities.Testing
         protected void AssertTypeMatches(object o, Type t)
         {
             Assert.IsNotNull(t);
-            Assert.IsNotNull(DefaultInstance);
-            Assert.IsInstanceOfType(DefaultInstance, t);
+            Assert.IsNotNull(o);
+            Assert.IsInstanceOfType(o, t);
         }
 
         
-
         #endregion
 
-        #region Base Property Tests
+        #region Base Model Tests
 
+
+        public virtual void Should_BeInstanceOf(Type t)
+        {
+            Assert.IsInstanceOfType(DefaultInstance, t);
+        }
 
 
         #endregion

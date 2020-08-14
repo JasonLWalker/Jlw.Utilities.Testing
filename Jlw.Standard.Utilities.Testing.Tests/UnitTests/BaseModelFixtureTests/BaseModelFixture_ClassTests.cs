@@ -1,3 +1,4 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
@@ -12,10 +13,11 @@ namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
         }
 
         [TestMethod]
-        public void Should_Match_ForDefaultInstance()
+        [DataRow(typeof(ISampleModelForTesting))]
+        [DataRow(typeof(SampleModelForTesting))]
+        public override void Should_BeInstanceOf(Type t)
         {
-            Assert.IsNotNull(DefaultInstance);
-            Assert.IsInstanceOfType(DefaultInstance, typeof(SampleModelForTesting));
+            base.Should_BeInstanceOf(t);
         }
     }
 }
