@@ -19,6 +19,8 @@ namespace Jlw.Standard.Utilities.Testing
 
         }
 
+        #region Assertion Helpers
+
         public PropertyInfo AssertPropertyExists(string sMemberName)
         {
             var p = GetPropertyInfoByName(sMemberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
@@ -88,7 +90,86 @@ namespace Jlw.Standard.Utilities.Testing
             return t;
         }
 
+        public PropertyInfo AssertPropertyScopeForGetAccessor(string sMemberName, MethodAttributes attrs)
+        {
+            var p = AssertPropertyIsReadable(sMemberName);
+            var m = p.GetMethod;
+            switch (attrs & MethodAttributes.MemberAccessMask)
+            {
+                case MethodAttributes.Public:   // Public
+                    Assert.IsTrue(m?.IsPublic ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor should be public, but is <{m?.Attributes}>");
+                    break;
+                case MethodAttributes.FamORAssem:   // Public
+                    Assert.IsTrue(m?.IsFamilyOrAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor should be internal, but is <{m?.Attributes}>");
+                    break;
+                case MethodAttributes.FamANDAssem:
+                    Assert.IsTrue(m?.IsFamilyAndAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor should be private protected, but is <{m?.Attributes}>");
+                    break;
+                case MethodAttributes.Family:   // Protected
+                    Assert.IsTrue(m?.IsFamily ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor should be protected, but is <{m?.Attributes}>");
+                    break;
+                case MethodAttributes.Private:   // Protected
+                    Assert.IsTrue(m?.IsFamily ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor should be private, but is <{m?.Attributes}>");
+                    break;
+                default:
+                    Assert.Fail($"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor has attributes that don't match expected values <{m?.Attributes}>");
+                    break;
+            }
+            return p;
+        }
 
+        public PropertyInfo AssertPropertyScopeForSetAccessor(string sMemberName, MethodAttributes attrs)
+        {
+            var p = AssertPropertyIsWritable(sMemberName);
+            var m = p.SetMethod;
+            switch (attrs & MethodAttributes.MemberAccessMask)
+            {
+                case MethodAttributes.Public:   // Public
+                    Assert.IsTrue(m?.IsPublic ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor should be public, but is <{m?.Attributes}>");
+                    break;
+                case MethodAttributes.FamORAssem:   // Public
+                    Assert.IsTrue(m?.IsFamilyOrAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor should be internal, but is <{m?.Attributes}>");
+                    break;
+                case MethodAttributes.FamANDAssem:
+                    Assert.IsTrue(m?.IsFamilyAndAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor should be private protected, but is <{m?.Attributes}>");
+                    break;
+                case MethodAttributes.Family:   // Protected
+                    Assert.IsTrue(m?.IsFamily ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor should be protected, but is <{m?.Attributes}>");
+                    break;
+                case MethodAttributes.Private:   // Protected
+                    Assert.IsTrue(m?.IsFamily ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor should be private, but is <{m?.Attributes}>");
+                    break;
+                default:
+                    Assert.Fail($"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor has attributes that don't match expected values <{m?.Attributes}>");
+                    break;
+            }
+            return p;
+        }
+
+
+        public void SetPropertyValueByName(TModel o, string sMemberName, object value, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+        {
+            var p = GetPropertyInfoByName(sMemberName, flags);
+            p.SetValue(o, value);
+        }
+
+        public object GetPropertyValueByName(TModel o, string sMemberName, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+        {
+            var p = GetPropertyInfoByName(sMemberName, flags);
+            return p.GetValue(o);
+
+        }
+
+
+        public void AssertSetPropertyValueByName(TModel o, string sMemberName, object value)
+        {
+            var p = AssertPropertyIsWritable(sMemberName);
+            Assert.ThrowsException<AssertSucceededException>(() =>
+            {
+                p.SetValue(o, value);
+                throw new AssertSucceededException("");
+            });
+        }
 
 
 
@@ -130,6 +211,24 @@ namespace Jlw.Standard.Utilities.Testing
 
             Assert.IsInstanceOfType(instance, typeof(TModel), $"<{instance.GetType().Name}> is not an instance of <{typeof(TModel).Name}>" );
         }
+
+        protected void AssertTypeMatches(object o, Type t)
+        {
+            Assert.IsNotNull(t);
+            Assert.IsNotNull(DefaultInstance);
+            Assert.IsInstanceOfType(DefaultInstance, t);
+        }
+
+        
+
+        #endregion
+
+        #region Base Property Tests
+
+
+
+        #endregion
+
     }
 
 }
