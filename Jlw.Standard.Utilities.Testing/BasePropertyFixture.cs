@@ -18,11 +18,15 @@ namespace Jlw.Standard.Utilities.Testing
         }
 
         [TestMethod]
+        public virtual void Should_Match_ForPropertyType()
+        {
+            AssertTypeAssignmentForObjectProperty(DefaultInstance, PropertyName, typeof(TProperty), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+        }
+
         public override void Should_BeInstanceOf(Type t)
         {
-            Assert.IsNotNull(PropertyInstance);
             Assert.IsNotNull(t);
-            Assert.IsInstanceOfType(PropertyInstance, t);
+            AssertTypeAssignmentForObjectProperty(DefaultInstance, PropertyName, t, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
         }
 
         [TestMethod]
