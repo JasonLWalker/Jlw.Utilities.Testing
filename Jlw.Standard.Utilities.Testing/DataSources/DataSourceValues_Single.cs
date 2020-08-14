@@ -58,7 +58,7 @@ namespace Jlw.Standard.Utilities.Testing.DataSources
             new KeyValuePair<object, float?>(" \t\v\r\n", 0),
             new KeyValuePair<object, float?>("Test123", 123),
             new KeyValuePair<object, float?>("123Test", 123),
-            new KeyValuePair<object, float?>("1234.567", 1234),
+            new KeyValuePair<object, float?>("1234.567", (float?)1234.567),
             new KeyValuePair<object, float?>("12345.678.9", 0),
             new KeyValuePair<object, float?>("127.0.1.2", 0),
             new KeyValuePair<object, float?>("1", 1),
