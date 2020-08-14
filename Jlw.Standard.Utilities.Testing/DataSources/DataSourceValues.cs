@@ -2,10 +2,11 @@
 {
     public partial class DataSourceValues
     {
+        /*
         static DataSourceValues()
         {
         }
-
+        */
 
     }
 }
