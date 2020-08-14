@@ -37,7 +37,7 @@ namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BasePropertyFixtureTest
         }
 
         [TestMethod]
-        public void Should_MatchValueFor_DefaultConstructor()
+        public void Should_MatchValue_ForDefaultConstructor()
         {
             var o = new SampleModelForTesting();
             base.Should_MatchValue(o, int.MinValue);
