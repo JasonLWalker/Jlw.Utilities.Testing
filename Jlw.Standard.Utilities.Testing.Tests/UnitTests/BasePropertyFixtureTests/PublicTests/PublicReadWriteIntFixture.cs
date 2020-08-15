@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BasePropertyFixtureTests
+namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BasePropertyFixtureTests.PublicTests
 {
     [TestClass]
     public class PublicReadWriteIntFixture : BasePropertyFixture<SampleModelForTesting, int>

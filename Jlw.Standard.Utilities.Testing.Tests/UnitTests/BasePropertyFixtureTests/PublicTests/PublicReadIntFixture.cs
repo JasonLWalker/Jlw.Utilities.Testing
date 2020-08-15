@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BasePropertyFixtureTests
+namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BasePropertyFixtureTests.PublicTests
 {
     [TestClass]
     public class PublicReadIntFixture : BasePropertyFixture<SampleModelForTesting, int>
@@ -19,11 +16,7 @@ namespace Jlw.Standard.Utilities.Testing.Tests.UnitTests.BasePropertyFixtureTest
         [DataRow(null)]
         public override void Should_MatchAccessScope_ForSet(MethodAttributes attr)
         {
-            var ex = Assert.ThrowsException<AssertFailedException>(() =>
-            {
-                base.Should_MatchAccessScope_ForSet(attr);
-            });
-            StringAssert.Contains(ex.ToString(), $"{PropertyName} is not a writable property");
+            base.Should_MatchAccessScope_ForSet(attr);
         }
     }
 }
