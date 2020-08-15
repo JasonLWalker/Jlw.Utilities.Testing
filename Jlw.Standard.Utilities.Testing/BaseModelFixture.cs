@@ -94,34 +94,7 @@ namespace Jlw.Standard.Utilities.Testing
         {
             var p = AssertPropertyIsReadable(sMemberName);
             var m = p.GetMethod;
-            switch (attrs & MethodAttributes.MemberAccessMask)
-            {
-                case MethodAttributes.Public:   // Public
-                    Assert.IsTrue(m?.IsPublic ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor should be public, but is <{m?.Attributes}>");
-                    break;
-                case MethodAttributes.FamORAssem:   // Public
-                    Assert.IsTrue(m?.IsFamilyOrAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor should be internal, but is <{m?.Attributes}>");
-                    break;
-                case MethodAttributes.FamANDAssem:
-                    Assert.IsTrue(m?.IsFamilyAndAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor should be private protected, but is <{m?.Attributes}>");
-                    break;
-                case MethodAttributes.Family:   // Protected
-                    Assert.IsTrue(m?.IsFamily ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor should be protected, but is <{m?.Attributes}>");
-                    break;
-                case MethodAttributes.Private:   // Protected
-                    Assert.IsTrue(m?.IsFamily ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor should be private, but is <{m?.Attributes}>");
-                    break;
-                default:
-                    Assert.Fail($"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor has attributes that don't match expected values <{m?.Attributes}>");
-                    break;
-            }
-
-            if (
-                m.IsStatic && ((attrs & MethodAttributes.Static) != MethodAttributes.Static)
-            ) {
-                Assert.Fail($"<{DefaultInstance.GetType().Name}.{sMemberName}.Get> accessor has attributes that don't match expected values <{m?.Attributes}>");
-            }
-
+            AssertAccessScopeForMethodAttributes(m, attrs);
             return p;
         }
 
@@ -129,37 +102,53 @@ namespace Jlw.Standard.Utilities.Testing
         {
             var p = AssertPropertyIsWritable(sMemberName);
             var m = p.SetMethod;
+            AssertAccessScopeForMethodAttributes(m, attrs);
+            return p;
+        }
+        
+        public void AssertAccessScopeForMethodAttributes(MethodInfo m, MethodAttributes attrs)
+        {
             switch (attrs & MethodAttributes.MemberAccessMask)
             {
-                case MethodAttributes.Public:   // Public
-                    Assert.IsTrue(m?.IsPublic ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor should be public, but is <{m?.Attributes}>");
+                case AccessScope.Public:   // Public
+                    Assert.IsTrue(m?.IsPublic ?? false, $"<{DefaultInstance.GetType().Name}.{m.Name}> should be public, but is <{m?.Attributes}>");
                     break;
-                case MethodAttributes.FamORAssem:   // Public
-                    Assert.IsTrue(m?.IsFamilyOrAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor should be internal, but is <{m?.Attributes}>");
+                case AccessScope.Internal:   // Internal
+                    Assert.IsTrue(m?.IsAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{m.Name}> should be internal, but is <{m?.Attributes}>");
                     break;
-                case MethodAttributes.FamANDAssem:
-                    Assert.IsTrue(m?.IsFamilyAndAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor should be private protected, but is <{m?.Attributes}>");
+                case AccessScope.ProtectedInternal:   // Internal
+                    Assert.IsTrue(m?.IsFamilyOrAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{m.Name}> should be protected internal, but is <{m?.Attributes}>");
                     break;
-                case MethodAttributes.Family:   // Protected
-                    Assert.IsTrue(m?.IsFamily ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor should be protected, but is <{m?.Attributes}>");
+                case AccessScope.PrivateProtected:
+                    Assert.IsTrue(m?.IsFamilyAndAssembly ?? false, $"<{DefaultInstance.GetType().Name}.{m.Name}> should be private protected, but is <{m?.Attributes}>");
                     break;
-                case MethodAttributes.Private:   // Protected
-                    Assert.IsTrue(m?.IsFamily ?? false, $"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor should be private, but is <{m?.Attributes}>");
+                case AccessScope.Protected:   // Protected
+                    Assert.IsTrue(m?.IsFamily ?? false, $"<{DefaultInstance.GetType().Name}.{m.Name}> should be protected, but is <{m?.Attributes}>");
+                    break;
+                case AccessScope.Private:   // Private
+                    Assert.IsTrue(m?.IsPrivate ?? false, $"<{DefaultInstance.GetType().Name}.{m.Name}> should be private, but is <{m?.Attributes}>");
                     break;
                 default:
-                    Assert.Fail($"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor has attributes that don't match expected values <{m?.Attributes}>");
+                    Assert.Fail($"<{DefaultInstance.GetType().Name}.{m.Name}> has attributes that don't match expected values <{m?.Attributes}>");
                     break;
             }
 
             if (
-                m.IsStatic && ((attrs & MethodAttributes.Static) != MethodAttributes.Static)
+                ((m.IsStatic) && ((attrs & AccessScope.Static) != AccessScope.Static)) 
+                || 
+                (!(m.IsStatic) && ((attrs & AccessScope.Static) == AccessScope.Static)) 
+                ||
+                (m.IsHideBySig && ((attrs & MethodAttributes.HideBySig) != MethodAttributes.HideBySig)) 
+                ||
+                (!m.IsHideBySig && ((attrs & MethodAttributes.HideBySig) == MethodAttributes.HideBySig)) 
+                ||
+                (m.IsSpecialName && ((attrs & MethodAttributes.SpecialName) != MethodAttributes.SpecialName))
+                ||
+                (!m.IsSpecialName && ((attrs & MethodAttributes.SpecialName) == MethodAttributes.SpecialName))
             ) {
-                Assert.Fail($"<{DefaultInstance.GetType().Name}.{sMemberName}.Set> accessor has attributes that don't match expected values <{m?.Attributes}>");
+                Assert.Fail($"<{DefaultInstance.GetType().Name}.{m.Name}> has attributes that don't match expected values <{m?.Attributes}>");
             }
-
-            return p;
         }
-
 
         public void SetPropertyValueByName(TModel o, string sMemberName, object value, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
         {

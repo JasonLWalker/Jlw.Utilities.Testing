@@ -20,7 +20,7 @@ namespace Jlw.Standard.Utilities.Testing
         [TestMethod]
         public virtual void Should_Match_ForPropertyType()
         {
-            AssertTypeAssignmentForObjectProperty(DefaultInstance, PropertyName, typeof(TProperty), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            Should_BeInstanceOf(typeof(TProperty));
         }
 
 
@@ -42,10 +42,21 @@ namespace Jlw.Standard.Utilities.Testing
         /// </summary>
         /// <param name="attr"></param>
         [TestMethod]
-        [DataRow(MethodAttributes.Public)]
+        [DataRow(AccessScope.Accessors.Public)]
         public virtual void Should_MatchAccessScope_ForGet(MethodAttributes attr)
         {
-            var propInfo = AssertPropertyScopeForGetAccessor(PropertyName, attr);
+            if (attr == 0)
+            {
+                var ex = Assert.ThrowsException<AssertFailedException>(() =>
+                {
+                    AssertPropertyScopeForGetAccessor(PropertyName, attr);
+                });
+                StringAssert.Contains(ex.ToString(), $"{PropertyName} is not a readable property");
+
+                return;
+            }
+            AssertPropertyScopeForGetAccessor(PropertyName, attr);
+
         }
 
 
@@ -55,10 +66,20 @@ namespace Jlw.Standard.Utilities.Testing
         /// </summary>
         /// <param name="attr"></param>
         [TestMethod]
-        [DataRow(MethodAttributes.Public)]
+        [DataRow(AccessScope.Accessors.Public)]
         public virtual void Should_MatchAccessScope_ForSet(MethodAttributes attr)
         {
-            var propInfo = AssertPropertyScopeForSetAccessor(PropertyName, attr);
+            if (attr == 0)
+            {
+                var ex = Assert.ThrowsException<AssertFailedException>(() =>
+                {
+                    AssertPropertyScopeForSetAccessor(PropertyName, attr);
+                });
+                StringAssert.Contains(ex.ToString(), $"{PropertyName} is not a writable property");
+
+                return;
+            }
+            AssertPropertyScopeForSetAccessor(PropertyName, attr);
         }
 
 
