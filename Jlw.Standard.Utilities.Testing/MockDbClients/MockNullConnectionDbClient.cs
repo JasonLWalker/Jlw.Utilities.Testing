@@ -4,7 +4,8 @@ using Jlw.Standard.Utilities.Data.DbUtility;
 
 namespace Jlw.Standard.Utilities.Testing
 {
-    public class MockNullConnectionDbClient : IModularDbClient
+        /*
+    public class MockNullConnectionDbClient : ModularDbClient<NullDbConnection, NullDbCommand, NullDbParameter>, IModularDbClient
     {
         public IDbConnection GetConnection(string connString)
         {
@@ -26,4 +27,5 @@ namespace Jlw.Standard.Utilities.Testing
             throw new NotImplementedException();
         }
     }
+        */
 }

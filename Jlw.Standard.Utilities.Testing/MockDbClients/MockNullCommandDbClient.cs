@@ -4,27 +4,29 @@ using Jlw.Standard.Utilities.Data.DbUtility;
 
 namespace Jlw.Standard.Utilities.Testing
 {
-    public class MockNullCommandDbClient<TConn> : IModularDbClient 
+    /*
+    public class MockNullCommandDbClient<TConn> : ModularDbClient<TConn, NullDbCommand, NullDbParameter>, IModularDbClient 
         where TConn : IDbConnection, new()
     {
-        public IDbConnection GetConnection(string connString)
+        public override IDbConnection GetConnection(string connString)
         {
             return new TConn {ConnectionString = connString};
         }
 
-        public IDbCommand GetCommand(string cmd, IDbConnection conn)
+        public override IDbCommand GetCommand(string cmd, IDbConnection conn)
         {
             return null;
         }
 
-        public IDbDataParameter AddParameterWithValue(string paramName, object value, IDbCommand cmd)
+        public override IDbDataParameter AddParameterWithValue(string paramName, object value, IDbCommand cmd)
         {
             throw new NotImplementedException();
         }
 
-        public IDbDataParameter GetNewParameter()
+        public override IDbDataParameter GetNewParameter()
         {
             throw new NotImplementedException();
         }
     }
+    */
 }
