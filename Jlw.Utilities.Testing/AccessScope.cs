@@ -16,12 +16,14 @@ namespace Jlw.Utilities.Testing
         
         public static class Accessors
         {
+            // ReSharper disable MemberHidesStaticFromOuterClass
             public const MethodAttributes Public = MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName;
             public const MethodAttributes Private = MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.SpecialName;
             public const MethodAttributes Protected = MethodAttributes.Family | MethodAttributes.HideBySig | MethodAttributes.SpecialName;
             public const MethodAttributes PrivateProtected = MethodAttributes.FamANDAssem | MethodAttributes.HideBySig | MethodAttributes.SpecialName;
             public const MethodAttributes Internal = MethodAttributes.Assembly | MethodAttributes.HideBySig | MethodAttributes.SpecialName;
             public const MethodAttributes ProtectedInternal = MethodAttributes.FamORAssem | MethodAttributes.HideBySig | MethodAttributes.SpecialName;
+            // ReSharper restore MemberHidesStaticFromOuterClass
         }
     }
 }
