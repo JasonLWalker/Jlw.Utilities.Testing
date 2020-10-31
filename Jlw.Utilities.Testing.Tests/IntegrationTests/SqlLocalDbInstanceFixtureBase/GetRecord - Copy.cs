@@ -24,6 +24,7 @@ namespace Jlw.Utilities.Testing.Tests.IntegrationTests.SqlLocalDbInstanceFixture
             base.TestInitialize();
         }
 
+        /*
         [TestMethod]
         public void Should_1()
         {
@@ -43,7 +44,7 @@ namespace Jlw.Utilities.Testing.Tests.IntegrationTests.SqlLocalDbInstanceFixture
             Assert.AreEqual(expected.Description, response.Description);
 
         }
-
+        */
 
         [TestMethod]
         public void Should_2()
@@ -66,6 +67,7 @@ namespace Jlw.Utilities.Testing.Tests.IntegrationTests.SqlLocalDbInstanceFixture
 
         }
 
+        /*
         [TestMethod]
         public void TestMe2()
         {
@@ -83,6 +85,6 @@ namespace Jlw.Utilities.Testing.Tests.IntegrationTests.SqlLocalDbInstanceFixture
             Assert.AreEqual(expected.Name, response.Name);
             Assert.AreEqual(expected.Description, response.Description);
         }
-
+        */
     }
 }
