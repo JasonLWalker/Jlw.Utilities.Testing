@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Jlw.Utilities.Testing.Tests.UnitTests.DataSourceTests
 {
     [TestClass]
+    [TestCategory("BooleanSourceAttribute.GetData")]
     public class BooleanSourceAttributeFixture
     {
 
