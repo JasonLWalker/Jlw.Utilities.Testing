@@ -10,6 +10,7 @@ namespace Jlw.Utilities.Testing.Tests.IntegrationTests.SqlLocalDbInstanceFixture
     public class GetRecord : SqlLocalDbInstanceFixtureBase<ModularDataRepository<ITestDataModel, TestDataModel>>
     {
         protected string _sqlInitFilename = $"{AppDomain.CurrentDomain.BaseDirectory}Data\\Sql\\TSql\\InitializeDb.sql";
+        /*
         protected RepositoryMethodDefinition<ITestDataModel, TestDataModel>.RecordCallback _recordCallback = (o) => new TestDataModel()
         {
             Description = DataUtility.ParseString(o, "Description"),
@@ -17,7 +18,8 @@ namespace Jlw.Utilities.Testing.Tests.IntegrationTests.SqlLocalDbInstanceFixture
             Name = DataUtility.ParseString(o, "Name"),
             LastUpdated = DataUtility.ParseDateTime(o, "LastUpdated")
         };
-
+        */
+        
         [TestInitialize]
         public override void TestInitialize()
         {
@@ -45,7 +47,7 @@ namespace Jlw.Utilities.Testing.Tests.IntegrationTests.SqlLocalDbInstanceFixture
 
         }
         */
-
+        /*
         [TestMethod]
         public void Should_2()
         {
@@ -66,7 +68,7 @@ namespace Jlw.Utilities.Testing.Tests.IntegrationTests.SqlLocalDbInstanceFixture
             Assert.AreEqual(expected.Description, response.Description);
 
         }
-
+        */
         /*
         [TestMethod]
         public void TestMe2()
