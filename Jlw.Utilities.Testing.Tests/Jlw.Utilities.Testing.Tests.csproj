@@ -8,6 +8,9 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
+    <PackageReference Include="MySql.Data" Version="8.0.23" />
+    <PackageReference Include="System.CodeDom" Version="5.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Jlw.Utilities.Testing\Jlw.Utilities.Testing.csproj" />
@@ -19,5 +22,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IntegrationTests\NewFolder\" />
+    <Folder Include="UnitTests\BaseModelFixtureTests\MemberFunctions\" />
   </ItemGroup>
 </Project>
