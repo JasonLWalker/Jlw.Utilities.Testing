@@ -99,7 +99,7 @@ namespace Jlw.Utilities.Testing.Tests
 
             protected internal double ProtectedInternalDoubleInfinity() => double.PositiveInfinity;
 
-            public DateTime? NullDateTest => null;
+            public DateTime? PublicNullDateTest => null;
         
 
         #endregion
