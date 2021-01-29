@@ -10,12 +10,32 @@ namespace Jlw.Utilities.Testing
     {
         protected TModel DefaultInstance { get; set; } = new TModel();
 
-
-        public PropertyInfo GetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default)
+        public static PropertyInfo GetPropertyInfoByName<T>(string sMemberName, BindingFlags flags = BindingFlags.Default)
         {
-            return typeof(TModel).GetProperty(sMemberName, flags);
-
+            return typeof(T).GetProperty(sMemberName, flags);
         }
+
+
+        public static PropertyInfo GetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default) => GetPropertyInfoByName<TModel>(sMemberName, flags);
+
+        public static object GetPropertyValueByName<T>(T o, string sMemberName, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+        {
+            var p = GetPropertyInfoByName<T>(sMemberName, flags);
+            return p?.GetValue(o); 
+        }
+
+        public static object GetPropertyValueByName(TModel o, string sMemberName, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy) => GetPropertyValueByName<TModel>(o, sMemberName, flags);
+
+
+        public static void SetPropertyValueByName<T>(T o, string sMemberName, object value, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+        {
+            var p = GetPropertyInfoByName(sMemberName, flags);
+            p.SetValue(o, value);
+        }
+        
+
+        public static void SetPropertyValueByName(TModel o, string sMemberName, object value, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static) => SetPropertyValueByName<TModel>(o, sMemberName, value, flags);
+
 
         #region Assertion Helpers
 
@@ -148,20 +168,6 @@ namespace Jlw.Utilities.Testing
             }
         }
 
-        public void SetPropertyValueByName(TModel o, string sMemberName, object value, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
-        {
-            var p = GetPropertyInfoByName(sMemberName, flags);
-            p.SetValue(o, value);
-        }
-
-        public object GetPropertyValueByName(TModel o, string sMemberName, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
-        {
-            var p = GetPropertyInfoByName(sMemberName, flags);
-            return p.GetValue(o);
-
-        }
-
-
         public void AssertSetPropertyValueByName(TModel o, string sMemberName, object value)
         {
             var p = AssertPropertyIsWritable(sMemberName);
@@ -237,6 +243,57 @@ namespace Jlw.Utilities.Testing
         #endregion
 
         #region Helper Methods
+
+        protected static AccessModifiers GetPropertyAccess(MethodAttributes getAttr, MethodAttributes setAttr)
+        {
+            int attr = Math.Max((int)(setAttr & MethodAttributes.MemberAccessMask), (int)(getAttr & MethodAttributes.MemberAccessMask));
+
+            // Add static flag if it is set on either Get or Set.
+            attr |= (int)((setAttr | getAttr) & MethodAttributes.Static);
+            return (AccessModifiers) attr;
+        }
+
+        protected static string GetAccessString(PropertyInfo info)
+        {
+            var attr = GetPropertyAccess(info?.SetMethod?.Attributes ?? MethodAttributes.PrivateScope, info?.GetMethod?.Attributes ?? MethodAttributes.PrivateScope);
+            
+            // return parsed string from results
+            return GetAccessString((MethodAttributes)attr);
+        }
+
+        protected static string GetAccessString(MethodAttributes attr)
+        {
+            string access = "";
+
+            switch (attr & MethodAttributes.MemberAccessMask)
+            {
+                case var a when a.HasFlag(MethodAttributes.Public):
+                    access += "public";
+                    break;
+                case var a when a.HasFlag(MethodAttributes.FamORAssem):
+                    access += "protected internal";
+                    break;
+                case var a when a.HasFlag(MethodAttributes.Family):
+                    access += "protected";
+                    break;
+                case var a when a.HasFlag(MethodAttributes.Assembly):
+                    access += "internal";
+                    break;
+                case var a when a.HasFlag(MethodAttributes.FamANDAssem):
+                    access += "private protected";
+                    break;
+                default:
+                    access += "private";
+                    break;
+            }
+
+            if (attr.HasFlag(MethodAttributes.Static))
+            {
+                access += " static";
+            }
+
+            return access;
+        }
 
         // from https://stackoverflow.com/questions/2448800/given-a-type-instance-how-to-get-generic-type-name-in-c#2448918
         protected static string GetGenericTypeString(Type t)
