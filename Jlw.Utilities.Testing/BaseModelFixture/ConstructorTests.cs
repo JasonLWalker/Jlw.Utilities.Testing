@@ -8,21 +8,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
-    public partial class BaseModelFixture<TModel>
+    public partial class BaseModelFixture<TModel, TSchema>
     {
-
-        protected static List<ConstructorSchema> _constructorSchema = new List<ConstructorSchema> { null };
+        protected static IEnumerable<BaseModelUtility<TModel>.ConstructorSchema> _constructorSchema = modelSchema.ConstructorList;
 
         public static IEnumerable<object[]> ConstructorList => _constructorSchema.Select(o => new object[] { o });
-
-        public static void AddConstructor(AccessModifiers access, IEnumerable<Type> initArgs, IEnumerable<IEnumerable<object>> testArgs, Func<TModel, IEnumerable<object>, bool> fnCallback)
-        {
-            // Clear out null placeholder
-            if (_constructorSchema.Count == 1 && _constructorSchema[0] == null)
-                _constructorSchema.Clear();
-
-            _constructorSchema.Add(new ConstructorSchema(access, initArgs, testArgs, fnCallback));
-        }
 
 
 

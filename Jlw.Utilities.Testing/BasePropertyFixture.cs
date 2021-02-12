@@ -4,8 +4,16 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
+    public class PropertyTestSchema<TModel> : BaseModelSchema<TModel> where TModel: class, new()
+    {
+        public PropertyTestSchema()
+        {
+
+        }
+    }
+    
     [TestClass]
-    public class BasePropertyFixture<TModel, TProperty> : BaseModelFixture<TModel> 
+    public class BasePropertyFixture<TModel, TProperty> : BaseModelFixture<TModel, PropertyTestSchema<TModel>> 
         where TModel : class, new() 
     {
         protected string PropertyName = "";

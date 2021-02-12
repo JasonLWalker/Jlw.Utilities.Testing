@@ -41,49 +41,6 @@ namespace Jlw.Utilities.Testing
 
             }
 
-/*
-            public MemberSchema(string name, Type type = null, AccessModifiers access = AccessModifiers.Public, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy, IEnumerable<object> testValues = null, IDictionary<string, object> expectedData = null, Action<MemberTest> fnCallback = null)
-            {
-                Name = name;
-                Type = type;
-                Access = access;
-                BindingFlags = bindingFlags; 
-                TestCallback = fnCallback ?? DefaultTestCallback;
-
-                if (testValues != null)
-                {
-                    foreach (var val in testValues)
-                    {
-                        _testItems.Add(val is IEnumerable
-                            ? new MemberTest(this, (IEnumerable<object>) val, expectedData, TestCallback)
-                            : new MemberTest(this, new[] {val}, expectedData, TestCallback)
-                        );
-                    }
-                }
-                
-            }
-
-            public MemberSchema(string name, Type type = null, AccessModifiers access = AccessModifiers.Public, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy, IDictionary<string, object> expectedData = null, Action<MemberTest> fnCallback = null)
-            {
-                Name = name;
-                Type = type;
-                Access = access;
-                BindingFlags = bindingFlags;
-                TestCallback = fnCallback ?? DefaultTestCallback;
-
-                if (expectedData != null)
-                {
-                    foreach (var kvp in expectedData)
-                    {
-                        _testItems.Add(kvp.Value is IEnumerable
-                            ? new MemberTest(this, (IEnumerable<object>)kvp.Value, expectedData, TestCallback)
-                            : new MemberTest(this, new[] { kvp.Value }, expectedData, TestCallback)
-                        );
-                    }
-                }
-
-            }
-*/
             public override string ToString()
             {
                 string type = GetTypeName(Type);

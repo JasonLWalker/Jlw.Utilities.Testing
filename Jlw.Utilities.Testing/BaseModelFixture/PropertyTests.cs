@@ -8,25 +8,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
-    public partial class BaseModelFixture<TModel> 
+    public partial class BaseModelFixture<TModel, TSchema>
     {
-        protected static List<PropertySchema> _propertySchema = new List<PropertySchema>() { null };
+
+        protected static IEnumerable<PropertySchema> _propertySchema = modelSchema.PropertySchemaList;//new List<PropertySchema>() { null };
 
         public static IEnumerable<object[]> PropertySchemaList => _propertySchema.Select(o => new object[] { o });
-
-        public static void AddProperty(Type type, string name, AccessModifiers? getAccess, AccessModifiers? setAccess)
-        {
-            AccessModifiers accessModifiers = GetPropertyAccess((MethodAttributes)(getAccess ?? default), (MethodAttributes)(setAccess ?? default));
-            BindingFlags flags = BindingFlags.FlattenHierarchy;
-            flags |= accessModifiers.HasFlag(AccessModifiers.Public) ? BindingFlags.Public : BindingFlags.NonPublic;
-            flags |= accessModifiers.HasFlag(AccessModifiers.Static) ? BindingFlags.Static : BindingFlags.Instance;
-
-            // Clear out null placeholder
-            if (_propertySchema.Count == 1 && _propertySchema[0] == null)
-                _propertySchema.Clear();
-
-            _propertySchema.Add(new PropertySchema(name, type, flags, getAccess, setAccess));
-        }
 
         #region Property Tests
         [TestMethod]

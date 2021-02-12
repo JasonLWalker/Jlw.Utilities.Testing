@@ -4,12 +4,17 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Microsoft.SqlServer.Management.Sdk.Sfc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
-    public partial class BaseModelFixture<TModel> : BaseModelUtility<TModel> where TModel : class, new()
+    public partial class BaseModelFixture<TModel, TSchema> : BaseModelUtility<TModel> 
+        where TModel : class, new()
+        where TSchema : BaseModelSchema<TModel>, new()
     {
+
+        public static TSchema modelSchema = new TSchema();
         
         public const AccessModifiers Private = AccessModifiers.Private;
         public const AccessModifiers PrivateProtected = AccessModifiers.PrivateProtected;
