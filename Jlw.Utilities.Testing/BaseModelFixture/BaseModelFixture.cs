@@ -19,5 +19,25 @@ namespace Jlw.Utilities.Testing
         public const AccessModifiers Public = AccessModifiers.Public;
         public const AccessModifiers Static = AccessModifiers.Static;
 
+        #region Class Tests
+        [TestMethod]
+        public virtual void Should_Be_Class()
+        {
+            var t = typeof(TModel);
+
+            Assert.IsTrue(t.IsClass, $"{GetTypeName(t)} is a class");
+            Console.WriteLine($"\t✓ {typeof(TModel).Name} is a class");
+        }
+
+        [TestMethod]
+        public virtual void Should_Be_Public()
+        {
+            var t = typeof(TModel);
+            Assert.IsTrue(t.IsPublic, $"{GetTypeName(t)} is not public");
+            Console.WriteLine($"\t✓ {typeof(TModel).Name} is public");
+        }
+        #endregion
+
+
     }
 }

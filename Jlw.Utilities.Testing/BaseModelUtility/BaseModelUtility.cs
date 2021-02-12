@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Jlw.Utilities.Data;
@@ -10,11 +11,35 @@ namespace Jlw.Utilities.Testing
     {
         protected TModel DefaultInstance { get; set; } = new TModel();
 
+        public static IEnumerable<object> GenerateRandomTestValues<T>(int nCount = 5)
+        {
+            List<object> a = new List<object>();
+            for (int i=0; i < nCount; i++)
+            {
+                a.Add(DataUtility.GenerateRandom<T>());
+            }
+            
+            return a;
+        }
+
+
+        public static T GenerateRandomTestValue<T>()
+        {
+            return (T)DataUtility.GenerateRandom<T>();
+        }
+
+
+        public static FieldInfo GetFieldInfoByName<T>(string sMemberName, BindingFlags flags = BindingFlags.Default)
+        {
+            return typeof(T).GetField(sMemberName, flags);
+        }
+
+        public static FieldInfo GetFieldInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default) => GetFieldInfoByName<TModel>(sMemberName, flags);
+
         public static PropertyInfo GetPropertyInfoByName<T>(string sMemberName, BindingFlags flags = BindingFlags.Default)
         {
             return typeof(T).GetProperty(sMemberName, flags);
         }
-
 
         public static PropertyInfo GetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default) => GetPropertyInfoByName<TModel>(sMemberName, flags);
 
@@ -39,6 +64,15 @@ namespace Jlw.Utilities.Testing
 
         #region Assertion Helpers
 
+        public FieldInfo AssertFieldExists(string sMemberName)
+        {
+            var p = GetFieldInfoByName(sMemberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            Assert.IsNotNull(p, $"{typeof(TModel)} does not contain a field with the name '{sMemberName}'");
+
+            return p;
+        }
+
+
         public PropertyInfo AssertPropertyExists(string sMemberName)
         {
             var p = GetPropertyInfoByName(sMemberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
@@ -46,6 +80,17 @@ namespace Jlw.Utilities.Testing
 
             return p;
         }
+
+        public FieldInfo AssertGetFieldInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default)
+        {
+            var p = AssertFieldExists(sMemberName);
+
+            p = GetFieldInfoByName(sMemberName, flags);
+            Assert.IsNotNull(p, $"{typeof(TModel)} does not contain a field with the name '{sMemberName}', and with the Binding Flags: {flags}");
+
+            return p;
+        }
+
 
         public PropertyInfo AssertGetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default)
         {
@@ -260,6 +305,8 @@ namespace Jlw.Utilities.Testing
             // return parsed string from results
             return GetAccessString((MethodAttributes)attr);
         }
+
+        protected static string GetAccessString(AccessModifiers attr) => GetAccessString((MethodAttributes) attr);
 
         protected static string GetAccessString(MethodAttributes attr)
         {

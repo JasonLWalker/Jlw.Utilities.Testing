@@ -6,12 +6,19 @@ namespace Jlw.Utilities.Testing.Tests
     {
 
         #region Internal Fields
-            internal int _publicWriteInt = int.MinValue;
-            internal short _privateWriteShort = short.MinValue;
-            internal long _protectedWriteLong = long.MinValue;
-            internal sbyte _internalWriteSByte = sbyte.MinValue;
-            internal float _privateProtectedWriteFloat = float.MinValue;
-            internal double _privateInternalWriteDouble = double.MinValue;
+            public int _publicInt = int.MinValue;
+            private short _privateShort = short.MinValue;
+            protected long _protectedLong = long.MinValue;
+            internal sbyte _internalSByte = sbyte.MinValue;
+            private protected float _privateProtectedFloat = float.MinValue;
+            protected internal double _protectedInternalDouble = double.MinValue;
+
+            public static int _publicStaticInt = int.MaxValue;
+            private static short _privateStaticShort = short.MaxValue;
+            protected static long _protectedStaticLong = long.MaxValue;
+            internal static sbyte _internalStaticSByte = sbyte.MaxValue;
+            private protected static float _privateProtectedStaticFloat = float.MaxValue;
+            protected internal static double _protectedInternalStaticDouble = double.MaxValue;
         #endregion
 
         #region Internal Properties
@@ -20,7 +27,7 @@ namespace Jlw.Utilities.Testing.Tests
             internal static sbyte InternalStaticReadWriteSByte { get; set; } = sbyte.MinValue;
             internal sbyte InternalWriteSByte
             {
-                set => _internalWriteSByte = value;
+                set => _internalSByte = value;
             }
         #endregion
 
@@ -31,7 +38,7 @@ namespace Jlw.Utilities.Testing.Tests
 
             private protected float PrivateProtectedWriteFloat
             {
-                set => _privateProtectedWriteFloat = value;
+                set => _privateProtectedFloat = value;
             }
         #endregion
 
@@ -43,7 +50,7 @@ namespace Jlw.Utilities.Testing.Tests
             
             private short PrivateWriteShort
             {
-                set => _privateWriteShort = value;
+                set => _privateShort = value;
             }
         #endregion
 
@@ -53,7 +60,7 @@ namespace Jlw.Utilities.Testing.Tests
             protected long ProtectedReadLong { get; } = long.MaxValue;
             protected long ProtectedWriteLong
             {
-                set => _protectedWriteLong = value;
+                set => _protectedLong = value;
             }
 
         #endregion
@@ -64,7 +71,7 @@ namespace Jlw.Utilities.Testing.Tests
             protected internal double ProtectedInternalReadDouble { get; } = double.MaxValue;
             protected internal double ProtectedInternalWriteDouble
             {
-                set => _privateInternalWriteDouble = value;
+                set => _protectedInternalDouble = value;
             }
 
         #endregion
@@ -79,7 +86,7 @@ namespace Jlw.Utilities.Testing.Tests
 
             public int PublicWriteInt
             {
-                set => _publicWriteInt = value;
+                set => _publicInt = value;
             } 
 
 

@@ -32,6 +32,7 @@ namespace Jlw.Utilities.Testing
         [TestMethod]
         [DataRow(Public)]
         [DataRow(Public | Static)]
+        /*
         [DataRow(Protected)]
         [DataRow(Protected | Static)]
         [DataRow(Internal)]
@@ -40,6 +41,7 @@ namespace Jlw.Utilities.Testing
         [DataRow(ProtectedInternal | Static)]
         [DataRow(PrivateProtected)]
         [DataRow(PrivateProtected | Static)]
+        */
         public virtual void Property_Count_ShouldMatch(AccessModifiers accessModifiers, bool flattenHierarchy = true)
         {
             if (_propertySchema.Count(o => o != null) < 1)
@@ -59,7 +61,6 @@ namespace Jlw.Utilities.Testing
             Assert.IsNotNull(aInfo, $"Unable to retrieve PropertyInfo for {GetTypeName(t)} with BindingFlags: {flags}");
             Console.WriteLine($"\t✓ PropertyInfo retrieved");
             BindingFlags mask = ~(BindingFlags.FlattenHierarchy | BindingFlags.Instance);
-            //int nCount = _propertySchema.Count(o => o != null && ((o.BindingFlags & mask) == (flags & mask)));
 
             int nCount = _propertySchema.Count(o => o != null && ((o.BindingFlags & mask) == (flags & mask)) && o.Access.Equals(accessModifiers));
             int nPropCount = 0;

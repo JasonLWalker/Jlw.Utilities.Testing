@@ -1,15 +1,8 @@
 ﻿using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using Microsoft.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
+namespace Jlw.Utilities.Testing.Tests.UnitTests
 {
     [TestClass]
     public class BaseModelFixtureTests : BaseModelFixture<SampleModelForTesting>
@@ -17,6 +10,11 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
         // Helper constants
         private const MethodAttributes PublicMethod = MethodAttributes.Public;
 
+        protected static object[] GenerateRandomInitModel => new object[]
+        {
+
+        };
+        
         protected static void InitProperties()
         {
             AddProperty(typeof(int), "PublicStaticReadWriteInt", Public | Static, Public | Static);
@@ -25,7 +23,8 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
             AddProperty(typeof(int), "PublicReadInt", Public, null);
             AddProperty(typeof(int), "PublicWriteInt", null, Public);
             AddProperty(typeof(DateTime?), "PublicNullDateTest", Public, null);
-
+            
+            
             AddProperty(typeof(SByte), "InternalStaticReadWriteSByte", Internal | Static, Internal | Static);
 
             AddProperty(typeof(SByte), "InternalReadWriteSByte", Internal, Internal);
@@ -55,18 +54,54 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
             AddProperty(typeof(double), "ProtectedInternalReadWriteDouble", ProtectedInternal, ProtectedInternal);
             AddProperty(typeof(double), "ProtectedInternalReadDouble", ProtectedInternal, null);
             AddProperty(typeof(double), "ProtectedInternalWriteDouble", null, ProtectedInternal);
+            
+        }
+
+        public static void InitInterfaces()
+        {
+            AddInterface(typeof(ISampleModelForTesting));
+        }
+
+        public static void InitConstructors()
+        {
+            AddConstructor(Public, new Type[] { }, null, null);
+        }
+
+        public static void InitFields()
+        {
+            
+            AddField(Internal, typeof(sbyte), "_internalSByte");
+            AddField(Internal | Static, typeof(sbyte), "_internalStaticSByte");
+
+            AddField(PrivateProtected, typeof(float), "_privateProtectedFloat");
+            AddField(PrivateProtected | Static, typeof(float), "_privateProtectedStaticFloat");
+
+            AddField(Protected, typeof(long), "_protectedLong");
+            AddField(Protected | Static, typeof(long), "_protectedStaticLong");
+
+            AddField(ProtectedInternal, typeof(double), "_protectedInternalDouble");
+            AddField(ProtectedInternal | Static, typeof(double), "_protectedInternalStaticDouble");
+            
+            AddField(Public, typeof(int), "_publicInt");
+            AddField(Public | Static, typeof(int), "_publicStaticInt");
         }
 
         [ClassInitialize]
         public static void ClassInit(TestContext ctx)
         {
+            InitFields();
             InitProperties();
+            InitInterfaces();
+            InitConstructors();
         }
 
 
+        
+        // Test to Override the Property count to count ALL properties
         [TestMethod]
         [DataRow(Public)]
         [DataRow(Public | Static)]
+        
         [DataRow(Protected)]
         [DataRow(Protected | Static)]
         [DataRow(Internal)]
@@ -77,10 +112,8 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
         [DataRow(PrivateProtected | Static)]
         [DataRow(Private)]
         [DataRow(Private | Static)]
-        public override void Property_Count_ShouldMatch(AccessModifiers flags, bool flattenHierarchy = true)
-        {
-            base.Property_Count_ShouldMatch(flags, flattenHierarchy);
-        }
+        public override void Property_Count_ShouldMatch(AccessModifiers flags, bool flattenHierarchy = true) => base.Property_Count_ShouldMatch(flags, flattenHierarchy);
         
+
     }
 }
