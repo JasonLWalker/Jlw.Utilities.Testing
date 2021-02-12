@@ -1,10 +1,10 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
+namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
 {
     [TestClass]
-    public class BaseModelFixture_ClassTests : BaseModelFixture<SampleModelForTesting>
+    public class BaseModelUtility_ClassTests : BaseModelUtility<SampleModelForTesting>
     {
         /*
         public BaseModelFixture_ClassTests()

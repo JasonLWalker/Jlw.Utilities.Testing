@@ -1,14 +1,12 @@
 using System;
-using System.Diagnostics.SymbolStore;
 using System.Reflection;
 using Jlw.Utilities.Testing.Tests.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
-namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
+namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
 {
     [TestClass]
-    public class BaseModelFixture_AssertTypeAssignmentForObjectProperty : BaseModelFixture<SampleModelForTesting>
+    public class BaseModelUtility_AssertTypeAssignmentForObjectProperty : BaseModelUtility<SampleModelForTesting>
     {
         const MethodAttributes KeywordMask = MethodAttributes.MemberAccessMask | MethodAttributes.Static;
 

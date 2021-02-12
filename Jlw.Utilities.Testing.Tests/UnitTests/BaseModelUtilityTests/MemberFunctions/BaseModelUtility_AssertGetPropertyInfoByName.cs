@@ -1,14 +1,12 @@
-using System;
-using System.Diagnostics.SymbolStore;
+﻿using System;
 using System.Reflection;
 using Jlw.Utilities.Testing.Tests.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
-namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
+namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
 {
     [TestClass]
-    public class BaseModelFixture_GetPropertyInfoByName : BaseModelFixture<SampleModelForTesting>
+    public class BaseModelUtility_AssertGetPropertyInfoByName : BaseModelUtility<SampleModelForTesting>
     {
         const MethodAttributes KeywordMask = MethodAttributes.MemberAccessMask | MethodAttributes.Static;
 
@@ -199,10 +197,14 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
         [DataRow("")]
         [DataRow(" \t\n\r")]
 
-        public void Should_ReturnNull_ForNonexistentProperty(string name)
+        public void Should_Fail_ForNonexistentProperty(string name)
         {
-            var p = GetPropertyInfoByName(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-            Assert.IsNull(p);
+            var ex = Assert.ThrowsException<AssertFailedException>(() =>
+            {
+                var p = AssertGetPropertyInfoByName(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                throw new Exception($"the property '{name}' should not be found, but was.");
+            });
+            StringAssert.Contains(ex.Message, $"does not contain a property with the name '{name}'");
         }
 
         [TestMethod]
@@ -212,7 +214,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
         [DataRow("PrivateStaticReadWriteShort", BindingFlags.NonPublic | BindingFlags.Static)]
         public void Should_NotReturnNull_ForCorrectlyBoundProperty(string name, BindingFlags flags)
         {
-            var p = GetPropertyInfoByName(name, flags);
+            var p = AssertGetPropertyInfoByName(name, flags);
             Assert.IsNotNull(p);
         }
 
@@ -220,7 +222,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
         #region Assert helpers
         public void AssertPropertyAccessMatches(string name, MethodAttributes attrExpected)
         {
-            PropertyInfo p = GetPropertyInfoByName(name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            PropertyInfo p = AssertGetPropertyInfoByName(name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             MethodAttributes getAttr = p?.GetMethod?.Attributes ?? 0;
             MethodAttributes setAttr = p?.SetMethod?.Attributes ?? 0;
             MethodAttributes m = getAttr | setAttr;
@@ -232,7 +234,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelFixtureTests
 
         public void AssertPropertyAccessDoesNotMatch(string name, MethodAttributes attrExpected)
         {
-            PropertyInfo p = GetPropertyInfoByName(name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            PropertyInfo p = AssertGetPropertyInfoByName(name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             MethodAttributes getAttr = p?.GetMethod?.Attributes ?? 0;
             MethodAttributes setAttr = p?.SetMethod?.Attributes ?? 0;
             MethodAttributes m = getAttr | setAttr;

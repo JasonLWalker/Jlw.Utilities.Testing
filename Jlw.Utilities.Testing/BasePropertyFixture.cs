@@ -41,8 +41,8 @@ namespace Jlw.Utilities.Testing
         /// Can call base method in overridden class.
         /// </summary>
         /// <param name="attr"></param>
-        [TestMethod]
-        [DataRow(AccessScope.Accessors.Public)]
+        //[TestMethod]
+        //[DataRow(AccessScope.Accessors.Public)]
         public virtual void Should_MatchAccessScope_ForGet(MethodAttributes attr)
         {
             if (attr == 0)
@@ -65,8 +65,8 @@ namespace Jlw.Utilities.Testing
         /// Can call base method in overridden class.
         /// </summary>
         /// <param name="attr"></param>
-        [TestMethod]
-        [DataRow(AccessScope.Accessors.Public)]
+        //[TestMethod]
+        //[DataRow(AccessScope.Accessors.Public)]
         public virtual void Should_MatchAccessScope_ForSet(MethodAttributes attr)
         {
             if (attr == 0)

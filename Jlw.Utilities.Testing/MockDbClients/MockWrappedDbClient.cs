@@ -15,6 +15,8 @@ namespace Jlw.Utilities.Testing
         {
             _path = path;
         }
+        
+        /*
         public override IDbCommand GetCommand(string cmd, IDbConnection conn)
         {
             var wrap = new TWrap() {DataPath = _path, DbCommand = new TCommand(){CommandText = cmd, Connection = conn}};
@@ -22,5 +24,6 @@ namespace Jlw.Utilities.Testing
 
             return wrap;
         }
+        */
     }
 }

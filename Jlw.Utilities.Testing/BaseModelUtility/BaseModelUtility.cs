@@ -1,25 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Linq;
 using System.Reflection;
-using System.Text;
 using Jlw.Utilities.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
-    public class BaseModelFixture<TModel> where TModel : class, new()
+    public partial class BaseModelUtility<TModel> where TModel : class, new()
     {
         protected TModel DefaultInstance { get; set; } = new TModel();
 
-
-        public PropertyInfo GetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default)
+        public static IEnumerable<object> GenerateRandomTestValues<T>(int nCount = 5)
         {
-            return typeof(TModel).GetProperty(sMemberName, flags);
-
+            List<object> a = new List<object>();
+            for (int i=0; i < nCount; i++)
+            {
+                a.Add(DataUtility.GenerateRandom<T>());
+            }
+            
+            return a;
         }
 
+
+        public static T GenerateRandomTestValue<T>()
+        {
+            return (T)DataUtility.GenerateRandom<T>();
+        }
+
+
+        public static FieldInfo GetFieldInfoByName<T>(string sMemberName, BindingFlags flags = BindingFlags.Default)
+        {
+            return typeof(T).GetField(sMemberName, flags);
+        }
+
+        public static FieldInfo GetFieldInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default) => GetFieldInfoByName<TModel>(sMemberName, flags);
+
+        public static PropertyInfo GetPropertyInfoByName<T>(string sMemberName, BindingFlags flags = BindingFlags.Default)
+        {
+            return typeof(T).GetProperty(sMemberName, flags);
+        }
+
+        public static PropertyInfo GetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default) => GetPropertyInfoByName<TModel>(sMemberName, flags);
+
+        public static object GetPropertyValueByName<T>(T o, string sMemberName, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+        {
+            var p = GetPropertyInfoByName<T>(sMemberName, flags);
+            return p?.GetValue(o); 
+        }
+
+        public static object GetPropertyValueByName(TModel o, string sMemberName, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.FlattenHierarchy) => GetPropertyValueByName<TModel>(o, sMemberName, flags);
+
+
+        public static void SetPropertyValueByName<T>(T o, string sMemberName, object value, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
+        {
+            var p = GetPropertyInfoByName(sMemberName, flags);
+            p.SetValue(o, value);
+        }
+        
+
+        public static void SetPropertyValueByName(TModel o, string sMemberName, object value, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static) => SetPropertyValueByName<TModel>(o, sMemberName, value, flags);
+
+
         #region Assertion Helpers
+
+        public FieldInfo AssertFieldExists(string sMemberName)
+        {
+            var p = GetFieldInfoByName(sMemberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            Assert.IsNotNull(p, $"{typeof(TModel)} does not contain a field with the name '{sMemberName}'");
+
+            return p;
+        }
+
 
         public PropertyInfo AssertPropertyExists(string sMemberName)
         {
@@ -28,6 +80,17 @@ namespace Jlw.Utilities.Testing
 
             return p;
         }
+
+        public FieldInfo AssertGetFieldInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default)
+        {
+            var p = AssertFieldExists(sMemberName);
+
+            p = GetFieldInfoByName(sMemberName, flags);
+            Assert.IsNotNull(p, $"{typeof(TModel)} does not contain a field with the name '{sMemberName}', and with the Binding Flags: {flags}");
+
+            return p;
+        }
+
 
         public PropertyInfo AssertGetPropertyInfoByName(string sMemberName, BindingFlags flags = BindingFlags.Default)
         {
@@ -150,20 +213,6 @@ namespace Jlw.Utilities.Testing
             }
         }
 
-        public void SetPropertyValueByName(TModel o, string sMemberName, object value, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
-        {
-            var p = GetPropertyInfoByName(sMemberName, flags);
-            p.SetValue(o, value);
-        }
-
-        public object GetPropertyValueByName(TModel o, string sMemberName, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
-        {
-            var p = GetPropertyInfoByName(sMemberName, flags);
-            return p.GetValue(o);
-
-        }
-
-
         public void AssertSetPropertyValueByName(TModel o, string sMemberName, object value)
         {
             var p = AssertPropertyIsWritable(sMemberName);
@@ -238,6 +287,129 @@ namespace Jlw.Utilities.Testing
 
         #endregion
 
-    }
+        #region Helper Methods
 
+        protected static AccessModifiers GetPropertyAccess(MethodAttributes getAttr, MethodAttributes setAttr)
+        {
+            int attr = Math.Max((int)(setAttr & MethodAttributes.MemberAccessMask), (int)(getAttr & MethodAttributes.MemberAccessMask));
+
+            // Add static flag if it is set on either Get or Set.
+            attr |= (int)((setAttr | getAttr) & MethodAttributes.Static);
+            return (AccessModifiers) attr;
+        }
+
+        protected static string GetAccessString(PropertyInfo info)
+        {
+            var attr = GetPropertyAccess(info?.SetMethod?.Attributes ?? MethodAttributes.PrivateScope, info?.GetMethod?.Attributes ?? MethodAttributes.PrivateScope);
+            
+            // return parsed string from results
+            return GetAccessString((MethodAttributes)attr);
+        }
+
+        protected static string GetAccessString(AccessModifiers attr) => GetAccessString((MethodAttributes) attr);
+
+        protected static string GetAccessString(MethodAttributes attr)
+        {
+            string access = "";
+
+            switch (attr & MethodAttributes.MemberAccessMask)
+            {
+                case var a when a.HasFlag(MethodAttributes.Public):
+                    access += "public";
+                    break;
+                case var a when a.HasFlag(MethodAttributes.FamORAssem):
+                    access += "protected internal";
+                    break;
+                case var a when a.HasFlag(MethodAttributes.Family):
+                    access += "protected";
+                    break;
+                case var a when a.HasFlag(MethodAttributes.Assembly):
+                    access += "internal";
+                    break;
+                case var a when a.HasFlag(MethodAttributes.FamANDAssem):
+                    access += "private protected";
+                    break;
+                default:
+                    access += "private";
+                    break;
+            }
+
+            if (attr.HasFlag(MethodAttributes.Static))
+            {
+                access += " static";
+            }
+
+            return access;
+        }
+
+        // from https://stackoverflow.com/questions/2448800/given-a-type-instance-how-to-get-generic-type-name-in-c#2448918
+        protected static string GetGenericTypeString(Type t)
+        {
+            if (!t.IsGenericType)
+                return GetTypeName(t);
+            string genericTypeName = t.GetGenericTypeDefinition().Name;
+            genericTypeName = genericTypeName.Substring(0,
+                genericTypeName.IndexOf('`'));
+            string genericArgs = string.Join(", ",
+                t.GetGenericArguments()
+                    .Select(ta => GetGenericTypeString(ta)).ToArray());
+            return genericTypeName + "<" + genericArgs + ">";
+        }
+
+        protected static string GetTypeName(Type t)
+        {
+            var tc = Type.GetTypeCode(t);
+            switch (tc)
+            {
+                case TypeCode.Boolean:
+                    return "bool";
+                case TypeCode.Byte:
+                    return "byte";
+                case TypeCode.Char:
+                    return "char";
+                case TypeCode.Double:
+                    return "double";
+                case TypeCode.Int16:
+                    return "short";
+                case TypeCode.Int32:
+                    return "int";
+                case TypeCode.Int64:
+                    return "long";
+                case TypeCode.Object:
+                    if (t.IsGenericType)
+                    {
+                        if (t.GetGenericTypeDefinition() == typeof(Nullable<>))
+                            return GetTypeName(t.GetGenericArguments()[0]) + "?";
+                        else
+                        {
+                            return GetGenericTypeString(t) + ", ";
+                        }
+                    }
+
+                    break;
+                case TypeCode.Single:
+                    return "float";
+                case TypeCode.String:
+                    return "string";
+            }
+
+            return t.Name;
+        }
+
+        protected static string GetTypeArgs(Type[] typeArray)
+        {
+            string sArgList = "";
+            foreach (Type typ in typeArray)
+            {
+                string sType = GetTypeName(typ);
+                sArgList += $"{sType}, ";
+            }
+
+
+            return sArgList.Trim(',', ' ');
+        }
+
+
+        #endregion
+    }
 }
