@@ -15,10 +15,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
         [DataRow(1.1234)]
         public void Should_Fail_ForNonImplementingTypes(object o)
         {
-            var ex = Assert.ThrowsException<AssertFailedException>(() =>
-            {
-                AssertInstanceImplementsType(o);
-            });
+            var ex = Assert.ThrowsException<AssertFailedException>(() => AssertInstanceImplementsType(o));
             StringAssert.Contains(ex.Message, $"is not an instance of");
 
         }

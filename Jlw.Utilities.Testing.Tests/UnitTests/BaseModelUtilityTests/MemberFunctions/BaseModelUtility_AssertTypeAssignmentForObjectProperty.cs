@@ -56,10 +56,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
         [TestMethod]
         public void Should_Fail_ForNullPropertyName()
         {
-            var ex = Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                AssertTypeAssignmentForObjectProperty(DefaultInstance, null, typeof(object), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            });
+            var ex = Assert.ThrowsException<ArgumentNullException>(() => AssertTypeAssignmentForObjectProperty(DefaultInstance, null, typeof(object), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
             StringAssert.Contains(ex.Message, $"Value cannot be null.");
         }
 

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Jlw.Utilities.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
@@ -14,6 +15,17 @@ namespace Jlw.Utilities.Testing
         protected static IEnumerable<PropertySchema> _propertySchema = modelSchema.PropertySchemaList;//new List<PropertySchema>() { null };
 
         public static IEnumerable<object[]> PropertySchemaList => _propertySchema.Select(o => new object[] { o });
+
+        public static IEnumerable<object[]> PropertyValueList
+        {
+            get
+            {
+                var val = _propertySchema.Where(o => o?.SetAttributes != null && o?.GetAttributes != null).Select(o => new object[] { o });
+
+                return !val.Any() ? new List<object[]>(){new object[]{null}} :  val;
+            }
+        }
+
 
         #region Property Tests
         [TestMethod]
@@ -201,6 +213,60 @@ namespace Jlw.Utilities.Testing
             }
 
             Console.WriteLine($"\t✓ property [{schema.Name}] attributes match: {schema.SetAttributes}");
+        }
+
+        [TestMethod()]
+        [DynamicData(nameof(PropertyValueList))]
+        public virtual void PropertyValue_ShouldMatch_WhenSet(PropertySchema schema)
+        {
+            if (schema is null)
+            {
+                Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+                Assert.Inconclusive();
+                return;
+            }
+
+            Type t = typeof(TModel);
+            string name = schema.Name;
+            var ctor = t.GetConstructor(new Type[] { });
+            Assert.IsNotNull(ctor, "Constructor is null. Unable to locate default constructor.");
+
+            TModel sut = (TModel)ctor.Invoke(null);
+            object origVal = AssertGetPropertyValueByName(sut, name, schema.BindingFlags);
+            object newValue = origVal;
+
+            for (var i = 0; i < 5; i++) // Loop through 5 iterations of tests
+            {
+                object prevVal;
+                // Random Value should not equal original Value. Try 3 times
+                var n = 0;
+                do
+                {
+                    prevVal = newValue;
+                    newValue = DataUtility.GenerateRandom(schema.Type);
+                } while ((++n < 3) && ((prevVal.Equals(newValue)) || (origVal.Equals(newValue))));
+
+                if (origVal.Equals(newValue) || prevVal.Equals(newValue))
+                {
+                    Console.WriteLine($"Unable to generate random value for {schema.Type}");
+                    Assert.Inconclusive();
+                }
+
+                Console.WriteLine($"Previous Value: {prevVal}, New Value: {newValue}");
+                // Values should be different
+
+                //Assert.AreNotEqual(origVal, newValue, "Original value should not match random value");
+                Assert.AreNotEqual(prevVal, newValue, "Previous value should not match random value");
+
+                // Set the property
+                AssertSetPropertyValueByName(sut, name, newValue);
+
+                // Retrieve the property value
+                prevVal = AssertGetPropertyValueByName(sut, name, schema.BindingFlags);
+
+                // Do the values match?
+                Assert.AreEqual(prevVal, newValue);
+            }
         }
 
         #endregion
