@@ -32,6 +32,5 @@ jobs:
       run: dotnet nuget add source https://nuget.pkg.github.com/${{ secrets.NUGET_USER }}/index.json --store-password-in-clear-text --name=github --username=${{ secrets.NUGET_USER }} --password=${{ secrets.NUGET_KEY }}
     - name: Pack NuGet package
       run: dotnet pack --configuration Release
-
     - name: Push package to NuGet
       run: dotnet nuget push -s github **/*.nupkg -k ${{ secrets.NUGET_KEY }}
