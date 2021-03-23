@@ -8,21 +8,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
-    public partial class BaseModelFixture<TModel>
+    public partial class BaseModelFixture<TModel, TSchema>
     {
         // ReSharper disable once StaticMemberInGenericType
-        protected static List<Type> _implementedInterfaceTypes = new List<Type> { null };
+        protected static IEnumerable<Type> _implementedInterfaceTypes = modelSchema.ImplementedInterfaceList;
 
         public static IEnumerable<object[]> ImplementedInterfaceList => _implementedInterfaceTypes.Select(o => new object[] { o });
-
-        public static void AddInterface(Type type)
-        {
-            // Clear out null placeholder
-            if (_implementedInterfaceTypes.Count == 1 && _implementedInterfaceTypes[0] == null)
-                _implementedInterfaceTypes.Clear();
-
-            _implementedInterfaceTypes.Add(type);
-        }
 
         #region Interface Tests
 
@@ -51,7 +42,7 @@ namespace Jlw.Utilities.Testing
             Assert.IsTrue(types.Any(type.IsAssignableFrom), $"Does not implement {type}");
             Console.WriteLine($"\t✓ implements interface {GetTypeName(type)}");
 
-            Assert.AreEqual(_implementedInterfaceTypes.Count, types.Length, $"Number of implemented interfaces is incorrect. Should be {_implementedInterfaceTypes.Count}. Interfaces Implemented:\n{sImplemented}");
+            Assert.AreEqual(_implementedInterfaceTypes.Count(), types.Length, $"Number of implemented interfaces is incorrect. Should be {_implementedInterfaceTypes.Count()}. Interfaces Implemented:\n{sImplemented}");
             Console.WriteLine($"\t✓ Number of interfaces is {_implementedInterfaceTypes.Count()}");
         }
 

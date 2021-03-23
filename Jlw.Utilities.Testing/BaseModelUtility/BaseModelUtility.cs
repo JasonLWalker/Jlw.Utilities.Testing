@@ -289,7 +289,7 @@ namespace Jlw.Utilities.Testing
 
         #region Helper Methods
 
-        protected static AccessModifiers GetPropertyAccess(MethodAttributes getAttr, MethodAttributes setAttr)
+        public static AccessModifiers GetPropertyAccess(MethodAttributes getAttr, MethodAttributes setAttr)
         {
             int attr = Math.Max((int)(setAttr & MethodAttributes.MemberAccessMask), (int)(getAttr & MethodAttributes.MemberAccessMask));
 

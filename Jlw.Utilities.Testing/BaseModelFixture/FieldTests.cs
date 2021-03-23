@@ -8,45 +8,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
-    public partial class BaseModelFixture<TModel>
+    public partial class BaseModelFixture<TModel, TSchema>
     {
-        // ReSharper disable once StaticMemberInGenericType
-        protected static List<MemberSchema> _fieldSchema = new List<MemberSchema> { null };
+        protected static IEnumerable<BaseModelUtility<TModel>.MemberSchema> _fieldSchema = modelSchema.FieldList;
 
         public static IEnumerable<object[]> FieldList => _fieldSchema.Select(o => new object[] { o });
 
-        public static IEnumerable<object> ValueTests {
-            get
-            {
-                List<object[]> aInit = new List<object[]>();
-
-                foreach (var f in _fieldSchema)
-                {
-                    foreach (var init in f.TestData)
-                    {
-                        aInit.Add(new object[] { init });
-                    }
-                }
-
-                if (aInit.Count < 1)
-                    aInit.Add(new object[]{null});
-                
-                return aInit;
-            }
-        }
-        
-        public static void AddField(AccessModifiers access, Type type, string name)
-        {
-            // Clear out null placeholder
-            if (_fieldSchema.Count == 1 && _fieldSchema[0] == null)
-                _fieldSchema.Clear();
-
-            BindingFlags flags = BindingFlags.FlattenHierarchy;
-            flags |= access.HasFlag(AccessModifiers.Public) ? BindingFlags.Public : BindingFlags.NonPublic;
-            flags |= access.HasFlag(AccessModifiers.Static) ? BindingFlags.Static : BindingFlags.Instance;
-
-            _fieldSchema.Add(new MemberSchema(name, type, access, flags));
-        }
 
         #region Field Tests
         [TestMethod]
@@ -64,9 +31,9 @@ namespace Jlw.Utilities.Testing
         */
         public virtual void Field_Count_ShouldMatch(AccessModifiers accessModifiers, bool flattenHierarchy = true)
         {
-            if (_propertySchema.Count(o => o != null) < 1)
+            if (_fieldSchema.Count(o => o != null) < 1)
             {
-                Console.WriteLine($"\t✓ No property schema added. Skipping Test");
+                Console.WriteLine($"\t✓ No field schema added. Skipping Test");
                 Assert.Inconclusive();
             }
 
