@@ -10,12 +10,15 @@ namespace Jlw.Utilities.Testing
             public AccessModifiers? GetAttributes { get; protected set; }
             public AccessModifiers? SetAttributes { get; protected set; }
 
+            public bool CanTestValue { get; protected set; }
+
             public override AccessModifiers Access => GetPropertyAccess((MethodAttributes)(GetAttributes ?? default), (MethodAttributes)(SetAttributes ?? default));
 
-            public PropertySchema(string name, Type type, BindingFlags flags = BindingFlags.Public, AccessModifiers? getAttr = AccessModifiers.Public, AccessModifiers? setAttr = AccessModifiers.Protected) : base(name, type, default, flags)
+            public PropertySchema(string name, Type type, BindingFlags flags = BindingFlags.Public, AccessModifiers? getAttr = AccessModifiers.Public, AccessModifiers? setAttr = AccessModifiers.Protected, bool canTestValue = true) : base(name, type, default, flags)
             {
                 GetAttributes = getAttr;
                 SetAttributes = setAttr;
+                CanTestValue = canTestValue;
             }
 
             public override string ToString()
