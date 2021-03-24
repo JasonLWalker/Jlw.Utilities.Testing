@@ -226,6 +226,13 @@ namespace Jlw.Utilities.Testing
                 return;
             }
 
+            if (!schema.CanTestValue)
+            {
+                Console.WriteLine($"\t✓ Property is flagged to not test values. Skipping Test");
+                Assert.Inconclusive();
+                return;
+            }
+
             Type t = typeof(TModel);
             string name = schema.Name;
             var ctor = t.GetConstructor(new Type[] { });
@@ -234,26 +241,29 @@ namespace Jlw.Utilities.Testing
             TModel sut = (TModel)ctor.Invoke(null);
             object origVal = AssertGetPropertyValueByName(sut, name, schema.BindingFlags);
             object newValue = origVal;
+            object prevVal = origVal;
 
             for (var i = 0; i < 5; i++) // Loop through 5 iterations of tests
             {
-                object prevVal;
                 // Random Value should not equal original Value. Try 3 times
                 var n = 0;
                 do
                 {
                     prevVal = newValue;
-                    newValue = DataUtility.GenerateRandom(schema.Type);
-                } while ((++n < 3) && ((prevVal.Equals(newValue)) || (origVal.Equals(newValue))));
+                    newValue = DataUtility.GenerateRandom(Nullable.GetUnderlyingType(schema.Type) != null ? Nullable.GetUnderlyingType(schema.Type) : schema.Type);
+                } while ((++n < 3) && ((prevVal?.Equals(newValue) ?? false) || (origVal?.Equals(newValue) ?? false)));
 
-                if (origVal.Equals(newValue) || prevVal.Equals(newValue))
+                if ((origVal?.Equals(newValue) ?? false) || (prevVal?.Equals(newValue) ?? false) || newValue is null)
                 {
                     Console.WriteLine($"Unable to generate random value for {schema.Type}");
-                    Assert.Inconclusive();
+                    if (schema.Type.IsValueType)
+                        Assert.Inconclusive();
+                    
+                    break;
                 }
 
-                Console.WriteLine($"Previous Value: {prevVal}, New Value: {newValue}");
                 // Values should be different
+                Console.WriteLine($"Previous Value: {prevVal ?? "<NULL>"}, New Value: {newValue}");
 
                 //Assert.AreNotEqual(origVal, newValue, "Original value should not match random value");
                 Assert.AreNotEqual(prevVal, newValue, "Previous value should not match random value");
@@ -266,6 +276,53 @@ namespace Jlw.Utilities.Testing
 
                 // Do the values match?
                 Assert.AreEqual(prevVal, newValue);
+            }
+
+            // Try default parameter-less Constructor
+            if (!schema.Type.IsValueType)
+            {
+                prevVal = newValue;
+                ctor = schema.Type.GetConstructor(new Type[] { });
+                if (ctor != null)
+                {
+                    newValue = ctor.Invoke(null);
+                    Console.WriteLine($"Previous Value: <{prevVal ?? "NULL"}>, New Value: <{newValue ?? "NULL"}>");
+
+                    // Set the property
+                    AssertSetPropertyValueByName(sut, name, newValue);
+
+                    // Retrieve the property value
+                    prevVal = AssertGetPropertyValueByName(sut, name, schema.BindingFlags);
+
+                    // Do the values match?
+                    Assert.AreEqual(prevVal, newValue);
+                }
+
+            }
+
+            // Test Null
+            if (prevVal == null)
+            {
+                Assert.Inconclusive();
+            }
+            else
+            {
+                if (Nullable.GetUnderlyingType(schema.Type) != null || !schema.Type.IsValueType)
+                {
+                    if (Nullable.GetUnderlyingType(schema.Type) != null || schema.Type == typeof(string))
+                        Console.WriteLine($"Previous Value: {prevVal ?? "<NULL>"}, New Value: <NULL>");
+                    else
+                        Console.WriteLine($"Previous Value: <{prevVal ?? "NULL"}>, New Value: <NULL>");
+
+                    // Set the property
+                    AssertSetPropertyValueByName(sut, name, null);
+
+                    // Retrieve the property value
+                    prevVal = AssertGetPropertyValueByName(sut, name, schema.BindingFlags);
+
+                    // Do the values match?
+                    Assert.AreEqual(prevVal, null);
+                }
             }
         }
 
