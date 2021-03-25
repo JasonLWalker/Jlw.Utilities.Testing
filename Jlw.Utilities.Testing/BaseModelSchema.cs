@@ -19,7 +19,7 @@ namespace Jlw.Utilities.Testing
         protected List<BaseModelUtility<TModel>.PropertySchema> _propertySchema = new List<BaseModelUtility<TModel>.PropertySchema>() { null };
         public IEnumerable<BaseModelUtility<TModel>.PropertySchema> PropertySchemaList => _propertySchema;//.Select(o => new object[] { o });
 
-        public void AddProperty(Type type, string name, AccessModifiers? getAccess, AccessModifiers? setAccess)
+        public void AddProperty(Type type, string name, AccessModifiers? getAccess, AccessModifiers? setAccess, bool canTestValue = true)
         {
             AccessModifiers accessModifiers = BaseModelUtility<TModel>.GetPropertyAccess((MethodAttributes)(getAccess ?? default), (MethodAttributes)(setAccess ?? default));
             BindingFlags flags = BindingFlags.FlattenHierarchy;
@@ -30,7 +30,7 @@ namespace Jlw.Utilities.Testing
             if (_propertySchema.Count == 1 && _propertySchema[0] == null)
                 _propertySchema.Clear();
 
-            _propertySchema.Add(new BaseModelUtility<TModel>.PropertySchema(name, type, flags, getAccess, setAccess));
+            _propertySchema.Add(new BaseModelUtility<TModel>.PropertySchema(name, type, flags, getAccess, setAccess, canTestValue));
         }
         #endregion
 
