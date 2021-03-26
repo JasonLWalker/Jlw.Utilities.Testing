@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9C2B11E3-C2A7-4FF9-AEED-D164F48E5DBC}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		sonarbuild.cmd = sonarbuild.cmd
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Workflows", "GitHub Workflows", "{9BCF0AC3-AE34-4898-AD07-FC04C4F16BC3}"
@@ -17,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Workflows", "GitHub 
 		.github\workflows\build-deploy-alpha.yml = .github\workflows\build-deploy-alpha.yml
 		.github\workflows\build-deploy-rc.yml = .github\workflows\build-deploy-rc.yml
 		.github\workflows\build-deploy.yml = .github\workflows\build-deploy.yml
+		.github\workflows\build-test.yml = .github\workflows\build-test.yml
 		.github\workflows\cron-artifact-cleanup.yml = .github\workflows\cron-artifact-cleanup.yml
 		.github\workflows\GenerateRelease.yml = .github\workflows\GenerateRelease.yml
 	EndProjectSection
