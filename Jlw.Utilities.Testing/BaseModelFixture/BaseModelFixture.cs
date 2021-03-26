@@ -13,7 +13,7 @@ namespace Jlw.Utilities.Testing
         where TModel : class, new()
         where TSchema : BaseModelSchema<TModel>, new()
     {
-        public static TSchema modelSchema;
+        public static TSchema modelSchema = new TSchema();;
         
         public const AccessModifiers Private = AccessModifiers.Private;
         public const AccessModifiers PrivateProtected = AccessModifiers.PrivateProtected;
@@ -22,14 +22,6 @@ namespace Jlw.Utilities.Testing
         public const AccessModifiers ProtectedInternal = AccessModifiers.ProtectedInternal;
         public const AccessModifiers Public = AccessModifiers.Public;
         public const AccessModifiers Static = AccessModifiers.Static;
-
-        static BaseModelFixture()
-        {
-            modelSchema = new TSchema();
-            //_constructorSchema = modelSchema.ConstructorList;
-            //_fieldSchema = modelSchema.FieldList;
-
-        }
 
         #region Class Tests
         [TestMethod]
