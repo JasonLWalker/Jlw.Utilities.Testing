@@ -11,7 +11,7 @@ namespace Jlw.Utilities.Testing
     public partial class BaseModelFixture<TModel, TSchema>
     {
         // ReSharper disable once StaticMemberInGenericType
-        protected static IEnumerable<Type> _implementedInterfaceTypes = modelSchema.ImplementedInterfaceList;
+        protected static IEnumerable<Type> _implementedInterfaceTypes => modelSchema.ImplementedInterfaceList;
 
         public static IEnumerable<object[]> ImplementedInterfaceList => _implementedInterfaceTypes.Select(o => new object[] { o });
 

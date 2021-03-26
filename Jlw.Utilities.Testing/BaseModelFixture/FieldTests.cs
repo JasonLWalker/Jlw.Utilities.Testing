@@ -10,7 +10,7 @@ namespace Jlw.Utilities.Testing
 {
     public partial class BaseModelFixture<TModel, TSchema>
     {
-        protected static IEnumerable<BaseModelUtility<TModel>.MemberSchema> _fieldSchema = modelSchema.FieldList;
+        protected static IEnumerable<BaseModelUtility<TModel>.MemberSchema> _fieldSchema => modelSchema.FieldList;
 
         public static IEnumerable<object[]> FieldList => _fieldSchema.Select(o => new object[] { o });
 
