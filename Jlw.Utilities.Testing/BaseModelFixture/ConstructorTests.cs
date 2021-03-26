@@ -10,7 +10,7 @@ namespace Jlw.Utilities.Testing
 {
     public partial class BaseModelFixture<TModel, TSchema>
     {
-        protected static IEnumerable<BaseModelUtility<TModel>.ConstructorSchema> _constructorSchema = modelSchema.ConstructorList;
+        protected static IEnumerable<BaseModelUtility<TModel>.ConstructorSchema> _constructorSchema => modelSchema.ConstructorList;
 
         public static IEnumerable<object[]> ConstructorList => _constructorSchema.Select(o => new object[] { o });
 

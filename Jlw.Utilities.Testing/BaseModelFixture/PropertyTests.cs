@@ -12,7 +12,7 @@ namespace Jlw.Utilities.Testing
     public partial class BaseModelFixture<TModel, TSchema>
     {
 
-        protected static IEnumerable<PropertySchema> _propertySchema = modelSchema.PropertySchemaList;//new List<PropertySchema>() { null };
+        protected static IEnumerable<PropertySchema> _propertySchema => modelSchema.PropertySchemaList;//new List<PropertySchema>() { null };
 
         public static IEnumerable<object[]> PropertySchemaList => _propertySchema.Select(o => new object[] { o });
 
@@ -250,7 +250,7 @@ namespace Jlw.Utilities.Testing
                 do
                 {
                     prevVal = newValue;
-                    newValue = DataUtility.GenerateRandom(Nullable.GetUnderlyingType(schema.Type) != null ? Nullable.GetUnderlyingType(schema.Type) : schema.Type);
+                    newValue = DataUtility.GenerateRandom(Nullable.GetUnderlyingType(schema.Type) ?? schema.Type);
                 } while ((++n < 3) && ((prevVal?.Equals(newValue) ?? false) || (origVal?.Equals(newValue) ?? false)));
 
                 if ((origVal?.Equals(newValue) ?? false) || (prevVal?.Equals(newValue) ?? false) || newValue is null)
