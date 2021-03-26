@@ -13,7 +13,7 @@ namespace Jlw.Utilities.Testing
         where TModel : class, new()
         where TSchema : BaseModelSchema<TModel>, new()
     {
-        public static TSchema modelSchema = new TSchema();;
+        public static TSchema modelSchema = new TSchema();
         
         public const AccessModifiers Private = AccessModifiers.Private;
         public const AccessModifiers PrivateProtected = AccessModifiers.PrivateProtected;
