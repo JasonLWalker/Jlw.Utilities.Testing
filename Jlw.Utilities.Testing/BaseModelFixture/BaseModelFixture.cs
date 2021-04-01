@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Jlw.Utilities.Data;
 using Microsoft.SqlServer.Management.Sdk.Sfc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -29,7 +30,7 @@ namespace Jlw.Utilities.Testing
         {
             var t = typeof(TModel);
 
-            Assert.IsTrue(t.IsClass, $"{GetTypeName(t)} is a class");
+            Assert.IsTrue(t.IsClass, $"{DataUtility.GetTypeName(t)} is a class");
             Console.WriteLine($"\t✓ {typeof(TModel).Name} is a class");
         }
 
@@ -37,7 +38,7 @@ namespace Jlw.Utilities.Testing
         public virtual void Should_Be_Public()
         {
             var t = typeof(TModel);
-            Assert.IsTrue(t.IsPublic, $"{GetTypeName(t)} is not public");
+            Assert.IsTrue(t.IsPublic, $"{DataUtility.GetTypeName(t)} is not public");
             Console.WriteLine($"\t✓ {typeof(TModel).Name} is public");
         }
         #endregion

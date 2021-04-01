@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Jlw.Utilities.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
@@ -36,7 +37,7 @@ namespace Jlw.Utilities.Testing
             foreach (var i in info)
             {
                 var types = i.GetParameters().Select(o => o.ParameterType).ToArray();
-                sImplemented += $"\t{typeof(TModel).Name}({GetTypeArgs(types)})\n";
+                sImplemented += $"\t{typeof(TModel).Name}({DataUtility.GetTypeArgs(types)})\n";
             }
 
             int nCount = _constructorSchema.Count(o => o != null);
@@ -63,11 +64,11 @@ namespace Jlw.Utilities.Testing
             foreach (var i in info)
             {
                 var types = i.GetParameters().Select(o => o.ParameterType).ToArray();
-                sImplemented += $"\t{typeof(TModel).Name}({GetTypeArgs(types)})\n";
+                sImplemented += $"\t{typeof(TModel).Name}({DataUtility.GetTypeArgs(types)})\n";
             }
 
             var ctor = t.GetConstructor(schema.Arguments.ToArray());
-            string sArgList = GetTypeArgs(schema.Arguments.ToArray());
+            string sArgList = DataUtility.GetTypeArgs(schema.Arguments.ToArray());
             Assert.IsNotNull(ctor, $"Unable to match constructor {typeof(TModel).Name}({sArgList})");
             Console.WriteLine($"\t✓ constructor {typeof(TModel).Name}({sArgList}) exists");
 

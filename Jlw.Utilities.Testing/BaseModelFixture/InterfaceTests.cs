@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Jlw.Utilities.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
@@ -36,11 +37,11 @@ namespace Jlw.Utilities.Testing
             string sImplemented = "";
             foreach (var k in types)
             {
-                sImplemented += $"\t{GetTypeName(k)}\n";
+                sImplemented += $"\t{DataUtility.GetTypeName(k)}\n";
             }
 
             Assert.IsTrue(types.Any(type.IsAssignableFrom), $"Does not implement {type}");
-            Console.WriteLine($"\t✓ implements interface {GetTypeName(type)}");
+            Console.WriteLine($"\t✓ implements interface {DataUtility.GetTypeName(type)}");
 
             Assert.AreEqual(_implementedInterfaceTypes.Count(), types.Length, $"Number of implemented interfaces is incorrect. Should be {_implementedInterfaceTypes.Count()}. Interfaces Implemented:\n{sImplemented}");
             Console.WriteLine($"\t✓ Number of interfaces is {_implementedInterfaceTypes.Count()}");
@@ -65,7 +66,7 @@ namespace Jlw.Utilities.Testing
             string sImplemented = "";
             foreach (var k in types)
             {
-                sImplemented += $"\t{GetTypeName(k)}\n";
+                sImplemented += $"\t{DataUtility.GetTypeName(k)}\n";
             }
 
             int nCount = _implementedInterfaceTypes.Count(o => o != null);

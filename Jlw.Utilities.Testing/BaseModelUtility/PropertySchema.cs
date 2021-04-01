@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Jlw.Utilities.Data;
 
 namespace Jlw.Utilities.Testing
 {
@@ -23,7 +24,7 @@ namespace Jlw.Utilities.Testing
 
             public override string ToString()
             {
-                string type = GetTypeName(Type);
+                string type = DataUtility.GetTypeName(Type);
                 string access = GetAccessString((MethodAttributes)Access);
                 string get = GetAccessString((MethodAttributes)(GetAttributes ?? default));
                 string set = GetAccessString((MethodAttributes)(SetAttributes ?? default));

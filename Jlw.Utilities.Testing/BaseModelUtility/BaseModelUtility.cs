@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -359,74 +359,6 @@ namespace Jlw.Utilities.Testing
 
             return access;
         }
-
-        // from https://stackoverflow.com/questions/2448800/given-a-type-instance-how-to-get-generic-type-name-in-c#2448918
-        protected static string GetGenericTypeString(Type t)
-        {
-            if (!t.IsGenericType)
-                return GetTypeName(t);
-            string genericTypeName = t.GetGenericTypeDefinition().Name;
-            genericTypeName = genericTypeName.Substring(0,
-                genericTypeName.IndexOf('`'));
-            string genericArgs = string.Join(", ",
-                t.GetGenericArguments()
-                    .Select(ta => GetGenericTypeString(ta)).ToArray());
-            return genericTypeName + "<" + genericArgs + ">";
-        }
-
-        protected static string GetTypeName(Type t)
-        {
-            var tc = Type.GetTypeCode(t);
-            switch (tc)
-            {
-                case TypeCode.Boolean:
-                    return "bool";
-                case TypeCode.Byte:
-                    return "byte";
-                case TypeCode.Char:
-                    return "char";
-                case TypeCode.Double:
-                    return "double";
-                case TypeCode.Int16:
-                    return "short";
-                case TypeCode.Int32:
-                    return "int";
-                case TypeCode.Int64:
-                    return "long";
-                case TypeCode.Object:
-                    if (t.IsGenericType)
-                    {
-                        if (t.GetGenericTypeDefinition() == typeof(Nullable<>))
-                            return GetTypeName(t.GetGenericArguments()[0]) + "?";
-                        else
-                        {
-                            return GetGenericTypeString(t) + ", ";
-                        }
-                    }
-
-                    break;
-                case TypeCode.Single:
-                    return "float";
-                case TypeCode.String:
-                    return "string";
-            }
-
-            return t.Name;
-        }
-
-        protected static string GetTypeArgs(Type[] typeArray)
-        {
-            string sArgList = "";
-            foreach (Type typ in typeArray)
-            {
-                string sType = GetTypeName(typ);
-                sArgList += $"{sType}, ";
-            }
-
-
-            return sArgList.Trim(',', ' ');
-        }
-
 
         #endregion
     }

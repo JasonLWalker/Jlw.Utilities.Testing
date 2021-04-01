@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Jlw.Utilities.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
@@ -44,7 +45,7 @@ namespace Jlw.Utilities.Testing
 
             public override string ToString()
             {
-                string type = GetTypeName(Type);
+                string type = DataUtility.GetTypeName(Type);
                 string access = GetAccessString((MethodAttributes) Access);
 
                 return $"{access} {type} {Name}";

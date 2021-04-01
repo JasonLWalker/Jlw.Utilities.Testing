@@ -57,7 +57,7 @@ namespace Jlw.Utilities.Testing
             var t = typeof(TModel);
             var aInfo = t.GetProperties(flags);
 
-            Assert.IsNotNull(aInfo, $"Unable to retrieve PropertyInfo for {GetTypeName(t)} with BindingFlags: {flags}");
+            Assert.IsNotNull(aInfo, $"Unable to retrieve PropertyInfo for {DataUtility.GetTypeName(t)} with BindingFlags: {flags}");
             Console.WriteLine($"\t✓ PropertyInfo retrieved");
             BindingFlags mask = ~(BindingFlags.FlattenHierarchy | BindingFlags.Instance);
 
@@ -69,7 +69,7 @@ namespace Jlw.Utilities.Testing
                 if (accessModifiers.Equals(GetPropertyAccess(info.GetMethod?.Attributes ?? default, info.SetMethod?.Attributes ?? default)))
                 {
                     string access = GetAccessString(info);
-                    sProps += $"\t\t{access} {GetTypeName(info.PropertyType)} {info.Name}\n";
+                    sProps += $"\t\t{access} {DataUtility.GetTypeName(info.PropertyType)} {info.Name}\n";
                     nPropCount++;
                 }
             }
@@ -125,11 +125,11 @@ namespace Jlw.Utilities.Testing
             var t = typeof(TModel);
             var info = GetPropertyInfoByName(schema.Name, schema.BindingFlags);
             
-            Assert.IsTrue(schema.Type.IsAssignableFrom(info.PropertyType), $"[{GetTypeName(schema.Type)}] is not assignable from [{GetTypeName(info.PropertyType)}]");
+            Assert.IsTrue(schema.Type.IsAssignableFrom(info.PropertyType), $"[{DataUtility.GetTypeName(schema.Type)}] is not assignable from [{DataUtility.GetTypeName(info.PropertyType)}]");
             if (schema.Type == info.PropertyType)
-                Console.WriteLine($"\t✓ typeof({GetTypeName(schema.Type)}) matches property with the signature: \n\t\t\t{schema}");
+                Console.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) matches property with the signature: \n\t\t\t{schema}");
             else
-                Console.WriteLine($"\t✓ typeof({GetTypeName(schema.Type)}) is implemented by property {schema}");
+                Console.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) is implemented by property {schema}");
         }
 
 

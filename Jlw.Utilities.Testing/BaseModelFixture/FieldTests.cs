@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Jlw.Utilities.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
@@ -45,7 +46,7 @@ namespace Jlw.Utilities.Testing
             var aInfo = t.GetFields(flags);
             BindingFlags mask = ~(BindingFlags.FlattenHierarchy | BindingFlags.Instance);
 
-            Assert.IsNotNull(aInfo, $"Unable to retrieve FieldInfo for {GetTypeName(t)} with BindingFlags: {flags}");
+            Assert.IsNotNull(aInfo, $"Unable to retrieve FieldInfo for {DataUtility.GetTypeName(t)} with BindingFlags: {flags}");
             Console.WriteLine($"\t✓ FieldInfo retrieved");
 
             int nCount = _fieldSchema.Count(o => o != null && ((o.BindingFlags & mask) == (flags & mask)) && o.Access.Equals(accessModifiers));
@@ -56,7 +57,7 @@ namespace Jlw.Utilities.Testing
                 if (accessModifiers.Equals((AccessModifiers)info?.Attributes))
                 {
                     string access = GetAccessString((AccessModifiers)info.Attributes);
-                    sProps += $"\t\t{access} {GetTypeName(info.FieldType)} {info.Name}\n";
+                    sProps += $"\t\t{access} {DataUtility.GetTypeName(info.FieldType)} {info.Name}\n";
                     nMemCount++;
                 }
             }
@@ -95,11 +96,11 @@ namespace Jlw.Utilities.Testing
             var t = typeof(TModel);
             var info = GetFieldInfoByName(schema.Name, schema.BindingFlags);
 
-            Assert.IsTrue(schema.Type.IsAssignableFrom(info.FieldType), $"[{GetTypeName(schema.Type)}] is not assignable from [{GetTypeName(info.FieldType)}]");
+            Assert.IsTrue(schema.Type.IsAssignableFrom(info.FieldType), $"[{DataUtility.GetTypeName(schema.Type)}] is not assignable from [{DataUtility.GetTypeName(info.FieldType)}]");
             if (schema.Type == info.FieldType)
-                Console.WriteLine($"\t✓ typeof({GetTypeName(schema.Type)}) matches field with the signature: \n\t\t\t{schema}");
+                Console.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) matches field with the signature: \n\t\t\t{schema}");
             else
-                Console.WriteLine($"\t✓ typeof({GetTypeName(schema.Type)}) is implemented by field {schema}");
+                Console.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) is implemented by field {schema}");
 
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Jlw.Utilities.Data;
 
 namespace Jlw.Utilities.Testing
 {
@@ -24,7 +25,7 @@ namespace Jlw.Utilities.Testing
 
             public override string ToString()
             {
-                string sArgList = GetTypeArgs(Arguments.ToArray());
+                string sArgList = DataUtility.GetTypeArgs(Arguments.ToArray());
                 return $"{GetAccessString((MethodAttributes)Access)} {typeof(TModel).Name}({sArgList})";
             }
         }
