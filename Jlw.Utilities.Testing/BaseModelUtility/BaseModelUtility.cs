@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,9 +7,26 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
-    public partial class BaseModelUtility<TModel> where TModel : class, new()
+    public partial class BaseModelUtility<TModel> where TModel : class
     {
-        protected TModel DefaultInstance { get; set; } = new TModel();
+        private TModel _defaultInstance;
+
+        protected TModel DefaultInstance
+        {
+            get
+            {
+                if (_defaultInstance is null)
+                {
+                    var ctx = typeof(TModel).GetConstructor(new Type[] { });
+                    if (ctx != null)
+                        return (TModel) ctx.Invoke(default);
+                    else
+                        return null;
+                }
+                return _defaultInstance;
+            }
+            set => _defaultInstance = value;
+        }
 
         public static IEnumerable<object> GenerateRandomTestValues<T>(int nCount = 5)
         {

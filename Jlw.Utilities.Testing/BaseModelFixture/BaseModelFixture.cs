@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Jlw.Utilities.Testing
 {
     public partial class BaseModelFixture<TModel, TSchema> : BaseModelUtility<TModel> 
-        where TModel : class, new()
+        where TModel : class
         where TSchema : BaseModelSchema<TModel>, new()
     {
         public static TSchema modelSchema = new TSchema();

@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
 namespace Jlw.Utilities.Testing
 {
-    public abstract class BaseModelSchema<TModel> where TModel : class, new()
+    public abstract class BaseModelSchema<TModel> where TModel : class
     {
         public const AccessModifiers Private = AccessModifiers.Private;
         public const AccessModifiers PrivateProtected = AccessModifiers.PrivateProtected;
