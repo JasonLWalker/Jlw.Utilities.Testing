@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -55,27 +55,6 @@ namespace Jlw.Utilities.Testing
         protected List<BaseModelUtility<TModel>.MemberSchema> _fieldSchema = new List<BaseModelUtility<TModel>.MemberSchema> { null };
 
         public IEnumerable<BaseModelUtility<TModel>.MemberSchema> FieldList => _fieldSchema;
-
-        public IEnumerable<object> ValueTests
-        {
-            get
-            {
-                List<object[]> aInit = new List<object[]>();
-
-                foreach (var f in _fieldSchema)
-                {
-                    foreach (var init in f.TestData)
-                    {
-                        aInit.Add(new object[] { init });
-                    }
-                }
-
-                if (aInit.Count < 1)
-                    aInit.Add(new object[] { null });
-
-                return aInit;
-            }
-        }
 
         public void AddField(AccessModifiers access, Type type, string name)
         {

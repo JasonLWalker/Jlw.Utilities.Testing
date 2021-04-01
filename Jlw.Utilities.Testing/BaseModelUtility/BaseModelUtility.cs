@@ -28,6 +28,7 @@ namespace Jlw.Utilities.Testing
             set => _defaultInstance = value;
         }
 
+        /*
         public static IEnumerable<object> GenerateRandomTestValues<T>(int nCount = 5)
         {
             List<object> a = new List<object>();
@@ -44,7 +45,7 @@ namespace Jlw.Utilities.Testing
         {
             return (T)DataUtility.GenerateRandom<T>();
         }
-
+        */
 
         public static FieldInfo GetFieldInfoByName<T>(string sMemberName, BindingFlags flags = BindingFlags.Default)
         {

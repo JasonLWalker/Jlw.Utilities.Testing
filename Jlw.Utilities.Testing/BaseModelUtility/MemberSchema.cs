@@ -11,21 +11,22 @@ namespace Jlw.Utilities.Testing
     {
         public class MemberSchema
         {
-            protected List<MemberTest> _testItems = new List<MemberTest>() { default };
+            //protected List<MemberTest> _testItems = new List<MemberTest>() { default };
             
             public virtual string Name { get; protected set; }
             public virtual Type Type { get; protected set; }
             public virtual AccessModifiers Access { get; protected set; }
             public BindingFlags BindingFlags { get; protected set; }
-            public IEnumerable<object> TestData => _testItems;
-            public Action<MemberTest> TestCallback { get; protected set; }
+            //public IEnumerable<object> TestData => _testItems;
+            //public Action<MemberTest> TestCallback { get; protected set; }
 
-            public MemberSchema(string name, Type type = null, AccessModifiers access = AccessModifiers.Public, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy, IEnumerable<object> testValues = null, IDictionary<string, object> expectedData = null, Action<MemberTest> fnCallback = null)
+            public MemberSchema(string name, Type type = null, AccessModifiers access = AccessModifiers.Public, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy /*, IEnumerable<object> testValues = null, IDictionary<string, object> expectedData = null, Action<MemberTest> fnCallback = null*/)
             {
                 Name = name;
                 Type = type;
                 Access = access;
                 BindingFlags = bindingFlags;
+                /*
                 TestCallback = fnCallback ?? DefaultTestCallback;
 
                 if (testValues != null)
@@ -38,7 +39,7 @@ namespace Jlw.Utilities.Testing
                         );
                     }
                 }
-
+                */
             }
 
             public override string ToString()
@@ -49,10 +50,12 @@ namespace Jlw.Utilities.Testing
                 return $"{access} {type} {Name}";
             }
 
+            /*
             public static void DefaultTestCallback(MemberTest test) {
                 Console.WriteLine($"\t✓ No Test Assertions have been specified. Skipping Test");
                 Assert.Inconclusive();
             }
+            */
         }
     }
 }
