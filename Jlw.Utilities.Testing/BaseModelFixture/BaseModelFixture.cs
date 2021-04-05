@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -24,7 +24,10 @@ namespace Jlw.Utilities.Testing
         public const AccessModifiers Public = AccessModifiers.Public;
         public const AccessModifiers Static = AccessModifiers.Static;
 
+        // Tests are redundant due to the fact that TModel must be class and is always public.
+        /* 
         #region Class Tests
+        
         [TestMethod]
         public virtual void Should_Be_Class()
         {
@@ -34,6 +37,7 @@ namespace Jlw.Utilities.Testing
             Console.WriteLine($"\t✓ {typeof(TModel).Name} is a class");
         }
 
+
         [TestMethod]
         public virtual void Should_Be_Public()
         {
@@ -42,6 +46,7 @@ namespace Jlw.Utilities.Testing
             Console.WriteLine($"\t✓ {typeof(TModel).Name} is public");
         }
         #endregion
+        */
 
 
     }
