@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Workflows", "GitHub 
 		.github\workflows\GenerateRelease.yml = .github\workflows\GenerateRelease.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jlw.Utilities.Testing.UnitTests", "Jlw.Utilities.Testing.UnitTests\Jlw.Utilities.Testing.UnitTests.csproj", "{965B8F45-0E76-4E46-90F0-53B882867102}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{96CAE574-592A-4D39-8ED1-6BFA51EF0E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96CAE574-592A-4D39-8ED1-6BFA51EF0E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96CAE574-592A-4D39-8ED1-6BFA51EF0E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{965B8F45-0E76-4E46-90F0-53B882867102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{965B8F45-0E76-4E46-90F0-53B882867102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{965B8F45-0E76-4E46-90F0-53B882867102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{965B8F45-0E76-4E46-90F0-53B882867102}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

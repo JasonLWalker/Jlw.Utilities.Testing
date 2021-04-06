@@ -22,6 +22,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IntegrationTests\NewFolder\" />
-    <Folder Include="UnitTests\BaseModelFixtureTests\MemberFunctions\" />
   </ItemGroup>
 </Project>

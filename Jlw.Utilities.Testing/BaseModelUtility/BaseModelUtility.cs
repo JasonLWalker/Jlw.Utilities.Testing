@@ -80,6 +80,45 @@ namespace Jlw.Utilities.Testing
         public static void SetPropertyValueByName(TModel o, string sMemberName, object value, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static) => SetPropertyValueByName<TModel>(o, sMemberName, value, flags);
 
 
+        public static ConstructorInfo GetDefaultConstructor<T>()
+        {
+            return typeof(T).GetConstructor(new Type[] { });
+        }
+
+        public static ConstructorInfo GetDefaultConstructor() => GetDefaultConstructor<TModel>();
+
+        public static ConstructorInfo AssertGetDefaultConstructor<T>()
+        {
+            var ctor = GetDefaultConstructor<T>();
+            Assert.IsNotNull(ctor, "Constructor is null. Unable to locate default constructor.");
+            return ctor;
+        }
+
+        public static ConstructorInfo AssertGetDefaultConstructor()
+        {
+            var ctor = GetDefaultConstructor();
+            Assert.IsNotNull(ctor, "Constructor is null. Unable to locate default constructor.");
+            return ctor;
+        }
+
+        public static T GetObjectInstance<T>()
+        {
+            var ctor = GetDefaultConstructor();
+            if (ctor != null)
+                return (T)ctor.Invoke(null);
+
+            return default(T);
+        }
+
+        public static T AssertGetObjectInstance<T>()
+        {
+            var ctor = AssertGetDefaultConstructor();
+            T obj = (T)ctor.Invoke(null);
+            return obj;
+        }
+
+
+
         #region Assertion Helpers
 
         public FieldInfo AssertFieldExists(string sMemberName)

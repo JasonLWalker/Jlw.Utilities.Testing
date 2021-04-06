@@ -19,7 +19,7 @@ namespace Jlw.Utilities.Testing
         protected List<BaseModelUtility<TModel>.PropertySchema> _propertySchema = new List<BaseModelUtility<TModel>.PropertySchema>() { null };
         public IEnumerable<BaseModelUtility<TModel>.PropertySchema> PropertySchemaList => _propertySchema;//.Select(o => new object[] { o });
 
-        public void AddProperty(Type type, string name, AccessModifiers? getAccess, AccessModifiers? setAccess, bool canTestValue = true)
+        public void AddProperty(Type type, string name, AccessModifiers? getAccess, AccessModifiers? setAccess, bool canTestValue = true, bool canTestSignature = true)
         {
             AccessModifiers accessModifiers = BaseModelUtility<TModel>.GetPropertyAccess((MethodAttributes)(getAccess ?? default), (MethodAttributes)(setAccess ?? default));
             BindingFlags flags = BindingFlags.FlattenHierarchy;
@@ -30,7 +30,7 @@ namespace Jlw.Utilities.Testing
             if (_propertySchema.Count == 1 && _propertySchema[0] == null)
                 _propertySchema.Clear();
 
-            _propertySchema.Add(new BaseModelUtility<TModel>.PropertySchema(name, type, flags, getAccess, setAccess, canTestValue));
+            _propertySchema.Add(new BaseModelUtility<TModel>.PropertySchema(name, type, flags, getAccess, setAccess, canTestValue, canTestSignature));
         }
         #endregion
 
@@ -56,7 +56,7 @@ namespace Jlw.Utilities.Testing
 
         public IEnumerable<BaseModelUtility<TModel>.MemberSchema> FieldList => _fieldSchema;
 
-        public void AddField(AccessModifiers access, Type type, string name)
+        public void AddField(AccessModifiers access, Type type, string name, bool canTestSignature = true)
         {
             // Clear out null placeholder
             if (_fieldSchema.Count() == 1 && _fieldSchema[0] == null)
@@ -66,7 +66,7 @@ namespace Jlw.Utilities.Testing
             flags |= access.HasFlag(AccessModifiers.Public) ? BindingFlags.Public : BindingFlags.NonPublic;
             flags |= access.HasFlag(AccessModifiers.Static) ? BindingFlags.Static : BindingFlags.Instance;
 
-            _fieldSchema.Add(new BaseModelUtility<TModel>.MemberSchema(name, type, access, flags));
+            _fieldSchema.Add(new BaseModelUtility<TModel>.MemberSchema(name, type, access, flags, canTestSignature));
         }
         #endregion
 
@@ -75,13 +75,13 @@ namespace Jlw.Utilities.Testing
 
         public IEnumerable<BaseModelUtility<TModel>.ConstructorSchema> ConstructorList => _constructorSchema;
 
-        public void AddConstructor(AccessModifiers access, IEnumerable<Type> initArgs, IEnumerable<IEnumerable<object>> testArgs, Func<TModel, IEnumerable<object>, bool> fnCallback)
+        public void AddConstructor(AccessModifiers access, IEnumerable<Type> initArgs)
         {
             // Clear out null placeholder
             if (_constructorSchema.Count == 1 && _constructorSchema[0] == null)
                 _constructorSchema.Clear();
 
-            _constructorSchema.Add(new BaseModelUtility<TModel>.ConstructorSchema(access, initArgs, testArgs, fnCallback));
+            _constructorSchema.Add(new BaseModelUtility<TModel>.ConstructorSchema(access, initArgs));
         }
         #endregion
     }

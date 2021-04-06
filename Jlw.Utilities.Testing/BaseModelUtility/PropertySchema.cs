@@ -15,7 +15,7 @@ namespace Jlw.Utilities.Testing
 
             public override AccessModifiers Access => GetPropertyAccess((MethodAttributes)(GetAttributes ?? default), (MethodAttributes)(SetAttributes ?? default));
 
-            public PropertySchema(string name, Type type, BindingFlags flags = BindingFlags.Public, AccessModifiers? getAttr = AccessModifiers.Public, AccessModifiers? setAttr = AccessModifiers.Protected, bool canTestValue = true) : base(name, type, default, flags)
+            public PropertySchema(string name, Type type, BindingFlags flags = BindingFlags.Public, AccessModifiers? getAttr = AccessModifiers.Public, AccessModifiers? setAttr = AccessModifiers.Protected, bool canTestValue = true, bool canTestSignature = true) : base(name, type, default, flags, canTestSignature)
             {
                 GetAttributes = getAttr;
                 SetAttributes = setAttr;

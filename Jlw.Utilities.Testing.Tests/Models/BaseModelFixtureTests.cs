@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Data;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jlw.Utilities.Testing.Tests.UnitTests
+namespace Jlw.Utilities.Testing.Tests
 {
     public class SampleSchema : BaseModelSchema<SampleModelForTesting>
     {
@@ -50,7 +51,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests
 
         public void InitInterfaces()
         {
-            AddInterface(typeof(ISampleModelForTesting));
+            //AddInterface(typeof(IDataRecord));
         }
 
         public void InitFields()
@@ -74,7 +75,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests
 
         public void InitConstructors()
         {
-            AddConstructor(Public, new Type[] { }, null, null);
+            AddConstructor(Public, new Type[] { });
         }
 
 

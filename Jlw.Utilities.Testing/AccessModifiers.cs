@@ -13,5 +13,6 @@ namespace Jlw.Utilities.Testing
         ProtectedInternal = (int)MethodAttributes.FamORAssem,
         Public = (int)MethodAttributes.Public,
         Static = (int)MethodAttributes.Static,
+        AccessMask = Public | Private | Protected | PrivateProtected | Internal | ProtectedInternal | Static
     }
 }

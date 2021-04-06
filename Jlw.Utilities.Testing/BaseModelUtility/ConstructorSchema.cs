@@ -13,7 +13,7 @@ namespace Jlw.Utilities.Testing
             protected List<Type> _arguments = new List<Type>();
             public IEnumerable<Type> Arguments => _arguments;
             
-            public ConstructorSchema(AccessModifiers access, IEnumerable<Type> args = null, IEnumerable<IEnumerable<object>> testArgs = null, Func<TModel, object[], bool> fnCallback = null) : base(typeof(TModel).Name, typeof(TModel), access, default)
+            public ConstructorSchema(AccessModifiers access, IEnumerable<Type> args = null) : base(typeof(TModel).Name, typeof(TModel), access, default)
             {
                 if (args != null)
                 {

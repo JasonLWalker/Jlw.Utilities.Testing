@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace Jlw.Utilities.Testing
             Assert.IsTrue(t.IsClass, $"{DataUtility.GetTypeName(t)} is a class");
             Console.WriteLine($"\t✓ {typeof(TModel).Name} is a class");
         }
-
+        
 
         [TestMethod]
         public virtual void Should_Be_Public()
@@ -48,6 +48,26 @@ namespace Jlw.Utilities.Testing
         #endregion
         */
 
+        protected void OutputExpectedKeys(string[] implementedKeys, string[] expectedKeys)
+        {
+            if (expectedKeys.Length > 0)
+            {
+                foreach (var sKey in expectedKeys)
+                {
+                    Console.WriteLine($"\t\t{(implementedKeys.Contains(sKey) ? "✓" : "✗")}\t{sKey}");
+                }
+            }
+        }
+        protected void OutputImplementedKeys(string[] implementedKeys, string[] expectedKeys)
+        {
+            if (implementedKeys.Length > 0)
+            {
+                foreach (var sKey in implementedKeys)
+                {
+                    Console.WriteLine($"\t\t{(expectedKeys.Contains(sKey) ? "✓" : "✗")}\t{sKey}");
+                }
+            }
+        }
 
     }
 }

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using Jlw.Utilities.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -26,28 +27,28 @@ namespace Jlw.Utilities.Testing
             }
         }
 
+        public static IEnumerable<object[]> ValueTypePropertyValueList
+        {
+            get
+            {
+                var val = _propertySchema.Where(o => o?.SetAttributes != null && o?.GetAttributes != null && o.Type.IsValueType).Select(o => new object[] { o });
+
+                return !val.Any() ? new List<object[]>() { new object[] { null } } : val;
+            }
+        }
+
+        protected static bool IsPropertyListEmpty => _propertySchema?.Count(o => o != null) < 1;
 
         #region Property Tests
         [TestMethod]
         [DataRow(Public)]
         [DataRow(Public | Static)]
-        /*
-        [DataRow(Protected)]
-        [DataRow(Protected | Static)]
-        [DataRow(Internal)]
-        [DataRow(Internal | Static)]
-        [DataRow(ProtectedInternal)]
-        [DataRow(ProtectedInternal | Static)]
-        [DataRow(PrivateProtected)]
-        [DataRow(PrivateProtected | Static)]
-        */
         public virtual void Property_Count_ShouldMatch(AccessModifiers accessModifiers, bool flattenHierarchy = true)
         {
-            if (_propertySchema.Count(o => o != null) < 1)
-            {
-                Console.WriteLine($"\t✓ No property schema added. Skipping Test");
-                Assert.Inconclusive();
-            }
+            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
+            if (_propertySchema.Count(o => o != null) < 1) Console.WriteLine($"\t✓\tNo property schema added. Skipping Test");
+            if (_propertySchema.Count(o => o != null) < 1) Assert.Inconclusive();
+            
 
             BindingFlags flags = flattenHierarchy ? BindingFlags.FlattenHierarchy : default;
             flags |= accessModifiers.HasFlag(AccessModifiers.Public) ? BindingFlags.Public : BindingFlags.NonPublic;
@@ -57,8 +58,8 @@ namespace Jlw.Utilities.Testing
             var t = typeof(TModel);
             var aInfo = t.GetProperties(flags);
 
-            Assert.IsNotNull(aInfo, $"Unable to retrieve PropertyInfo for {DataUtility.GetTypeName(t)} with BindingFlags: {flags}");
-            Console.WriteLine($"\t✓ PropertyInfo retrieved");
+            Assert.IsNotNull(aInfo, $"✗\tUnable to retrieve PropertyInfo for {DataUtility.GetTypeName(t)} with BindingFlags: {flags}");
+            Console.WriteLine($"\t✓\tPropertyInfo retrieved");
             BindingFlags mask = ~(BindingFlags.FlattenHierarchy | BindingFlags.Instance);
 
             int nCount = _propertySchema.Count(o => o != null && ((o.BindingFlags & mask) == (flags & mask)) && o.Access.Equals(accessModifiers));
@@ -69,26 +70,23 @@ namespace Jlw.Utilities.Testing
                 if (accessModifiers.Equals(GetPropertyAccess(info.GetMethod?.Attributes ?? default, info.SetMethod?.Attributes ?? default)))
                 {
                     string access = GetAccessString(info);
-                    sProps += $"\t\t{access} {DataUtility.GetTypeName(info.PropertyType)} {info.Name}\n";
+                    sProps += $"\t\t{(_propertySchema.Any(o => o.Name.Equals(info.Name)) ? "✓" : "✗")}\t{access} {DataUtility.GetTypeName(info.PropertyType)} {info.Name}\n";
                     nPropCount++;
                 }
             }
-            Console.WriteLine($"\t✓ Properties Retrieved:\n{sProps}");
+            Console.WriteLine($"\t\tProperties Retrieved:\n{sProps}");
 
-            Assert.AreEqual(nCount, nPropCount, $"Number of properties is incorrect. Should be {nCount} for BindingFlags: {flags}");
-            Console.WriteLine($"\t✓ Number of properties is {nCount} for BindingFlags: {flags}");
+            Assert.AreEqual(nCount, nPropCount, $"✗\tNumber of properties is incorrect. Should be {nCount} for BindingFlags: {flags}");
+            Console.WriteLine($"\t✓\tNumber of properties is {nCount} for BindingFlags: {flags}");
         }
 
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_ShouldExist(PropertySchema schema)
         {
-            if (schema is null)
-            {
-                Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-                Assert.Inconclusive();
-                return;
-            }
+            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
+            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+            if (schema is null) Assert.Inconclusive();
 
             var t = typeof(TModel);
             var info = AssertPropertyExists(schema.Name);
@@ -99,12 +97,9 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Binding_ShouldMatch(PropertySchema schema)
         {
-            if (schema is null)
-            {
-                Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-                Assert.Inconclusive();
-                return;
-            }
+            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
+            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+            if (schema is null) Assert.Inconclusive();
 
             var t = typeof(TModel);
             var info = AssertGetPropertyInfoByName(schema.Name, schema.BindingFlags);
@@ -115,12 +110,9 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Type_IsAssignable(PropertySchema schema)
         {
-            if (schema is null)
-            {
-                Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-                Assert.Inconclusive();
-                return;
-            }
+            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
+            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+            if (schema is null) Assert.Inconclusive();
 
             var t = typeof(TModel);
             var info = GetPropertyInfoByName(schema.Name, schema.BindingFlags);
@@ -137,12 +129,9 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_AccessModifiers_ShouldMatch(PropertySchema schema)
         {
-            if (schema is null)
-            {
-                Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-                Assert.Inconclusive();
-                return;
-            }
+            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
+            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+            if (schema is null) Assert.Inconclusive();
 
 
             // Arrange
@@ -159,12 +148,9 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_GetAccessor_ShouldMatch(PropertySchema schema)
         {
-            if (schema is null)
-            {
-                Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-                Assert.Inconclusive();
-                return;
-            }
+            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
+            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+            if (schema is null) Assert.Inconclusive();
 
 
             // Arrange
@@ -179,7 +165,8 @@ namespace Jlw.Utilities.Testing
             else
             {
 
-                Assert.IsTrue(info.GetMethod.Attributes.HasFlag((MethodAttributes) schema.GetAttributes), $"property [{schema.Name}] attributes [{info.GetMethod.Attributes}] do not match [{schema.GetAttributes}]");
+                //Assert.IsTrue(info.GetMethod.Attributes.HasFlag((MethodAttributes) schema.GetAttributes), $"property [{schema.Name}] attributes [{info.GetMethod.Attributes}] do not match [{schema.GetAttributes}]");
+                Assert.IsTrue((info.GetMethod.Attributes & AccessScope.AccessMask) == (MethodAttributes)schema.GetAttributes, $"property [{schema.Name}] attributes [{info.GetMethod.Attributes}] do not match [{schema.GetAttributes}]");
             }
 
             Console.WriteLine($"\t✓ property [{schema.Name}] attributes match: {schema.GetAttributes}");
@@ -189,49 +176,145 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_SetAccessor_ShouldMatch(PropertySchema schema)
         {
-            if (schema is null)
-            {
-                Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-                Assert.Inconclusive();
-                return;
-            }
+            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
+            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+            if (schema is null) Assert.Inconclusive();
 
 
             // Arrange
             var info = GetPropertyInfoByName(schema.Name, schema.BindingFlags);
 
             // Assert
-            if (schema.SetAttributes == null || info.SetMethod == null)
+            if (schema.SetAttributes == null || info?.SetMethod == null)
             {
-                Assert.AreEqual(schema.SetAttributes, info.SetMethod, schema.SetAttributes == null ? "set accessor should not exist" : "set accessor should exist");
+                Assert.AreEqual(schema.SetAttributes, info?.SetMethod, schema.SetAttributes == null ? "set accessor should not exist" : "set accessor should exist");
                 Console.WriteLine($"\t✓ property set accessor should not exist");
             }
             else
             {
-
-                Assert.IsTrue(info.SetMethod.Attributes.HasFlag((MethodAttributes)schema.SetAttributes), $"property [{schema.Name}] attributes [{info.SetMethod?.Attributes}] do not match [{schema.SetAttributes}]");
+                //Assert.IsTrue(info.SetMethod.Attributes.HasFlag((MethodAttributes)schema.SetAttributes), $"property [{schema.Name}] attributes [{info.SetMethod?.Attributes}] do not match [{schema.SetAttributes}]");
+                Assert.IsTrue((info.SetMethod.Attributes & AccessScope.AccessMask) == (MethodAttributes)schema.SetAttributes, $"property [{schema.Name}] attributes [{info.SetMethod?.Attributes}] do not match [{schema.SetAttributes}]");
             }
 
             Console.WriteLine($"\t✓ property [{schema.Name}] attributes match: {schema.SetAttributes}");
         }
 
-        [TestMethod()]
+        [TestMethod]
+        [DataRow(Public)]
+        [DataRow(Public | Static)]
+        public virtual void Property_Signatures_ShouldMatch(AccessModifiers access)
+        {
+            // Retrieve the list of unique implemented constructor signatures
+            var implementedKeys = GetImplementedPropertyKeys(access).ToArray();
+            // Retrieve the list of unique expected constructor signatures
+            var expectedKeys = GetExpectedPropertyKeys(access).ToArray();
+            // Declare variable to hold Dictionary of matched values
+            var matches = new Dictionary<string, bool>();
+
+            // Output count to console for information purposes
+            Console.WriteLine($"\t✓\tNumber of implemented {GetAccessString(access)} properties is {implementedKeys.Length}");
+            Console.WriteLine($"\t\tImplemented properties:");
+            OutputImplementedKeys(implementedKeys, expectedKeys);
+            Console.WriteLine($"\t\tExpected properties:");
+            OutputExpectedKeys(implementedKeys, expectedKeys);
+
+            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
+            if (IsPropertyListEmpty) Console.WriteLine($"\t-\tNo property schema added. Skipping Test");
+            if (IsPropertyListEmpty) Assert.Inconclusive();
+
+            var re = new Regex(@"\s+(\w+)\s+{");
+
+            foreach (string sKey in implementedKeys)
+            {
+                var m = re.Match(sKey);
+                var s = m.Groups[1].Value;
+                bool bTest = (_propertySchema.FirstOrDefault(o => o.Name == s)?.CanTestSignature) ?? true; // Set to false if signature isn't to be tested.
+                if (bTest)
+                    matches[sKey] = expectedKeys.Contains(sKey);
+            }
+            foreach (string sKey in expectedKeys)
+            {
+                var m = re.Match(sKey);
+                var s = m.Groups[1].Value;
+                bool bTest = (_propertySchema.FirstOrDefault(o => o.Name == s)?.CanTestSignature) ?? true; // Set to false if signature isn't to be tested.
+                if (bTest)
+                    matches[sKey] = implementedKeys.Contains(sKey);
+            }
+
+            Assert.IsTrue(matches.All(o => o.Value == true), $"\n\t✗\tNot all implemented {GetAccessString(access)} properties match the expected {GetAccessString(access)} properties.");
+
+        }
+
+        /*
+        [TestMethod]
+        [DynamicData(nameof(ValueTypePropertyValueList))]
+        public virtual void PropertyValue_ShouldMatch_WhenSet_ForValueType(PropertySchema schema)
+        {
+            // If schema list is empty, then skip the test. 
+            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+            if (schema is null) Assert.Inconclusive();
+
+            // If not flagged, then skip the test. (2 if statements are used to pass code coverage)
+            if (!schema.CanTestValue) Console.WriteLine($"\t✓ Property is flagged to not test values. Skipping Test");
+            if (!schema.CanTestValue) //Assert.Inconclusive();
+                return;
+            string name = schema.Name;
+
+            TModel sut = AssertGetObjectInstance<TModel>();
+            object origVal = GetPropertyValueByName(sut, name, schema.BindingFlags);
+
+            object newValue = origVal;
+            object prevVal = origVal;
+
+            for (var i = 0; i < 5; i++) // Loop through 5 iterations of tests
+            {
+                newValue = GetUniqueRandomValue(schema.Type, prevVal, origVal);
+
+
+                if ((origVal?.Equals(newValue) ?? false) || (prevVal?.Equals(newValue) ?? false) || newValue is null)
+                {
+                    Console.WriteLine($"Unable to generate random value for {schema.Type}");
+                    if (schema.Type.IsValueType)
+                        Assert.Inconclusive();
+
+                    break;
+                }
+
+                // Values should be different
+                Console.WriteLine($"Previous Value: {prevVal ?? "<NULL>"}, New Value: {newValue}");
+
+                //Assert.AreNotEqual(origVal, newValue, "Original value should not match random value");
+                Assert.AreNotEqual(prevVal, newValue, "Previous value should not match random value");
+
+                // Set the property
+                AssertSetPropertyValueByName(sut, name, newValue);
+
+                // Retrieve the property value
+                prevVal = AssertGetPropertyValueByName(sut, name, schema.BindingFlags);
+
+                // Do the values match?
+                Assert.AreEqual(prevVal, newValue);
+
+            }
+
+
+
+        }
+        */
+
+        [TestMethod]
         [DynamicData(nameof(PropertyValueList))]
         public virtual void PropertyValue_ShouldMatch_WhenSet(PropertySchema schema)
         {
-            if (schema is null)
-            {
-                Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-                Assert.Inconclusive();
-                return;
-            }
+            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
+            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+            if (schema is null) Assert.Inconclusive();
 
-            if (!schema.CanTestValue)
-            {
-                Console.WriteLine($"\t✓ Property is flagged to not test values. Skipping Test");
-                Assert.Inconclusive();
+
+            // If not flagged, then skip the test. (2 if statements are used to pass code coverage)
+            if (!schema.CanTestValue) Console.WriteLine($"\t✓ Property is flagged to not test values. Skipping Test");
+            if (!schema.CanTestValue) //Assert.Inconclusive();
                 return;
-            }
 
             Type t = typeof(TModel);
             string name = schema.Name;
@@ -239,10 +322,11 @@ namespace Jlw.Utilities.Testing
             Assert.IsNotNull(ctor, "Constructor is null. Unable to locate default constructor.");
 
             TModel sut = (TModel)ctor.Invoke(null);
-            object origVal = AssertGetPropertyValueByName(sut, name, schema.BindingFlags);
+            object origVal = GetPropertyValueByName(sut, name, schema.BindingFlags);
+
             object newValue = origVal;
             object prevVal = origVal;
-
+            
             for (var i = 0; i < 5; i++) // Loop through 5 iterations of tests
             {
                 // Random Value should not equal original Value. Try 3 times
@@ -253,6 +337,7 @@ namespace Jlw.Utilities.Testing
                     newValue = DataUtility.GenerateRandom(Nullable.GetUnderlyingType(schema.Type) ?? schema.Type);
                 } while ((++n < 3) && ((prevVal?.Equals(newValue) ?? false) || (origVal?.Equals(newValue) ?? false)));
 
+            
                 if ((origVal?.Equals(newValue) ?? false) || (prevVal?.Equals(newValue) ?? false) || newValue is null)
                 {
                     Console.WriteLine($"Unable to generate random value for {schema.Type}");
@@ -276,8 +361,10 @@ namespace Jlw.Utilities.Testing
 
                 // Do the values match?
                 Assert.AreEqual(prevVal, newValue);
+            
             }
 
+            
             // Try default parameter-less Constructor
             if (!schema.Type.IsValueType)
             {
@@ -298,8 +385,10 @@ namespace Jlw.Utilities.Testing
                     Assert.AreEqual(prevVal, newValue);
                 }
 
+            
             }
 
+            
             // Test Null
             if (prevVal == null)
             {
@@ -324,9 +413,58 @@ namespace Jlw.Utilities.Testing
                     Assert.AreEqual(prevVal, null);
                 }
             }
+            
         }
 
         #endregion
 
+        #region Helper Methods
+
+        protected object GetUniqueRandomValue(Type t, object prevVal, object origVal)
+        {
+            object newValue = origVal;
+            // Random Value should not equal original Value. Try 3 times
+            var n = 0;
+            do
+            {
+                prevVal = newValue;
+                newValue = DataUtility.GenerateRandom(Nullable.GetUnderlyingType(t) ?? t);
+            } while ((++n < 3) && ((prevVal?.Equals(newValue) ?? false) || (origVal?.Equals(newValue) ?? false)));
+
+            return newValue;
+        }
+
+        protected IEnumerable<string> GetExpectedPropertyKeys(AccessModifiers access = AccessModifiers.Public)
+        {
+            var aReturn = new List<string>();
+            var schemaList = _propertySchema?.Where(o => o?.Access == access).ToArray();
+            if (schemaList?.Length > 0)
+            {
+                foreach (var schema in schemaList)
+                {
+                    aReturn.Add(schema.ToString());
+                }
+            }
+
+            return aReturn.Distinct();
+        }
+
+        protected IEnumerable<string> GetImplementedPropertyKeys(AccessModifiers access = AccessModifiers.Public)
+        {
+            var aReturn = new List<string>();
+            var t = typeof(TModel);
+            PropertyInfo[] info = t.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.CreateInstance | BindingFlags.FlattenHierarchy);
+            foreach (var i in info.Where(o => (GetPropertyAccess(o.GetMethod?.Attributes ?? default, o.SetMethod?.Attributes ?? default) & AccessModifiers.AccessMask) == (AccessModifiers)access))
+            {
+                PropertySchema ps = new PropertySchema(i.Name, i.PropertyType, default,
+                     (AccessModifiers?)(i.GetMethod?.Attributes) ?? null,
+                    (AccessModifiers?)(i.SetMethod?.Attributes) ?? null);
+                aReturn.Add(ps.ToString());
+            }
+
+            return aReturn.Distinct();
+        }
+
+        #endregion
     }
 }
