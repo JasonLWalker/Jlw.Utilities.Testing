@@ -15,11 +15,11 @@ namespace Jlw.Utilities.Testing.UnitTests
         [ExpectedException(typeof(AssertFailedException))]
         [DataRow(Public)]
         [DataRow(Private | Static)]
-        public override void Constructor_Count_ShouldMatch(AccessModifiers access)
+        public override void Constructor_Count_Should_Match(AccessModifiers access)
         {
             try
             {
-                base.Constructor_Count_ShouldMatch(access);
+                base.Constructor_Count_Should_Match(access);
             }
             catch(Exception ex)
             {
@@ -32,11 +32,11 @@ namespace Jlw.Utilities.Testing.UnitTests
         [TestMethod]
         [ExpectedException(typeof(AssertFailedException))]
         [DynamicData(nameof(ConstructorList))]
-        public override void Constructor_ShouldExist(ConstructorSchema schema)
+        public override void Constructor_Should_Exist(ConstructorSchema schema)
         {
             try
             {
-                base.Constructor_ShouldExist(schema);
+                base.Constructor_Should_Exist(schema);
             }
             catch (Exception ex)
             {
@@ -50,11 +50,11 @@ namespace Jlw.Utilities.Testing.UnitTests
         [ExpectedException(typeof(AssertFailedException))]
         [DataRow(Public)]
         [DataRow(Private | Static)]
-        public override void Constructor_Signatures_ShouldMatch(AccessModifiers access)
+        public override void Constructor_Signatures_Should_Match(AccessModifiers access)
         {
             try
             {
-                base.Constructor_Signatures_ShouldMatch(access);
+                base.Constructor_Signatures_Should_Match(access);
             }
             catch (Exception ex)
             {
@@ -66,11 +66,11 @@ namespace Jlw.Utilities.Testing.UnitTests
 
         [TestMethod]
         [ExpectedException(typeof(AssertFailedException))]
-        public override void Interface_Count_ShouldMatch()
+        public override void Interface_Count_Should_Match()
         {
             CatchFailedAssertion(() =>
             {
-                base.Interface_Count_ShouldMatch();
+                base.Interface_Count_Should_Match();
             }, "\n\t✓\tAssertion failed for incorrect constructor count. (This is the correct result)");
         }
 
@@ -78,11 +78,11 @@ namespace Jlw.Utilities.Testing.UnitTests
         [TestMethod]
         [ExpectedException(typeof(AssertFailedException))]
         [DynamicData(nameof(ImplementedInterfaceList))]
-        public override void Interface_IsAssignable(Type type)
+        public override void Interface_Is_Assignable(Type type)
         {
             CatchFailedAssertion(() =>
             {
-                base.Interface_IsAssignable(type);
+                base.Interface_Is_Assignable(type);
             }, "\n\t✓\tAssertion failed for incorrect constructor count. (This is the correct result)");
         }
 

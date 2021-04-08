@@ -21,7 +21,7 @@ namespace Jlw.Utilities.Testing
 
         [TestMethod]
         [DynamicData(nameof(ImplementedInterfaceList))]
-        public virtual void Interface_IsAssignable(Type type)
+        public virtual void Interface_Is_Assignable(Type type)
         {
             if (type is null) Console.WriteLine($"\t✓ type is NULL. Skipping Test");
             if (type is null) Assert.Inconclusive();
@@ -47,7 +47,7 @@ namespace Jlw.Utilities.Testing
 
 
         [TestMethod]
-        public virtual void Interface_Count_ShouldMatch()
+        public virtual void Interface_Count_Should_Match()
         {
             // If interface list is empty, then skip the test. (2 IF statements are used to pass code coverage)
             if (IsInterfaceListEmpty) Console.WriteLine($"\t✓ No interface schema added. Skipping Test");

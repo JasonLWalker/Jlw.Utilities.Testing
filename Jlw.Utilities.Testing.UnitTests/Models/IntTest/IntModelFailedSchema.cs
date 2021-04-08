@@ -12,7 +12,6 @@ namespace Jlw.Utilities.Testing.UnitTests
         protected void InitConstructors()
         {
             AddConstructor(Public, new Type[] { typeof(long), typeof(int) });
-            AddConstructor(Public, new Type[] { typeof(int), typeof(long) });
             AddConstructor(Private | Static, new Type[] { typeof(long), typeof(int) });
             AddConstructor(Private | Static, new Type[] { typeof(int), typeof(long) });
         }

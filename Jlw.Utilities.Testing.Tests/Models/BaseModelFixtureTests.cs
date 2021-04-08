@@ -114,7 +114,6 @@ namespace Jlw.Utilities.Testing.Tests
         [TestMethod]
         [DataRow(Public)]
         [DataRow(Public | Static)]
-        
         [DataRow(Protected)]
         [DataRow(Protected | Static)]
         [DataRow(Internal)]
@@ -125,7 +124,7 @@ namespace Jlw.Utilities.Testing.Tests
         [DataRow(PrivateProtected | Static)]
         [DataRow(Private)]
         [DataRow(Private | Static)]
-        public override void Property_Count_ShouldMatch(AccessModifiers flags, bool flattenHierarchy = true) => base.Property_Count_ShouldMatch(flags, flattenHierarchy);
+        public override void Property_Count_Should_Match(AccessModifiers flags, bool flattenHierarchy = true) => base.Property_Count_Should_Match(flags, flattenHierarchy);
         
 
     }
