@@ -15,7 +15,7 @@ namespace Jlw.Utilities.Testing
         public const AccessModifiers Public = AccessModifiers.Public;
         public const AccessModifiers Static = AccessModifiers.Static;
 
-        #region Properies
+        #region Properties
         protected List<BaseModelUtility<TModel>.PropertySchema> _propertySchema = new List<BaseModelUtility<TModel>.PropertySchema>() { null };
         public IEnumerable<BaseModelUtility<TModel>.PropertySchema> PropertySchemaList => _propertySchema;//.Select(o => new object[] { o });
 
@@ -72,6 +72,8 @@ namespace Jlw.Utilities.Testing
 
         #region Constructors
         protected List<BaseModelUtility<TModel>.ConstructorSchema> _constructorSchema = new List<BaseModelUtility<TModel>.ConstructorSchema> { null };
+
+        public virtual IEnumerable<InstanceMemberTestData<TModel>> InstanceMemberTestList => new List<InstanceMemberTestData<TModel>>(){null};
 
         public IEnumerable<BaseModelUtility<TModel>.ConstructorSchema> ConstructorList => _constructorSchema;
 
