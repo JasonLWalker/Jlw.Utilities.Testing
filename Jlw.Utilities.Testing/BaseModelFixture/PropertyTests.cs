@@ -158,7 +158,7 @@ namespace Jlw.Utilities.Testing
             // Assert
             if (schema.GetAttributes == null || info.GetMethod == null)
             {
-                Assert.AreEqual(schema.GetAttributes, info.GetMethod, schema.GetAttributes == null ? "Get method should not exist" : "Get method should exist");
+                Assert.AreEqual(DataUtility.ParseNullableLong(schema.GetAttributes), DataUtility.ParseNullableLong(info.GetMethod?.Attributes), schema.GetAttributes == null ? "Get method should not exist" : "Get method should exist");
                 Console.WriteLine($"\t✓ property get method should not exist");
             }
             else
@@ -186,7 +186,7 @@ namespace Jlw.Utilities.Testing
             // Assert
             if (schema.SetAttributes == null || info?.SetMethod == null)
             {
-                Assert.AreEqual(schema.SetAttributes, info?.SetMethod, schema.SetAttributes == null ? "set accessor should not exist" : "set accessor should exist");
+                Assert.AreEqual(DataUtility.ParseNullableLong(schema.SetAttributes), DataUtility.ParseNullableLong(info?.SetMethod?.Attributes), schema.SetAttributes == null ? "set accessor should not exist" : "set accessor should exist");
                 Console.WriteLine($"\t✓ property set accessor should not exist");
             }
             else
