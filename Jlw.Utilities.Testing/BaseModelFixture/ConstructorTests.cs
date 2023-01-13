@@ -22,7 +22,7 @@ namespace Jlw.Utilities.Testing
         /// </summary>
         public static IEnumerable<object[]> ConstructorList => _constructorSchema.Select(o => new object[] { o });
 
-
+        public static IEnumerable<object[]> InstanceMemberTestList => modelSchema.InstanceMemberTestList.Select(o => new object[] { o });
 
         #region Constructor Tests
         /// <summary>
@@ -33,7 +33,7 @@ namespace Jlw.Utilities.Testing
         [TestMethod]
         [DataRow(Public)]
 
-        public virtual void Constructor_Count_ShouldMatch(AccessModifiers access)
+        public virtual void Constructor_Count_Should_Match(AccessModifiers access)
         {
             // Retrieve the list of unique implemented constructor signatures
             var implementedKeys = GetImplementedConstructorKeys(access).ToArray();
@@ -66,7 +66,7 @@ namespace Jlw.Utilities.Testing
         /// <param name="access">AccessModifier to filter by</param>
         [TestMethod]
         [DataRow(Public)]
-        public virtual void Constructor_Signatures_ShouldMatch(AccessModifiers access)
+        public virtual void Constructor_Signatures_Should_Match(AccessModifiers access)
         {
             // Retrieve the list of unique implemented constructor signatures
             var implementedKeys = GetImplementedConstructorKeys(access).ToArray();
@@ -100,7 +100,7 @@ namespace Jlw.Utilities.Testing
 
         [TestMethod]
         [DynamicData(nameof(ConstructorList))]
-        public virtual void Constructor_ShouldExist(ConstructorSchema schema)
+        public virtual void Constructor_Should_Exist(ConstructorSchema schema)
         {
             // If schema is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (schema == null) Console.WriteLine($"\t-\tschema is NULL. Skipping Test");
@@ -119,6 +119,36 @@ namespace Jlw.Utilities.Testing
             }
             Assert.IsNotNull(ctor, $"\n\t✗\tUnable to match constructor {GetAccessString(schema.Access)} {typeof(TModel).Name}({sArgList})");
             Console.WriteLine($"\t✓\tExpected constructor {GetAccessString(schema.Access)} {typeof(TModel).Name}({sArgList}) exists");
+        }
+
+        
+        [TestMethod]
+        [DynamicData(nameof(InstanceMemberTestList))]
+        public void Member_Should_Match_For_Instance(InstanceMemberTestData<TModel> data)
+        {
+            // If schema is empty, then skip the test. (2 if statements are used to pass code coverage)
+            if (data == null) Console.WriteLine($"\t-\tschema is NULL. Skipping Test");
+            if (data == null) Assert.Inconclusive();
+
+            // Act
+            //var member = AssertGetFieldInfoByName(data.MemberName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            var prop = typeof(TModel).GetProperty(data.MemberName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            if (prop != null)
+            {
+                object actual = prop.GetValue(data.SystemUnderTest);
+                Assert.AreEqual(data.ExpectedValue, actual);
+                return;
+            }
+
+            var field = typeof(TModel).GetField(data.MemberName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            if (field != null)
+            {
+                object actual = field.GetValue(data.SystemUnderTest);
+                Assert.AreEqual(data.ExpectedValue, actual);
+                return;
+            }
+
+            Assert.Fail($"{data.MemberName} is not a field or property of {DataUtility.GetTypeName(typeof(TModel))}");
         }
 
 

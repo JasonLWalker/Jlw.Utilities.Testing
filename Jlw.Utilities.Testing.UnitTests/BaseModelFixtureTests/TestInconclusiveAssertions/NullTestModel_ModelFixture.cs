@@ -7,9 +7,9 @@ namespace Jlw.Utilities.Testing.UnitTests.BaseModelFixtureTests.TestInconclusive
     {
         [TestMethod]
         [DataRow(null)]
-        public override void Constructor_ShouldExist(ConstructorSchema schema)
+        public override void Constructor_Should_Exist(ConstructorSchema schema)
         {
-            base.Constructor_ShouldExist(schema);
+            base.Constructor_Should_Exist(schema);
         }
     }
 }

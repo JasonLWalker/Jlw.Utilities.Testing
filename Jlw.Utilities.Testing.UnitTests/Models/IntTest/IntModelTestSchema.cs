@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Jlw.Utilities.Data;
 
 namespace Jlw.Utilities.Testing.UnitTests
 {
@@ -7,10 +9,23 @@ namespace Jlw.Utilities.Testing.UnitTests
     /// </summary>
     public class IntModelTestSchema : BaseModelSchema<IntModel>
     {
+        public override IEnumerable<InstanceMemberTestData<IntModel>> InstanceMemberTestList
+        {
+            get
+            {
+                var n = DataUtility.GenerateRandom<short>();
+                var sut = new IntModel(n);
+
+                yield return new InstanceMemberTestData<IntModel>(sut, nameof(sut.PublicGet), (int)n);
+                yield return new InstanceMemberTestData<IntModel>(sut, nameof(sut._public), (int)n);
+            }
+        }
+
         protected void InitConstructors()
         {
             AddConstructor(Public, null);
             AddConstructor(Public, new Type[] { });
+            AddConstructor(Public, new Type[] { typeof(short) });
             AddConstructor(Private | Static, null);
             AddConstructor(Private, new Type[] { typeof(long) });
             AddConstructor(Protected, new Type[] { typeof(int) });
