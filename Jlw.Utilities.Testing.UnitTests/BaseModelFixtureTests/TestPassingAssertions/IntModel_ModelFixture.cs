@@ -9,9 +9,9 @@ namespace Jlw.Utilities.Testing.UnitTests.BaseModelFixtureTests.TestPassingAsser
         [DataRow(Public)]
         [DataRow(Private)]
         [DataRow(Protected)]
-        public override void Constructor_Signatures_ShouldMatch(AccessModifiers access)
+        public override void Constructor_Signatures_Should_Match(AccessModifiers access)
         {
-            base.Constructor_Signatures_ShouldMatch(access);
+            base.Constructor_Signatures_Should_Match(access);
         }
 
 

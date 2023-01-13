@@ -12,7 +12,6 @@ namespace Jlw.Utilities.Testing
 {
     public partial class BaseModelFixture<TModel, TSchema>
     {
-
         protected static IEnumerable<PropertySchema> _propertySchema => modelSchema.PropertySchemaList;//new List<PropertySchema>() { null };
 
         public static IEnumerable<object[]> PropertySchemaList => _propertySchema.Select(o => new object[] { o });
@@ -43,7 +42,7 @@ namespace Jlw.Utilities.Testing
         [TestMethod]
         [DataRow(Public)]
         [DataRow(Public | Static)]
-        public virtual void Property_Count_ShouldMatch(AccessModifiers accessModifiers, bool flattenHierarchy = true)
+        public virtual void Property_Count_Should_Match(AccessModifiers accessModifiers, bool flattenHierarchy = true)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (_propertySchema.Count(o => o != null) < 1) Console.WriteLine($"\t✓\tNo property schema added. Skipping Test");
@@ -82,7 +81,7 @@ namespace Jlw.Utilities.Testing
 
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
-        public virtual void Property_ShouldExist(PropertySchema schema)
+        public virtual void Property_Should_Exist(PropertySchema schema)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
@@ -95,7 +94,7 @@ namespace Jlw.Utilities.Testing
 
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
-        public virtual void Property_Binding_ShouldMatch(PropertySchema schema)
+        public virtual void Property_Binding_Should_Match(PropertySchema schema)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
@@ -108,7 +107,7 @@ namespace Jlw.Utilities.Testing
 
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
-        public virtual void Property_Type_IsAssignable(PropertySchema schema)
+        public virtual void Property_Type_Is_Assignable(PropertySchema schema)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
@@ -127,7 +126,7 @@ namespace Jlw.Utilities.Testing
 
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
-        public virtual void Property_AccessModifiers_ShouldMatch(PropertySchema schema)
+        public virtual void Property_Access_Should_Match(PropertySchema schema)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
@@ -146,7 +145,7 @@ namespace Jlw.Utilities.Testing
 
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
-        public virtual void Property_GetAccessor_ShouldMatch(PropertySchema schema)
+        public virtual void Property_Get_Accessor_Should_Match(PropertySchema schema)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
@@ -159,7 +158,7 @@ namespace Jlw.Utilities.Testing
             // Assert
             if (schema.GetAttributes == null || info.GetMethod == null)
             {
-                Assert.AreEqual(schema.GetAttributes, info.GetMethod, schema.GetAttributes == null ? "Get method should not exist" : "Get method should exist");
+                Assert.AreEqual(DataUtility.ParseNullableLong(schema.GetAttributes), DataUtility.ParseNullableLong(info.GetMethod?.Attributes), schema.GetAttributes == null ? "Get method should not exist" : "Get method should exist");
                 Console.WriteLine($"\t✓ property get method should not exist");
             }
             else
@@ -174,7 +173,7 @@ namespace Jlw.Utilities.Testing
 
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
-        public virtual void Property_SetAccessor_ShouldMatch(PropertySchema schema)
+        public virtual void Property_Set_Accessor_Should_Match(PropertySchema schema)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
@@ -187,7 +186,7 @@ namespace Jlw.Utilities.Testing
             // Assert
             if (schema.SetAttributes == null || info?.SetMethod == null)
             {
-                Assert.AreEqual(schema.SetAttributes, info?.SetMethod, schema.SetAttributes == null ? "set accessor should not exist" : "set accessor should exist");
+                Assert.AreEqual(DataUtility.ParseNullableLong(schema.SetAttributes), DataUtility.ParseNullableLong(info?.SetMethod?.Attributes), schema.SetAttributes == null ? "set accessor should not exist" : "set accessor should exist");
                 Console.WriteLine($"\t✓ property set accessor should not exist");
             }
             else
@@ -202,7 +201,7 @@ namespace Jlw.Utilities.Testing
         [TestMethod]
         [DataRow(Public)]
         [DataRow(Public | Static)]
-        public virtual void Property_Signatures_ShouldMatch(AccessModifiers access)
+        public virtual void Property_Signatures_Should_Match(AccessModifiers access)
         {
             // Retrieve the list of unique implemented constructor signatures
             var implementedKeys = GetImplementedPropertyKeys(access).ToArray();
@@ -248,7 +247,7 @@ namespace Jlw.Utilities.Testing
         /*
         [TestMethod]
         [DynamicData(nameof(ValueTypePropertyValueList))]
-        public virtual void PropertyValue_ShouldMatch_WhenSet_ForValueType(PropertySchema schema)
+        public virtual void Property_Value_Should_Match_When_Set_For_Value_Type(PropertySchema schema)
         {
             // If schema list is empty, then skip the test. 
             if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
@@ -304,7 +303,7 @@ namespace Jlw.Utilities.Testing
 
         [TestMethod]
         [DynamicData(nameof(PropertyValueList))]
-        public virtual void PropertyValue_ShouldMatch_WhenSet(PropertySchema schema)
+        public virtual void Property_Value_Should_Match_When_Set(PropertySchema schema)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
@@ -326,7 +325,10 @@ namespace Jlw.Utilities.Testing
 
             object newValue = origVal;
             object prevVal = origVal;
-            
+
+            // Retrieve a snapshot of all the member values before changes occur
+            var origSnapshot = new InstanceMemberSnapshot(sut);
+
             for (var i = 0; i < 5; i++) // Loop through 5 iterations of tests
             {
                 // Random Value should not equal original Value. Try 3 times
@@ -361,7 +363,9 @@ namespace Jlw.Utilities.Testing
 
                 // Do the values match?
                 Assert.AreEqual(prevVal, newValue);
-            
+
+                var snapshot = new InstanceMemberSnapshot(sut);
+                snapshot.AssertAreSame(origSnapshot, name);
             }
 
             
@@ -383,9 +387,12 @@ namespace Jlw.Utilities.Testing
 
                     // Do the values match?
                     Assert.AreEqual(prevVal, newValue);
+
+                    var snapshot = new InstanceMemberSnapshot(sut);
+                    snapshot.AssertAreSame(origSnapshot, name);
                 }
 
-            
+
             }
 
             
@@ -411,6 +418,9 @@ namespace Jlw.Utilities.Testing
 
                     // Do the values match?
                     Assert.AreEqual(prevVal, null);
+
+                    var snapshot = new InstanceMemberSnapshot(sut);
+                    snapshot.AssertAreSame(origSnapshot, name);
                 }
             }
             

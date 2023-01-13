@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30204.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jlw.Utilities.Testing", "Jlw.Utilities.Testing\Jlw.Utilities.Testing.csproj", "{5CD4E33C-9B15-401D-B30C-FFB7F409D100}"
 EndProject
@@ -18,12 +18,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Workflows", "GitHub 
 		.github\workflows\build-deploy-alpha.yml = .github\workflows\build-deploy-alpha.yml
 		.github\workflows\build-deploy-rc.yml = .github\workflows\build-deploy-rc.yml
 		.github\workflows\build-deploy.yml = .github\workflows\build-deploy.yml
+		.github\workflows\build-test-deploy-template.yml = .github\workflows\build-test-deploy-template.yml
+		.github\workflows\build-test-template.yml = .github\workflows\build-test-template.yml
 		.github\workflows\build-test.yml = .github\workflows\build-test.yml
 		.github\workflows\cron-artifact-cleanup.yml = .github\workflows\cron-artifact-cleanup.yml
 		.github\workflows\GenerateRelease.yml = .github\workflows\GenerateRelease.yml
+		.github\workflows\sonnarbuild.yml = .github\workflows\sonnarbuild.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jlw.Utilities.Testing.UnitTests", "Jlw.Utilities.Testing.UnitTests\Jlw.Utilities.Testing.UnitTests.csproj", "{965B8F45-0E76-4E46-90F0-53B882867102}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jlw.Utilities.Testing.UnitTests", "Jlw.Utilities.Testing.UnitTests\Jlw.Utilities.Testing.UnitTests.csproj", "{965B8F45-0E76-4E46-90F0-53B882867102}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build-scripts", "build-scripts", "{FD9EAE6A-DABC-4434-B7CB-F7F466F566EA}"
+	ProjectSection(SolutionItems) = preProject
+		build-scripts\build.ps1 = build-scripts\build.ps1
+		build-scripts\generate-readme.ps1 = build-scripts\generate-readme.ps1
+		build-scripts\set-version-property.ps1 = build-scripts\set-version-property.ps1
+		build-scripts\setenv.ps1 = build-scripts\setenv.ps1
+		build-scripts\test.ps1 = build-scripts\test.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{92749A0F-BDC9-4F73-A99B-CA2C15CEF864}"
+	ProjectSection(SolutionItems) = preProject
+		build-scripts\templates\ReadmeGenerationUtilities.psm1 = build-scripts\templates\ReadmeGenerationUtilities.psm1
+		build-scripts\templates\ReadmeTemplate.md = build-scripts\templates\ReadmeTemplate.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +67,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9BCF0AC3-AE34-4898-AD07-FC04C4F16BC3} = {9C2B11E3-C2A7-4FF9-AEED-D164F48E5DBC}
+		{FD9EAE6A-DABC-4434-B7CB-F7F466F566EA} = {9C2B11E3-C2A7-4FF9-AEED-D164F48E5DBC}
+		{92749A0F-BDC9-4F73-A99B-CA2C15CEF864} = {FD9EAE6A-DABC-4434-B7CB-F7F466F566EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BBDB865B-4E3E-44BD-A715-8B0BBC15E789}

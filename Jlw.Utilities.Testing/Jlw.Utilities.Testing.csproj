@@ -1,48 +1,65 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;</TargetFrameworks>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<LangVersion>10.0</LangVersion>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net48;</TargetFrameworks>
-	  <Deterministic>False</Deterministic>
-	  <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-	  <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);ReadPackageVersionFromOutputAssembly</GenerateNuspecDependsOn>
-	  <RepositoryUrl>https://github.com/JasonLWalker/Jlw.Utilities.Testing.git</RepositoryUrl>    
-	  <VersionSuffix>$(VersionSuffix)</VersionSuffix>    
-	  <PackageLicenseExpression>MIT</PackageLicenseExpression>    
-	  <PackageId>Jlw.Utilities.Testing</PackageId>    
-	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>    
-	  <PackageReleaseNotes>Library provided as is</PackageReleaseNotes>    
-	  <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>    
-	  <Authors>Jlw.Utilities.Testing</Authors>    
-	  <SignAssembly>false</SignAssembly>    
-	  <AssemblyOriginatorKeyFile />
- </PropertyGroup>
+	<PropertyGroup>
+		<Product>Jlw.Utilities.Testing</Product>
+		<PackageId>Jlw.Utilities.Testing</PackageId>    
+		<RepositoryUrl>https://github.com/JasonLWalker/Jlw.Utilities.Testing.git</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>    
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>    
+		<PackageReleaseNotes>Library provided as is</PackageReleaseNotes>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+		<IsPackable>True</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AssemblyName>$(PackageId)</AssemblyName>
+		<RootNamespace>$(PackageId)</RootNamespace>
+		<Company>Jason L. Walker</Company>
+		<Authors>Jason L. Walker</Authors>
+		<Description>Utility library and set of base classes to assist with common scenarios when testing models and data structures via the MSTest unit test framework.</Description>
+		<Copyright>Copyright ©2012-2022 Jason L. Walker</Copyright>
+		<VersionPrefix Condition="'$(VersionPrefix)' == ''">0.0.0.1</VersionPrefix>
+		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<DebugSymbols>true</DebugSymbols>
+		<EmbedAllSources>true</EmbedAllSources>
+		<DebugType>portable</DebugType>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+		<SignAssembly>false</SignAssembly>
+		<AssemblyOriginatorKeyFile />
+		
+		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+
+  </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.dotCover.CommandLineTools" Version="2020.3.4">
+    <PackageReference Include="JetBrains.dotCover.CommandLineTools" Version="2022.3.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Jlw.Utilities.Data" Version="4.0.7754.41085" />
-    <PackageReference Include="MartinCostello.SqlLocalDb" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.7">
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageReference Include="Jlw.Utilities.Data" Version="4.6.8413.6718" />
+    <PackageReference Include="MartinCostello.SqlLocalDb" Version="3.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0">
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.8" />
-    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="161.41011.9" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="170.11.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="DBInstanceFixtures\" />
   </ItemGroup>
 
-	<Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build">
-		<GetAssemblyIdentity AssemblyFiles="$(OutputPath)\netstandard2.0\$(AssemblyName).dll">
-			<Output TaskParameter="Assemblies" ItemName="PackAssembly" />
-		</GetAssemblyIdentity>
-		<PropertyGroup>
-			<PackageVersion>%(PackAssembly.Version)$(VersionSuffix)</PackageVersion>
-		</PropertyGroup>
-	</Target>
-  
 </Project>
