@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿/*
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -10,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("JasonLWalker")]
 [assembly: AssemblyProduct("Jlw.Utilites.Testing")]
-[assembly: AssemblyCopyright("Copyright ©2019-2020 Jason L. Walker")]
+[assembly: AssemblyCopyright("Copyright ©2019-2022 Jason L. Walker")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,3 +34,4 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("3.0.*")]
+*/
