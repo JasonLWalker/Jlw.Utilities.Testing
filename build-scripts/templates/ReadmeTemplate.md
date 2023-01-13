@@ -18,6 +18,8 @@
 	$projectName = "Jlw.Utilities.Testing"
 	$projectPath = "$($buildPath)**\$($projectName).csproj"
 ) -->
+[![Nuget](https://img.shields.io/nuget/v/$($projectName)?label=$($projectName)%20%28release%29)](https://www.nuget.org/packages/$($projectName)/#versions-body-tab) [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/$($projectName)?label=$($projectName)%20%28preview%29)](https://www.nuget.org/packages/$($projectName)/#versions-body-tab)
+
 
 ## Information / Requirements
 $(Get-ProjectInfoTable $projectName $projectPath)
