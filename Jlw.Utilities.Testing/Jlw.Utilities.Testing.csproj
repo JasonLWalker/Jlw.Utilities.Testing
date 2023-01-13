@@ -13,6 +13,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>    
 		<PackageReleaseNotes>Library provided as is</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GenerateAssemblyInfo>True</GenerateAssemblyInfo>
 		<IsPackable>True</IsPackable>
 	</PropertyGroup>
@@ -57,6 +58,10 @@
     <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Include="../README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 
   <ItemGroup>
     <Folder Include="DBInstanceFixtures\" />
