@@ -10,7 +10,7 @@
 		<PackageId>Jlw.Utilities.Testing</PackageId>    
 		<RepositoryUrl>https://github.com/JasonLWalker/Jlw.Utilities.Testing.git</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>    
-		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>    
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>    
 		<PackageReleaseNotes>Library provided as is</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 		<GenerateAssemblyInfo>True</GenerateAssemblyInfo>
