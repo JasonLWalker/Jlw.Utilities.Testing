@@ -26,8 +26,6 @@ jobs:
       run: dotnet restore
     - name: Build with dotnet
       run: dotnet build --version-suffix="-alpha" --configuration Release --no-restore
-    - name: Pack NuGet package
-      run: dotnet pack --version-suffix="-alpha" --configuration Release
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ env.PKGNAME }}
