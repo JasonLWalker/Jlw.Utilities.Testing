@@ -1,31 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;</TargetFrameworks>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<LangVersion>10.0</LangVersion>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;</TargetFrameworks>
-	  <Deterministic>False</Deterministic>
-	  <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-	  <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);ReadPackageVersionFromOutputAssembly</GenerateNuspecDependsOn>
-	  <RepositoryUrl>https://github.com/JasonLWalker/Jlw.Utilities.Testing.git</RepositoryUrl>    
-	  <VersionSuffix>$(VersionSuffix)</VersionSuffix>    
-	  <PackageLicenseExpression>MIT</PackageLicenseExpression>    
-	  <PackageId>Jlw.Utilities.Testing</PackageId>    
-	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>    
-	  <PackageReleaseNotes>Library provided as is</PackageReleaseNotes>    
-	  <Authors>Jlw.Utilities.Testing</Authors>    
-	  <SignAssembly>false</SignAssembly>    
-	  <AssemblyOriginatorKeyFile />
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Description>Utility library and set of base classes to assist with common scenarios when testing models and data structures via the MSTest unit test framework.</Description>
+	<PropertyGroup>
+		<Product>Jlw.Utilities.Testing</Product>
+		<PackageId>Jlw.Utilities.Testing</PackageId>    
+		<RepositoryUrl>https://github.com/JasonLWalker/Jlw.Utilities.Testing.git</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>    
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>    
+		<PackageReleaseNotes>Library provided as is</PackageReleaseNotes>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+		<IsPackable>True</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AssemblyName>$(PackageId)</AssemblyName>
+		<RootNamespace>$(PackageId)</RootNamespace>
+		<Company>Jason L. Walker</Company>
+		<Authors>Jason L. Walker</Authors>
+		<Description>Utility library and set of base classes to assist with common scenarios when testing models and data structures via the MSTest unit test framework.</Description>
+		<Copyright>Copyright ©2012-2022 Jason L. Walker</Copyright>
+		<VersionPrefix Condition="'$(VersionPrefix)' == ''">0.0.0.1</VersionPrefix>
+		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <DebugSymbols>true</DebugSymbols>
-    <EmbedAllSources>true</EmbedAllSources>
-    <DebugType>portable</DebugType>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<PropertyGroup>
+		<DebugSymbols>true</DebugSymbols>
+		<EmbedAllSources>true</EmbedAllSources>
+		<DebugType>portable</DebugType>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+		<SignAssembly>false</SignAssembly>
+		<AssemblyOriginatorKeyFile />
+		
+		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,13 +62,4 @@
     <Folder Include="DBInstanceFixtures\" />
   </ItemGroup>
 
-	<Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build">
-		<GetAssemblyIdentity AssemblyFiles="$(OutputPath)\netstandard2.0\$(AssemblyName).dll">
-			<Output TaskParameter="Assemblies" ItemName="PackAssembly" />
-		</GetAssemblyIdentity>
-		<PropertyGroup>
-			<PackageVersion>%(PackAssembly.Version)$(VersionSuffix)</PackageVersion>
-		</PropertyGroup>
-	</Target>
-  
 </Project>
