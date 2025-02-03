@@ -48,7 +48,11 @@ function Get-ProjectInfoTable {
 
     $tableString = "|||`r`n|-----|-----|`r`n"
     $tableString += "|Namespace|$($xmlProject.SelectSingleNode("//PackageId[1]").InnerText)|`r`n"
-    $tableString += "|Target Framework|$($xmlProject.SelectSingleNode("//TargetFramework[1]").InnerText)|`r`n"
+    if($xmlProject.SelectSingleNode("//TargetFramework[1]").InnerText) {
+        $tableString += "|Target Framework|$($xmlProject.SelectSingleNode("//TargetFramework[1]").InnerText)|`r`n"
+    } else {
+        $tableString += "|Target Frameworks|$($xmlProject.SelectSingleNode("//TargetFrameworks[1]").InnerText)|`r`n"
+    }
     $tableString += "|Author(s)|$($xmlProject.SelectSingleNode("//Authors[1]").InnerText)|`r`n"
     $tableString += "|Copyright|$($xmlProject.SelectSingleNode("//Copyright[1]").InnerText)|`r`n"
     #$tableString += "|Version|$AssemblyVersion|`r`n"
@@ -75,27 +79,28 @@ function Get-ProjectDependencyTable {
 
     $xmlProject.SelectNodes("//ItemGroup/PackageReference").ForEach( {
         
-	    $packageLower = $_.Include.ToLower()
-	    $packagePath = "$globalPackageFolder$packageLower\$($_.Version)\$packageLower*.nuspec"
+        if (!$_.PrivateAssets) {
+	        $packageLower = $_.Include.ToLower()
+	        $packagePath = "$globalPackageFolder$packageLower\$($_.Version)\$packageLower*.nuspec"
 	    
-        $xmlPackage = [XML](Get-Content -Path $packagePath)
-	    $packageId = $xmlPackage.package.metadata.id;
+            $xmlPackage = [XML](Get-Content -Path $packagePath)
+	        $packageId = $xmlPackage.package.metadata.id;
+            Write-Host "    - Generating Dependency info for: $packageId"
 
-        Write-Host "    - Generating Dependency info for: $packageId"
+	        if ($xmlPackage.package.metadata.projectUrl) {
+		        $packageId = "[$packageId]($($xmlPackage.package.metadata.projectUrl))"
+	        }
+	        $packageVersion = $xmlPackage.package.metadata.version
+	        $packageLicense = $xmlPackage.package.metadata.license.InnerText
+	        if (!$packageLicense -and $xmlPackage.package.metadata.licenseUrl) {
+		        $packageLicense = "..."
+	        }
+	        if ($xmlPackage.package.metadata.licenseUrl) {
+		        $packageLicense = "[$packageLicense]($($xmlPackage.package.metadata.licenseUrl))"
+	        }
 
-	    if ($xmlPackage.package.metadata.projectUrl) {
-		    $packageId = "[$packageId]($($xmlPackage.package.metadata.projectUrl))"
-	    }
-	    $packageVersion = $xmlPackage.package.metadata.version
-	    $packageLicense = $xmlPackage.package.metadata.license.InnerText
-	    if (!$packageLicense -and $xmlPackage.package.metadata.licenseUrl) {
-		    $packageLicense = "..."
-	    }
-	    if ($xmlPackage.package.metadata.licenseUrl) {
-		    $packageLicense = "[$packageLicense]($($xmlPackage.package.metadata.licenseUrl))"
-	    }
-
-    	$tableString += "|{0}|{1}|{2}|{3}|`r`n" -f $packageId, $packageVersion, $packageLicense, $purposes[$packageId]
+    	    $tableString += "|{0}|{1}|{2}|{3}|`r`n" -f $packageId, $packageVersion, $packageLicense, $purposes[$packageId]
+        }
     })
     return $tableString
 }

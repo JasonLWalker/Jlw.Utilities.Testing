@@ -20,7 +20,7 @@
 |||
 |-----|-----|
 |Namespace|Jlw.Utilities.Testing|
-|Target Framework||
+|Target Frameworks|netstandard2.0;netstandard2.1|
 |Author(s)|Jason L. Walker|
 |Copyright|Copyright ©2012-2022 Jason L. Walker|
 
@@ -29,14 +29,15 @@
 
 |Dependency|Version|License|Purpose|
 |-----|-----|-----|-----|
-|[JetBrains.dotCover.CommandLineTools](http://www.jetbrains.com/dotcover/)|2022.3.1|[tools\License\jetbrains_license.md](https://aka.ms/deprecateLicenseUrl)||
+|[Azure.Identity](https://github.com/Azure/azure-sdk-for-net/blob/Azure.Identity_1.13.2/sdk/identity/Azure.Identity/README.md)|1.13.2|[MIT](https://licenses.nuget.org/MIT)||
+|[System.Formats.Asn1](https://dot.net/)|9.0.1|[MIT](https://licenses.nuget.org/MIT)||
 |[System.Text.RegularExpressions](https://dot.net/)|4.3.1|[...](http://go.microsoft.com/fwlink/?LinkId=329770)||
-|Jlw.Utilities.Data|4.6.8413.6718|[MIT](https://licenses.nuget.org/MIT)||
-|[MartinCostello.SqlLocalDb](https://github.com/martincostello/sqllocaldb)|3.2.0|[Apache-2.0](https://licenses.nuget.org/Apache-2.0)||
-|[Microsoft.Extensions.Configuration.Json](https://dot.net/)|6.0.0|[MIT](https://licenses.nuget.org/MIT)||
-|[Microsoft.Extensions.Logging](https://dot.net/)|6.0.0|[MIT](https://licenses.nuget.org/MIT)||
-|[Microsoft.SqlServer.SqlManagementObjects](https://docs.microsoft.com/sql/relational-databases/server-management-objects-smo/overview-smo)|170.11.0|[MIT](https://licenses.nuget.org/MIT)||
-|[MSTest.TestFramework](https://github.com/microsoft/testfx)|3.0.2|[MIT](https://licenses.nuget.org/MIT)||
-|[Newtonsoft.Json](https://www.newtonsoft.com/json)|13.0.1|[MIT](https://licenses.nuget.org/MIT)||
+|Jlw.Utilities.Data|4.8.9063.5895|[MIT](https://licenses.nuget.org/MIT)||
+|[MartinCostello.SqlLocalDb](https://github.com/martincostello/sqllocaldb)|3.4.0|[Apache-2.0](https://licenses.nuget.org/Apache-2.0)||
+|[Microsoft.Extensions.Configuration.Json](https://dot.net/)|9.0.1|[MIT](https://licenses.nuget.org/MIT)||
+|[Microsoft.Extensions.Logging](https://dot.net/)|9.0.1|[MIT](https://licenses.nuget.org/MIT)||
+|[Microsoft.SqlServer.SqlManagementObjects](https://docs.microsoft.com/sql/relational-databases/server-management-objects-smo/overview-smo)|172.52.0|[MIT](https://licenses.nuget.org/MIT)||
+|[MSTest.TestFramework](https://github.com/microsoft/testfx)|3.7.3|[MIT](https://licenses.nuget.org/MIT)||
+|[Newtonsoft.Json](https://www.newtonsoft.com/json)|13.0.3|[MIT](https://licenses.nuget.org/MIT)||
 
 
