@@ -73,7 +73,10 @@ namespace Jlw.Utilities.Testing
         #region Constructors
         protected List<BaseModelUtility<TModel>.ConstructorSchema> _constructorSchema = new List<BaseModelUtility<TModel>.ConstructorSchema> { null };
 
-        public virtual IEnumerable<InstanceMemberTestData<TModel>> InstanceMemberTestList => new List<InstanceMemberTestData<TModel>>(){null};
+        public virtual IEnumerable<InstanceMemberTestData<TModel>> InstanceMemberTestList
+        {
+            get { yield return new InstanceMemberTestData<TModel>(null, null, null, "[Other Instance Members]");  }
+        }
 
         public IEnumerable<BaseModelUtility<TModel>.ConstructorSchema> ConstructorList => _constructorSchema;
 

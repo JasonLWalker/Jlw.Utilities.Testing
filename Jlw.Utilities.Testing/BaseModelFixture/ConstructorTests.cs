@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Jlw.Utilities.Data;
+using Microsoft.SqlServer.Management.Smo;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Jlw.Utilities.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
@@ -23,6 +25,8 @@ namespace Jlw.Utilities.Testing
         public static IEnumerable<object[]> ConstructorList => _constructorSchema.Select(o => new object[] { o });
 
         public static IEnumerable<object[]> InstanceMemberTestList => modelSchema.InstanceMemberTestList.Select(o => new object[] { o });
+        protected static List<string> TestedInstanceMembersNames = new List<string>();
+        
 
         #region Constructor Tests
         /// <summary>
@@ -127,14 +131,55 @@ namespace Jlw.Utilities.Testing
         public void Member_Should_Match_For_Instance(InstanceMemberTestData<TModel> data)
         {
             // If schema is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (data == null) Console.WriteLine($"\t-\tschema is NULL. Skipping Test");
+            if (data == null) Console.WriteLine($"\t-\tTest schema is NULL. Skipping Test");
             if (data == null) Assert.Inconclusive();
+
+            if (data.SystemUnderTest == null)
+            {
+                var props = typeof(TModel).GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static);
+                var untestedProps = props.Where(o => !TestedInstanceMembersNames.Contains(o.Name)).ToList();
+                
+                var fields = typeof(TModel).GetFields(BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static);
+                var untestedFields = fields.Where(o => !TestedInstanceMembersNames.Contains(o.Name)).ToList();
+
+                if (untestedFields.Count > 0 || untestedProps.Count > 0)
+                {
+                    Console.WriteLine($"\n\t-\tSome public members were not automatically tested by the schema - Skipping Test");
+
+                    if (untestedProps.Count > 0)
+                    {
+                        Console.WriteLine($"\n\t-\tThe following public properties were not tested:");
+                        foreach (var x in untestedProps)
+                        {
+                            Console.WriteLine($"\t\t-\t{x.Name}");
+                        }
+                    }
+
+                    if (untestedFields.Count > 0)
+                    {
+                        Console.WriteLine($"\n\t-\tThe following public fields were not tested:");
+                        foreach (var x in untestedFields)
+                        {
+                            Console.WriteLine($"\t\t-\t{x.Name}");
+                        }
+                    }
+
+                    Assert.Inconclusive();
+                }
+                else
+                {
+                    Console.WriteLine($"\t✓\tAll public properties and fields have been tested");
+                    Assert.IsTrue(true);
+                }
+                return;
+            }
 
             // Act
             //var member = AssertGetFieldInfoByName(data.MemberName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             var prop = typeof(TModel).GetProperty(data.MemberName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             if (prop != null)
             {
+                TestedInstanceMembersNames.Add(prop.Name);
                 object actual = prop.GetValue(data.SystemUnderTest);
                 Assert.AreEqual(data.ExpectedValue, actual);
                 return;

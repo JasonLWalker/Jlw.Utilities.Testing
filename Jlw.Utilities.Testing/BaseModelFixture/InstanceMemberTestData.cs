@@ -21,7 +21,8 @@ namespace Jlw.Utilities.Testing
 
         public override string ToString()
         {
-            string sutType = DataUtility.GetTypeName(SystemUnderTest.GetType());
+
+            string sutType = SystemUnderTest == null ? "null" : DataUtility.GetTypeName(SystemUnderTest?.GetType());
             string expectedType = ExpectedValue == null ? "" : $"({DataUtility.GetTypeName(ExpectedValue?.GetType())})";
             string value = (ExpectedValue?.GetType() == typeof(string)) ? $"\"{ExpectedValue}\"" : ExpectedValue?.ToString() ?? "null";
             string sutDesc = _sutDescription ?? $"{sutType}";
