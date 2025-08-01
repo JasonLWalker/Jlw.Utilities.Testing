@@ -309,7 +309,6 @@ namespace Jlw.Utilities.Testing
             if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
             if (schema is null) Assert.Inconclusive();
 
-
             // If not flagged, then skip the test. (2 if statements are used to pass code coverage)
             if (!schema.CanTestValue) Console.WriteLine($"\t✓ Property is flagged to not test values. Skipping Test");
             if (!schema.CanTestValue) //Assert.Inconclusive();
@@ -317,6 +316,13 @@ namespace Jlw.Utilities.Testing
 
             Type t = typeof(TModel);
             string name = schema.Name;
+            List<string> excludeList = new List<string>() { name };
+
+            foreach (var prop in _propertySchema)
+            {
+                if (!prop.CanTestValue) excludeList.Add(prop.Name);
+            }
+            
             var ctor = t.GetConstructor(new Type[] { });
             Assert.IsNotNull(ctor, "Constructor is null. Unable to locate default constructor.");
 
@@ -365,7 +371,7 @@ namespace Jlw.Utilities.Testing
                 Assert.AreEqual(prevVal, newValue);
 
                 var snapshot = new InstanceMemberSnapshot(sut);
-                snapshot.AssertAreSame(origSnapshot, name);
+                snapshot.AssertAreSame(origSnapshot, excludeList);
             }
 
             

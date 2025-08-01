@@ -83,8 +83,16 @@ namespace Jlw.Utilities.Testing.Tests
 
             public int PublicReadInt { get; } = int.MaxValue;
 
+            public string PublicReadString { get; }
+            
+            public string PublicReadWriteString { get; set; }
 
-            public int PublicWriteInt
+            public string PublicCalculatedString
+            {
+                get => $"Calculated: {PublicReadString} {PublicReadWriteString} {_publicInt} {PublicReadWriteInt}";
+            }
+
+        public int PublicWriteInt
             {
                 set => _publicInt = value;
             } 
