@@ -1,12 +1,36 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Jlw.Utilities.Data;
 
 namespace Jlw.Utilities.Testing.Tests
 {
     public class SampleSchema : BaseModelSchema<SampleModelForTesting>
     {
+
+        public override IEnumerable<InstanceMemberTestData<SampleModelForTesting>> InstanceMemberTestList
+        {
+            get
+            {
+                var pubInt = DataUtility.GenerateRandom<int>();
+                var pubString = DataUtility.GenerateRandom<string>();
+
+                var sut = new SampleModelForTesting
+                {
+                    PublicReadWriteInt = pubInt,
+                    PublicReadWriteString = pubString,
+                };
+
+                yield return new InstanceMemberTestData<SampleModelForTesting>(sut, nameof(sut.PublicReadWriteInt), pubInt);
+                yield return new InstanceMemberTestData<SampleModelForTesting>(sut, nameof(sut.PublicReadWriteString), pubString);
+                
+                // Pick up any values not tested
+                foreach (var baseVal in base.InstanceMemberTestList) { yield return baseVal; }
+            }
+        }
+
         protected void InitProperties()
         {
             AddProperty(typeof(int), "PublicStaticReadWriteInt", Public | Static, Public | Static);
@@ -47,11 +71,15 @@ namespace Jlw.Utilities.Testing.Tests
             AddProperty(typeof(double), "ProtectedInternalReadDouble", ProtectedInternal, null);
             AddProperty(typeof(double), "ProtectedInternalWriteDouble", null, ProtectedInternal);
 
+            AddProperty(typeof(string), nameof(SampleModelForTesting.PublicReadString), Public, null);
+            AddProperty(typeof(string), nameof(SampleModelForTesting.PublicReadWriteString), Public, Public);
+            AddProperty(typeof(string), nameof(SampleModelForTesting.PublicCalculatedString), Public, null, false);
+
         }
 
         public void InitInterfaces()
         {
-            //AddInterface(typeof(IDataRecord));
+            AddInterface(typeof(ISampleModelForTesting));
         }
 
         public void InitFields()
