@@ -15,7 +15,7 @@ namespace Jlw.Utilities.Testing.UnitTests
 
         protected void InitInterfaces()
         {
-            AddInterface(typeof(INullModel));
+            //AddInterface(typeof(INullModel));
         }
 
         protected void InitFields()

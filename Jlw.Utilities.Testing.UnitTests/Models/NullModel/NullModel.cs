@@ -1,6 +1,6 @@
 ﻿namespace Jlw.Utilities.Testing.UnitTests
 {
-    public class NullModel : INullModel
+    public class NullModel //: INullModel
     {
     }
 }

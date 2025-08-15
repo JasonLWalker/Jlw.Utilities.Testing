@@ -62,7 +62,12 @@ namespace Jlw.Utilities.Testing.UnitTests
         public IntModel(short s)
         {
             PublicGet = s;
+            PublicGetSet = s;
+            PublicStaticGetSet = s;
+            
             _public = s;
+            _publicObject = s;
+            _publicStatic = s;
         }
 
         protected IntModel(int i) { }
