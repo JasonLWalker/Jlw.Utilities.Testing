@@ -447,6 +447,7 @@ namespace Jlw.Utilities.Testing
             // Retrieve a snapshot of all the member values before changes occur
             var origSnapshot = new InstanceMemberSnapshot(sut);
 
+            TestContext?.WriteLine($"=== Test changing value with 5 random iterations ===");
             for (var i = 0; i < 5; i++) // Loop through 5 iterations of tests
             {
                 // Random Value should not equal original Value. Try 3 times
@@ -490,7 +491,6 @@ namespace Jlw.Utilities.Testing
                 snapshot.AssertAreSame(origSnapshot, excludeList);
             }
 
-            
             // Try default parameter-less Constructor
             if (!schema.Type.IsValueType)
             {
@@ -498,6 +498,7 @@ namespace Jlw.Utilities.Testing
                 ctor = schema.Type.GetConstructor(new Type[] { });
                 if (ctor != null)
                 {
+                    TestContext?.WriteLine($"=== Test setting value with Parameter-less constructor ===");
                     newValue = ctor.Invoke(null);
                     TestContext?.WriteLine($"Previous Value: <{prevVal ?? "NULL"}>, New Value: <{newValue ?? "NULL"}>");
 
@@ -527,6 +528,7 @@ namespace Jlw.Utilities.Testing
             {
                 if (Nullable.GetUnderlyingType(schema.Type) != null || !schema.Type.IsValueType)
                 {
+                    TestContext?.WriteLine($"=== Test setting value to <NULL> ===");
                     if (Nullable.GetUnderlyingType(schema.Type) != null || schema.Type == typeof(string))
                         TestContext.WriteLine($"Previous Value: {prevVal ?? "<NULL>"}, New Value: <NULL>");
                     else
