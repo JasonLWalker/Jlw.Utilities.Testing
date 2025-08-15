@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+		<TargetFramework>net8.0</TargetFramework>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<LangVersion>10.0</LangVersion>
 	</PropertyGroup>
@@ -24,7 +24,7 @@
 		<Company>Jason L. Walker</Company>
 		<Authors>Jason L. Walker</Authors>
 		<Description>Utility library and set of base classes to assist with common scenarios when testing models and data structures via the MSTest unit test framework.</Description>
-		<Copyright>Copyright ©2012-2022 Jason L. Walker</Copyright>
+		<Copyright>Copyright ©2012-2025 Jason L. Walker</Copyright>
 		<VersionPrefix Condition="'$(VersionPrefix)' == ''">0.0.0.1</VersionPrefix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
   </PropertyGroup>
@@ -62,5 +62,11 @@
   <ItemGroup>
     <Folder Include="DBInstanceFixtures\" />
   </ItemGroup>
+
+
+	<Target Name="CustomSetVersionNumberForProj" AfterTargets="Publish">
+		<Exec Command="powershell $(ProjectDir)..\build-scripts\generate-documentation.ps1 $(OutputPath)..\publish\ $(ProjectDir)..\docs" EchoOff="false" ConsoleToMSBuild="true"></Exec>
+		<Exec Command="powershell $(ProjectDir)..\build-scripts\generate-readme.ps1 $(ProjectDir)..\" EchoOff="false" ConsoleToMSBuild="true"></Exec>
+	</Target>
 
 </Project>

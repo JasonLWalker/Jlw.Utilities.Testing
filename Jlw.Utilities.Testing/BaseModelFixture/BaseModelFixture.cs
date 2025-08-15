@@ -24,6 +24,8 @@ namespace Jlw.Utilities.Testing
         public const AccessModifiers Public = AccessModifiers.Public;
         public const AccessModifiers Static = AccessModifiers.Static;
 
+        public TestContext TestContext { get; set; }
+
         // Tests are redundant due to the fact that TModel must be class and is always public.
         /* 
         #region Class Tests
@@ -34,7 +36,7 @@ namespace Jlw.Utilities.Testing
             var t = typeof(TModel);
 
             Assert.IsTrue(t.IsClass, $"{DataUtility.GetTypeName(t)} is a class");
-            Console.WriteLine($"\t✓ {typeof(TModel).Name} is a class");
+            TestContext?.WriteLine($"\t✓ {typeof(TModel).Name} is a class");
         }
         
 
@@ -43,7 +45,7 @@ namespace Jlw.Utilities.Testing
         {
             var t = typeof(TModel);
             Assert.IsTrue(t.IsPublic, $"{DataUtility.GetTypeName(t)} is not public");
-            Console.WriteLine($"\t✓ {typeof(TModel).Name} is public");
+            TestContext?.WriteLine($"\t✓ {typeof(TModel).Name} is public");
         }
         #endregion
         */
@@ -54,7 +56,7 @@ namespace Jlw.Utilities.Testing
             {
                 foreach (var sKey in expectedKeys)
                 {
-                    Console.WriteLine($"\t\t{(implementedKeys.Contains(sKey) ? "✓" : "✗")}\t{sKey}");
+                    TestContext?.WriteLine($"\t\t{(implementedKeys.Contains(sKey) ? "✓" : "✗")}\t{sKey}");
                 }
             }
         }
@@ -64,7 +66,7 @@ namespace Jlw.Utilities.Testing
             {
                 foreach (var sKey in implementedKeys)
                 {
-                    Console.WriteLine($"\t\t{(expectedKeys.Contains(sKey) ? "✓" : "✗")}\t{sKey}");
+                    TestContext?.WriteLine($"\t\t{(expectedKeys.Contains(sKey) ? "✓" : "✗")}\t{sKey}");
                 }
             }
         }

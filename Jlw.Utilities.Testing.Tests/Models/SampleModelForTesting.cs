@@ -77,7 +77,10 @@ namespace Jlw.Utilities.Testing.Tests
         #endregion
 
         #region Public Properties
-            public static int PublicStaticReadWriteInt { get; set; } = int.MinValue;
+            public bool PublicReadWriteBool { get; set; } = false;
+            public DateTime? PublicReadWriteNullableDateTime { get; set; } = null;
+
+        public static int PublicStaticReadWriteInt { get; set; } = int.MinValue;
 
             public int PublicReadWriteInt { get; set; } = int.MinValue;
 

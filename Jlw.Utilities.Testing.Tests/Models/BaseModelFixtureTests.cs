@@ -33,6 +33,9 @@ namespace Jlw.Utilities.Testing.Tests
 
         protected void InitProperties()
         {
+            AddProperty(typeof(bool), nameof(SampleModelForTesting.PublicReadWriteBool), Public, Public);
+            AddProperty(typeof(DateTime?), nameof(SampleModelForTesting.PublicReadWriteNullableDateTime), Public, Public);
+            
             AddProperty(typeof(int), "PublicStaticReadWriteInt", Public | Static, Public | Static);
 
             AddProperty(typeof(int), "PublicReadWriteInt", Public, Public);
