@@ -23,11 +23,21 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(ImplementedInterfaceList))]
         public virtual void Interface_Is_Assignable(Type type)
         {
-            if (type is null) Console.WriteLine($"\t✓ type is NULL. Skipping Test");
-            if (type is null) Assert.Inconclusive();
-
             var t = typeof(TModel);
             var types = t.GetInterfaces();
+
+            if (type is null)
+            {
+                TestContext?.WriteLine($"\t✓ type is NULL. Skipping Test");
+                if (types.Length < 1)
+                {
+                    TestContext?.WriteLine($"\t✓ No interfaces exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputInterfaceCountAndList();
+                Assert.Inconclusive();
+            }
 
             Assert.IsNotNull(types);
             TestContext?.WriteLine($"\t✓ type list is not NULL");
@@ -50,11 +60,23 @@ namespace Jlw.Utilities.Testing
         public virtual void Interface_Count_Should_Match()
         {
             // If interface list is empty, then skip the test. (2 IF statements are used to pass code coverage)
-            if (IsInterfaceListEmpty) Console.WriteLine($"\t✓ No interface schema added. Skipping Test");
-            if (IsInterfaceListEmpty) Assert.Inconclusive();
-
             var t = typeof(TModel);
             var types = t.GetInterfaces();
+
+            if (IsInterfaceListEmpty)
+            {
+                TestContext?.WriteLine($"\t✓ No interface schema added. Skipping Test");
+                if (types.Length < 1)
+                {
+                    TestContext?.WriteLine($"\t✓ No interfaces exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+
+
+                OutputInterfaceCountAndList();
+                Assert.Inconclusive();
+            }
 
             var expectedKeys = GetExpectedInterfaceKeys().ToArray();
             var implementedKeys = GetImplementedInterfaceKeys().ToArray();
@@ -77,7 +99,8 @@ namespace Jlw.Utilities.Testing
             {
                 foreach (var schema in schemaList)
                 {
-                    aReturn.Add(schema.Name);
+                    if (schema != null)
+                        aReturn.Add(schema.Name);
                 }
             }
 
@@ -122,6 +145,18 @@ namespace Jlw.Utilities.Testing
                 OutputExpectedKeys(implementedKeys, expectedKeys);
             }
         }
+
+        protected void OutputInterfaceCountAndList()
+        {
+            // Retrieve the list of unique implemented constructor signatures
+            var implementedKeys = GetImplementedInterfaceKeys().ToArray();
+            // Retrieve the list of unique expected constructor signatures
+            var expectedKeys = GetExpectedInterfaceKeys().ToArray();
+            TestContext?.WriteLine($"\t✓\tNumber of implemented interfaces is {implementedKeys.Length}");
+            OutputImplementedKeys(implementedKeys, expectedKeys);
+        }
+
+
         #endregion
 
 

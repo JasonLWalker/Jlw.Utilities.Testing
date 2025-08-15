@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Jlw.Utilities.Data;
+using Microsoft.SqlServer.Management.Smo;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Jlw.Utilities.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
@@ -25,11 +26,27 @@ namespace Jlw.Utilities.Testing
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (_fieldSchema.Count(o => o != null) < 1) TestContext?.WriteLine($"\t✓ No field schema added. Skipping Test");
-            if (_fieldSchema.Count(o => o != null) < 1) Assert.Inconclusive();
+            //if (_fieldSchema.Count(o => o != null) < 1) Assert.Inconclusive();
 
             BindingFlags flags = flattenHierarchy ? BindingFlags.FlattenHierarchy : default;
             flags |= accessModifiers.HasFlag(AccessModifiers.Public) ? BindingFlags.Public : BindingFlags.NonPublic;
             flags |= accessModifiers.HasFlag(AccessModifiers.Static) ? BindingFlags.Static : BindingFlags.Instance;
+
+
+            if (_fieldSchema.Count(o => o != null) < 1)
+            {
+                var fields = typeof(TModel).GetFields(flags);
+                if (fields.Length < 1)
+                {
+                    TestContext?.WriteLine($"\t✓ No {accessModifiers} fields exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+
+                OutputFieldCountAndList(accessModifiers);
+                Assert.Inconclusive();
+            }
+
 
             var t = typeof(TModel);
             var aInfo = t.GetFields(flags);
@@ -60,9 +77,21 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(FieldList))]
         public virtual void Field_Should_Exist(MemberSchema schema)
         {
-            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-            if (schema is null) Assert.Inconclusive();
+            // If schema is null, then skip the test. 
+            if (schema is null)
+            {
+                TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
+                var fields = GetImplementedFieldKeys();//typeof(TModel).GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                if (!fields.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No public fields exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputFieldCountAndList();
+                Assert.Inconclusive();
+            }
+
 
             var t = typeof(TModel);
 
@@ -75,8 +104,19 @@ namespace Jlw.Utilities.Testing
         public virtual void Field_Type_Is_Assignable(MemberSchema schema)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-            if (schema is null) Assert.Inconclusive();
+            if (schema is null)
+            {
+                TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
+                var fields = GetImplementedFieldKeys();//typeof(TModel).GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                if (!fields.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No public fields exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputFieldCountAndList();
+                Assert.Inconclusive();
+            }
 
             var t = typeof(TModel);
             var info = GetFieldInfoByName(schema.Name, schema.BindingFlags);
@@ -95,9 +135,20 @@ namespace Jlw.Utilities.Testing
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (schema is null) TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
-            if (schema is null) Assert.Inconclusive();
+            if (schema is null)
+            {
+                var fields = GetImplementedFieldKeys();
+                if (!fields.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No public fields exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                
+                OutputFieldCountAndList();
+                Assert.Inconclusive();
+            }
             
-
             var info = GetFieldInfoByName(schema.Name, schema.BindingFlags);
 
 
@@ -118,16 +169,21 @@ namespace Jlw.Utilities.Testing
             // Declare variable to hold Dictionary of matched values
             var matches = new Dictionary<string, bool>();
 
-            // Output count to console for information purposes
-            Console.WriteLine($"\t✓\tNumber of implemented {GetAccessString(access)} fields is {implementedKeys.Length}");
-            Console.WriteLine($"\t\tImplemented fields:");
-            OutputImplementedKeys(implementedKeys, expectedKeys);
-            Console.WriteLine($"\t\tExpected fields:");
-            OutputExpectedKeys(implementedKeys, expectedKeys);
-
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
             if (IsFieldListEmpty) TestContext?.WriteLine($"\t-\tNo field schema added. Skipping Test");
-            if (IsFieldListEmpty) Assert.Inconclusive();
+            if (IsFieldListEmpty)
+            {
+                //var fields = typeof(TModel).GetFields(BindingFlags.Public | (access.HasFlag(AccessModifiers.Static) ? BindingFlags.Static : 0) | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                if (!implementedKeys.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No {access} fields exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                
+                OutputFieldCountAndList(access);
+                Assert.Inconclusive();
+            }
 
             foreach (string sKey in implementedKeys)
             {
@@ -179,6 +235,16 @@ namespace Jlw.Utilities.Testing
             }
 
             return aReturn.Distinct();
+        }
+
+        protected void OutputFieldCountAndList(AccessModifiers accessModifiers = AccessModifiers.Public)
+        {
+            // Retrieve the list of unique implemented constructor signatures
+            var implementedKeys = GetImplementedFieldKeys(accessModifiers).ToArray();
+            // Retrieve the list of unique expected constructor signatures
+            var expectedKeys = GetExpectedFieldKeys(accessModifiers).ToArray();
+            TestContext?.WriteLine($"\t✓\tNumber of implemented {accessModifiers} fields is {implementedKeys.Length}");
+            OutputImplementedKeys(implementedKeys, expectedKeys);
         }
 
         #endregion

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -38,6 +40,7 @@ namespace Jlw.Utilities.Testing
 
         protected static bool IsPropertyListEmpty => _propertySchema?.Count(o => o != null) < 1;
 
+        
         #region Property Tests
         [TestMethod]
         [DataRow(Public)]
@@ -45,8 +48,19 @@ namespace Jlw.Utilities.Testing
         public virtual void Property_Count_Should_Match(AccessModifiers accessModifiers, bool flattenHierarchy = true)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (_propertySchema.Count(o => o != null) < 1) Console.WriteLine($"\t✓\tNo property schema added. Skipping Test");
-            if (_propertySchema.Count(o => o != null) < 1) Assert.Inconclusive();
+            if (_propertySchema.Count(o => o != null) < 1)
+            {
+                TestContext?.WriteLine($"\t✓\tNo property schema added. Skipping Test");
+                var props = GetImplementedPropertyKeys(accessModifiers);
+                if (!props.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No {accessModifiers} properties exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputPropertyCountAndList(accessModifiers);
+                Assert.Inconclusive();
+            }
             
 
             BindingFlags flags = flattenHierarchy ? BindingFlags.FlattenHierarchy : default;
@@ -83,9 +97,21 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Should_Exist(PropertySchema schema)
         {
-            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-            if (schema is null) Assert.Inconclusive();
+            // If schema list is empty, then skip the test.
+            if (schema is null)
+            {
+                TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
+                var props = GetImplementedPropertyKeys();
+                if (!props.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No public properties exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputPropertyCountAndList();
+
+                Assert.Inconclusive();
+            }
 
             var t = typeof(TModel);
             var info = AssertPropertyExists(schema.Name);
@@ -96,9 +122,21 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Binding_Should_Match(PropertySchema schema)
         {
-            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-            if (schema is null) Assert.Inconclusive();
+            // If schema list is empty, then skip the test. 
+            if (schema is null)
+            {
+                TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
+                var props = GetImplementedPropertyKeys();
+                if (!props.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No public properties exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputPropertyCountAndList();
+                Assert.Inconclusive();
+            }
+            
 
             var t = typeof(TModel);
             var info = AssertGetPropertyInfoByName(schema.Name, schema.BindingFlags);
@@ -109,10 +147,21 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Type_Is_Assignable(PropertySchema schema)
         {
-            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-            if (schema is null) Assert.Inconclusive();
-
+            // If schema list is empty, then skip the test.
+            if (schema is null)
+            {
+                TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
+                var props = GetImplementedPropertyKeys();
+                if (!props.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No public properties exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputPropertyCountAndList();
+                Assert.Inconclusive();
+            }
+            
             var t = typeof(TModel);
             var info = GetPropertyInfoByName(schema.Name, schema.BindingFlags);
             
@@ -129,8 +178,21 @@ namespace Jlw.Utilities.Testing
         public virtual void Property_Access_Should_Match(PropertySchema schema)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-            if (schema is null) Assert.Inconclusive();
+            if (schema is null)
+            {
+                TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
+
+                var props = GetImplementedPropertyKeys();
+                if (!props.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No public properties exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputPropertyCountAndList();
+                Assert.Inconclusive();
+            }
+            
 
 
             // Arrange
@@ -147,9 +209,21 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Get_Accessor_Should_Match(PropertySchema schema)
         {
-            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-            if (schema is null) Assert.Inconclusive();
+            // If schema list is empty, then skip the test.
+            if (schema is null)
+            {
+                TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
+                var props = GetImplementedPropertyKeys();
+                if (!props.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No public properties exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputPropertyCountAndList();
+                Assert.Inconclusive();
+            }
+            
 
 
             // Arrange
@@ -175,10 +249,21 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Set_Accessor_Should_Match(PropertySchema schema)
         {
-            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-            if (schema is null) Assert.Inconclusive();
-
+            // If schema list is empty, then skip the test.
+            if (schema is null)
+            {
+                TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
+                var props = GetImplementedPropertyKeys();
+                if (!props.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No public properties exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputPropertyCountAndList();
+                Assert.Inconclusive();
+            }
+            
 
             // Arrange
             var info = GetPropertyInfoByName(schema.Name, schema.BindingFlags);
@@ -210,16 +295,32 @@ namespace Jlw.Utilities.Testing
             // Declare variable to hold Dictionary of matched values
             var matches = new Dictionary<string, bool>();
 
+            /*
             // Output count to console for information purposes
             TestContext?.WriteLine($"\t✓\tNumber of implemented {GetAccessString(access)} properties is {implementedKeys.Length}");
             TestContext?.WriteLine($"\t\tImplemented properties:");
             OutputImplementedKeys(implementedKeys, expectedKeys);
             TestContext?.WriteLine($"\t\tExpected properties:");
             OutputExpectedKeys(implementedKeys, expectedKeys);
-
+            */
+            
+            
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (IsPropertyListEmpty) Console.WriteLine($"\t-\tNo property schema added. Skipping Test");
-            if (IsPropertyListEmpty) Assert.Inconclusive();
+            if (IsPropertyListEmpty)
+            {
+                TestContext?.WriteLine($"\t-\tNo property schema added. Skipping Test");
+                var props = GetImplementedPropertyKeys(access);
+                if (!props.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No {access} properties exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputPropertyCountAndList(access);
+                Assert.Inconclusive();
+            }
+            OutputPropertyCountAndList(access);
+
 
             var re = new Regex(@"\s+(\w+)\s+{");
 
@@ -305,9 +406,20 @@ namespace Jlw.Utilities.Testing
         [DynamicData(nameof(PropertyValueList))]
         public virtual void Property_Value_Should_Match_When_Set(PropertySchema schema)
         {
-            // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
-            if (schema is null) Assert.Inconclusive();
+            // If schema list is empty, then skip the test.
+            if (schema is null)
+            {
+                TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
+                var props = GetImplementedPropertyKeys();
+                if (!props.Any())
+                {
+                    TestContext?.WriteLine($"\t✓ No public properties exist.");
+                    Assert.AreEqual(0, 0);
+                    return;
+                }
+                OutputPropertyCountAndList();
+                Assert.Inconclusive();
+            }
 
             // If not flagged, then skip the test. (2 if statements are used to pass code coverage)
             if (!schema.CanTestValue) TestContext?.WriteLine($"\t✓ {schema.Name} Property is flagged to not test values. Skipping Test");
@@ -345,21 +457,25 @@ namespace Jlw.Utilities.Testing
                     newValue = DataUtility.GenerateRandom(Nullable.GetUnderlyingType(schema.Type) ?? schema.Type);
                 } while ((++n < 3) && ((prevVal?.Equals(newValue) ?? false) || (origVal?.Equals(newValue) ?? false)));
 
-            
-                if ((origVal?.Equals(newValue) ?? false) || (prevVal?.Equals(newValue) ?? false) || newValue is null)
-                {
-                        TestContext?.WriteLine($"{schema.Name} - Unable to generate random value for {schema.Type}");
-                    if (schema.Type.IsValueType)
-                        Assert.Inconclusive();
-                    
-                    break;
-                }
 
                 // Values should be different
-                Console.WriteLine($"Previous Value: {prevVal ?? "<NULL>"}, New Value: {newValue}");
+                TestContext?.WriteLine($"Property: {schema.Name}, Previous Value: {prevVal ?? "<NULL>"}, New Value: {newValue}");
+                if ((Nullable.GetUnderlyingType(schema.Type) ?? schema.Type) != typeof(bool))
+                {
 
-                //Assert.AreNotEqual(origVal, newValue, "Original value should not match random value");
-                Assert.AreNotEqual(prevVal, newValue, "Previous value should not match random value");
+                    if ((origVal?.Equals(newValue) ?? false) || (prevVal?.Equals(newValue) ?? false) || newValue is null)
+                    {
+                        TestContext?.WriteLine($"{schema.Name} - Unable to generate random value for {schema.Type}");
+                        if (schema.Type.IsValueType)
+                            Assert.Inconclusive();
+
+                        break;
+                    }
+
+
+                    //Assert.AreNotEqual(origVal, newValue, "Original value should not match random value");
+                    Assert.AreNotEqual(prevVal, newValue, "Previous value should not match random value");
+                }
 
                 // Set the property
                 AssertSetPropertyValueByName(sut, name, newValue);
@@ -480,6 +596,18 @@ namespace Jlw.Utilities.Testing
 
             return aReturn.Distinct();
         }
+
+        protected void OutputPropertyCountAndList(AccessModifiers accessModifiers = AccessModifiers.Public)
+        {
+            // Retrieve the list of unique implemented constructor signatures
+            var implementedKeys = GetImplementedPropertyKeys(accessModifiers).ToArray();
+            // Retrieve the list of unique expected constructor signatures
+            var expectedKeys = GetExpectedPropertyKeys(accessModifiers).ToArray();
+            TestContext?.WriteLine($"\t✓\tNumber of implemented {accessModifiers} properties is {implementedKeys.Length}");
+            OutputImplementedKeys(implementedKeys, expectedKeys);
+        }
+
+
 
         #endregion
     }

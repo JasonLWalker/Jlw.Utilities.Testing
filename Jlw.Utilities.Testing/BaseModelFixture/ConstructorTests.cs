@@ -47,6 +47,16 @@ namespace Jlw.Utilities.Testing
             // Output count to console for information purposes
             TestContext?.WriteLine($"\t✓\tNumber of implemented {GetAccessString(access)} constructors is {implementedKeys.Length}");
 
+            if (IsConstructorListEmpty)
+            {
+                if (implementedKeys.Length == 1 && (implementedKeys[0]?.Equals($"public {typeof(TModel).Name}()") ?? false))
+                {
+                    TestContext?.WriteLine($"\t-\tNo constructor schema added, but only default constructor exists, skipping other tests");
+                    Assert.AreEqual(implementedKeys[0], $"public {typeof(TModel).Name}()");
+                    return;
+                }
+            }
+
             OutputImplementedConstructors(implementedKeys, expectedKeys);
             OutputExpectedConstructors(implementedKeys, expectedKeys);
 
@@ -85,6 +95,16 @@ namespace Jlw.Utilities.Testing
             // Output count to console for information purposes
             TestContext?.WriteLine($"\t✓\tNumber of implemented {GetAccessString(access)} constructors is {implementedKeys.Length}");
 
+            if (IsConstructorListEmpty)
+            {
+                if (implementedKeys.Length == 1 && (implementedKeys[0]?.Equals($"public {typeof(TModel).Name}()") ?? false))
+                {
+                    TestContext?.WriteLine($"\t-\tNo constructor schema added, but only default constructor exists, skipping other tests");
+                    Assert.AreEqual(implementedKeys[0], $"public {typeof(TModel).Name}()");
+                    return;
+                }
+            }
+
             OutputImplementedConstructors(implementedKeys, expectedKeys);
             OutputExpectedConstructors(implementedKeys, expectedKeys);
 
@@ -110,8 +130,22 @@ namespace Jlw.Utilities.Testing
         public virtual void Constructor_Should_Exist(ConstructorSchema schema)
         {
             // If schema is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema == null) Console.WriteLine($"\t-\tschema is NULL. Skipping Test");
-            if (schema == null) Assert.Inconclusive();
+            if (schema == null)
+            {
+                // Retrieve the list of unique implemented constructor signatures
+                var implementedKeys = GetImplementedConstructorKeys().ToArray();
+                var expectedKeys = GetExpectedConstructorKeys().ToArray();
+                TestContext?.WriteLine($"\t✓\tNumber of implemented Public constructors is {implementedKeys.Length}");
+                OutputImplementedConstructors(implementedKeys, expectedKeys);
+                if (implementedKeys.Length == 1 && (implementedKeys[0]?.Equals($"public {typeof(TModel).Name}()") ?? false))
+                {
+                    TestContext?.WriteLine($"\t-\tNo constructor schema added, but only default constructor exists, skipping other tests");
+                    Assert.AreEqual(implementedKeys[0], $"public {typeof(TModel).Name}()");
+                    return;
+                }
+                TestContext?.WriteLine($"\t-\tschema is NULL. Skipping Test");
+                Assert.Inconclusive();
+            }
 
             var t = typeof(TModel);
             var ctors = t.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.CreateInstance | BindingFlags.FlattenHierarchy);
@@ -191,6 +225,7 @@ namespace Jlw.Utilities.Testing
             var field = typeof(TModel).GetField(data.MemberName, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             if (field != null)
             {
+                TestedInstanceMembersNames.Add(field.Name);
                 object actual = field.GetValue(data.SystemUnderTest);
                 Assert.AreEqual(data.ExpectedValue, actual);
                 return;
