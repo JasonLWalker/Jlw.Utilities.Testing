@@ -511,7 +511,7 @@ namespace Jlw.Utilities.Testing
                     Assert.AreEqual(prevVal, newValue);
 
                     var snapshot = new InstanceMemberSnapshot(sut);
-                    snapshot.AssertAreSame(origSnapshot, name);
+                    snapshot.AssertAreSame(origSnapshot, excludeList);
                 }
 
 
@@ -542,7 +542,7 @@ namespace Jlw.Utilities.Testing
                     Assert.AreEqual(prevVal, null);
 
                     var snapshot = new InstanceMemberSnapshot(sut);
-                    snapshot.AssertAreSame(origSnapshot, name);
+                    snapshot.AssertAreSame(origSnapshot, excludeList);
                 }
             }
             

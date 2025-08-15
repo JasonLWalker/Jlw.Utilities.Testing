@@ -75,6 +75,7 @@ namespace Jlw.Utilities.Testing.UnitTests
 
             AddProperty(typeof(object), "PublicNoTest", Public, Public, false, false);
 
+            AddProperty(typeof(string), nameof(IntModel.GetHash), Public, null, false);
         }
 
         public IntModelTestSchema()
