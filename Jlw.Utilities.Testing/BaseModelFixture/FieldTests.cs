@@ -24,7 +24,7 @@ namespace Jlw.Utilities.Testing
         public virtual void Field_Count_Should_Match(AccessModifiers accessModifiers, bool flattenHierarchy = true)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (_fieldSchema.Count(o => o != null) < 1) Console.WriteLine($"\t✓ No field schema added. Skipping Test");
+            if (_fieldSchema.Count(o => o != null) < 1) TestContext?.WriteLine($"\t✓ No field schema added. Skipping Test");
             if (_fieldSchema.Count(o => o != null) < 1) Assert.Inconclusive();
 
             BindingFlags flags = flattenHierarchy ? BindingFlags.FlattenHierarchy : default;
@@ -36,7 +36,7 @@ namespace Jlw.Utilities.Testing
             BindingFlags mask = ~(BindingFlags.FlattenHierarchy | BindingFlags.Instance);
 
             Assert.IsNotNull(aInfo, $"Unable to retrieve FieldInfo for {DataUtility.GetTypeName(t)} with BindingFlags: {flags}");
-            Console.WriteLine($"\t✓ FieldInfo retrieved");
+            TestContext?.WriteLine($"\t✓ FieldInfo retrieved");
 
             int nCount = _fieldSchema.Count(o => o != null && ((o.BindingFlags & mask) == (flags & mask)) && o.Access.Equals(accessModifiers));
             int nMemCount = 0;
@@ -50,10 +50,10 @@ namespace Jlw.Utilities.Testing
                     nMemCount++;
                 }
             }
-            Console.WriteLine($"\t   Fields Retrieved:\n{sProps}");
+            TestContext?.WriteLine($"\t   Fields Retrieved:\n{sProps}");
 
             Assert.AreEqual(nCount, nMemCount, $"Number of fields is incorrect. Should be {nCount} for BindingFlags: {flags}, and AccessModifiers: {accessModifiers}");
-            Console.WriteLine($"\t✓ Number of fields is {nCount} for BindingFlags: {flags}, and AccessModifiers: {accessModifiers}");
+            TestContext?.WriteLine($"\t✓ Number of fields is {nCount} for BindingFlags: {flags}, and AccessModifiers: {accessModifiers}");
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace Jlw.Utilities.Testing
             var t = typeof(TModel);
 
             var info = AssertFieldExists(schema.Name);
-            Console.WriteLine($"\t✓ property [{schema.Name}] exists with PropertyType.Attributes: {info.FieldType.Attributes}");
+            TestContext?.WriteLine($"\t✓ property [{schema.Name}] exists with PropertyType.Attributes: {info.FieldType.Attributes}");
         }
 
         [TestMethod]
@@ -83,9 +83,9 @@ namespace Jlw.Utilities.Testing
 
             Assert.IsTrue(schema.Type.IsAssignableFrom(info.FieldType), $"[{DataUtility.GetTypeName(schema.Type)}] is not assignable from [{DataUtility.GetTypeName(info.FieldType)}]");
             if (schema.Type == info.FieldType)
-                Console.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) matches field with the signature: \n\t\t\t{schema}");
+                TestContext?.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) matches field with the signature: \n\t\t\t{schema}");
             else
-                Console.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) is implemented by field {schema}");
+                TestContext?.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) is implemented by field {schema}");
 
         }
 
@@ -94,7 +94,7 @@ namespace Jlw.Utilities.Testing
         public virtual void Field_Access_Should_Match(MemberSchema schema)
         {
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+            if (schema is null) TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
             if (schema is null) Assert.Inconclusive();
             
 
@@ -103,7 +103,7 @@ namespace Jlw.Utilities.Testing
 
             Assert.AreEqual((FieldAttributes)schema.Access, (info?.Attributes ?? default), $"Access modifiers do not match for field with the signature:\n\t\t\t{schema}");
 
-            Console.WriteLine($"\t✓ field access modifiers match: {schema}");
+            TestContext?.WriteLine($"\t✓ field access modifiers match: {schema}");
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace Jlw.Utilities.Testing
             OutputExpectedKeys(implementedKeys, expectedKeys);
 
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
-            if (IsFieldListEmpty) Console.WriteLine($"\t-\tNo field schema added. Skipping Test");
+            if (IsFieldListEmpty) TestContext?.WriteLine($"\t-\tNo field schema added. Skipping Test");
             if (IsFieldListEmpty) Assert.Inconclusive();
 
             foreach (string sKey in implementedKeys)

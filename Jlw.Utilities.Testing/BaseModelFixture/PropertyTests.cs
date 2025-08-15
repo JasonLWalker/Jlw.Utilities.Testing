@@ -58,7 +58,7 @@ namespace Jlw.Utilities.Testing
             var aInfo = t.GetProperties(flags);
 
             Assert.IsNotNull(aInfo, $"✗\tUnable to retrieve PropertyInfo for {DataUtility.GetTypeName(t)} with BindingFlags: {flags}");
-            Console.WriteLine($"\t✓\tPropertyInfo retrieved");
+            TestContext?.WriteLine($"\t✓\tPropertyInfo retrieved");
             BindingFlags mask = ~(BindingFlags.FlattenHierarchy | BindingFlags.Instance);
 
             int nCount = _propertySchema.Count(o => o != null && ((o.BindingFlags & mask) == (flags & mask)) && o.Access.Equals(accessModifiers));
@@ -73,10 +73,10 @@ namespace Jlw.Utilities.Testing
                     nPropCount++;
                 }
             }
-            Console.WriteLine($"\t\tProperties Retrieved:\n{sProps}");
+            TestContext?.WriteLine($"\t\tProperties Retrieved:\n{sProps}");
 
             Assert.AreEqual(nCount, nPropCount, $"✗\tNumber of properties is incorrect. Should be {nCount} for BindingFlags: {flags}");
-            Console.WriteLine($"\t✓\tNumber of properties is {nCount} for BindingFlags: {flags}");
+            TestContext?.WriteLine($"\t✓\tNumber of properties is {nCount} for BindingFlags: {flags}");
         }
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace Jlw.Utilities.Testing
 
             var t = typeof(TModel);
             var info = AssertPropertyExists(schema.Name);
-            Console.WriteLine($"\t✓ property [{schema.Name}] exists with PropertyType.Attributes: {info.PropertyType.Attributes}");
+            TestContext?.WriteLine($"\t✓ property [{schema.Name}] exists with PropertyType.Attributes: {info.PropertyType.Attributes}");
         }
 
         [TestMethod]
@@ -102,7 +102,7 @@ namespace Jlw.Utilities.Testing
 
             var t = typeof(TModel);
             var info = AssertGetPropertyInfoByName(schema.Name, schema.BindingFlags);
-            Console.WriteLine($"\t✓ property [{schema.Name}] retrieved with BindingFlags: {schema.BindingFlags}");
+            TestContext?.WriteLine($"\t✓ property [{schema.Name}] retrieved with BindingFlags: {schema.BindingFlags}");
         }
 
         [TestMethod]
@@ -118,9 +118,9 @@ namespace Jlw.Utilities.Testing
             
             Assert.IsTrue(schema.Type.IsAssignableFrom(info.PropertyType), $"[{DataUtility.GetTypeName(schema.Type)}] is not assignable from [{DataUtility.GetTypeName(info.PropertyType)}]");
             if (schema.Type == info.PropertyType)
-                Console.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) matches property with the signature: \n\t\t\t{schema}");
+                TestContext?.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) matches property with the signature: \n\t\t\t{schema}");
             else
-                Console.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) is implemented by property {schema}");
+                TestContext?.WriteLine($"\t✓ typeof({DataUtility.GetTypeName(schema.Type)}) is implemented by property {schema}");
         }
 
 
@@ -140,7 +140,7 @@ namespace Jlw.Utilities.Testing
             // Assert
             Assert.AreEqual(schema.Access, GetPropertyAccess(info?.GetMethod?.Attributes ?? default, info?.SetMethod?.Attributes ?? default), $"Access modifiers do not match for property with the signature:\n\t\t\t{schema}");
 
-            Console.WriteLine($"\t✓ property access modifiers match: {schema}");
+            TestContext?.WriteLine($"\t✓ property access modifiers match: {schema}");
         }
 
         [TestMethod]
@@ -159,7 +159,7 @@ namespace Jlw.Utilities.Testing
             if (schema.GetAttributes == null || info.GetMethod == null)
             {
                 Assert.AreEqual(DataUtility.ParseNullableLong(schema.GetAttributes), DataUtility.ParseNullableLong(info.GetMethod?.Attributes), schema.GetAttributes == null ? "Get method should not exist" : "Get method should exist");
-                Console.WriteLine($"\t✓ property get method should not exist");
+                TestContext?.WriteLine($"\t✓ property get method should not exist");
             }
             else
             {
@@ -168,7 +168,7 @@ namespace Jlw.Utilities.Testing
                 Assert.IsTrue((info.GetMethod.Attributes & AccessScope.AccessMask) == (MethodAttributes)schema.GetAttributes, $"property [{schema.Name}] attributes [{info.GetMethod.Attributes}] do not match [{schema.GetAttributes}]");
             }
 
-            Console.WriteLine($"\t✓ property [{schema.Name}] attributes match: {schema.GetAttributes}");
+            TestContext?.WriteLine($"\t✓ property [{schema.Name}] attributes match: {schema.GetAttributes}");
         }
 
         [TestMethod]
@@ -187,7 +187,7 @@ namespace Jlw.Utilities.Testing
             if (schema.SetAttributes == null || info?.SetMethod == null)
             {
                 Assert.AreEqual(DataUtility.ParseNullableLong(schema.SetAttributes), DataUtility.ParseNullableLong(info?.SetMethod?.Attributes), schema.SetAttributes == null ? "set accessor should not exist" : "set accessor should exist");
-                Console.WriteLine($"\t✓ property set accessor should not exist");
+                TestContext?.WriteLine($"\t✓ property set accessor should not exist");
             }
             else
             {
@@ -195,7 +195,7 @@ namespace Jlw.Utilities.Testing
                 Assert.IsTrue((info.SetMethod.Attributes & AccessScope.AccessMask) == (MethodAttributes)schema.SetAttributes, $"property [{schema.Name}] attributes [{info.SetMethod?.Attributes}] do not match [{schema.SetAttributes}]");
             }
 
-            Console.WriteLine($"\t✓ property [{schema.Name}] attributes match: {schema.SetAttributes}");
+            TestContext?.WriteLine($"\t✓ property [{schema.Name}] attributes match: {schema.SetAttributes}");
         }
 
         [TestMethod]
@@ -211,10 +211,10 @@ namespace Jlw.Utilities.Testing
             var matches = new Dictionary<string, bool>();
 
             // Output count to console for information purposes
-            Console.WriteLine($"\t✓\tNumber of implemented {GetAccessString(access)} properties is {implementedKeys.Length}");
-            Console.WriteLine($"\t\tImplemented properties:");
+            TestContext?.WriteLine($"\t✓\tNumber of implemented {GetAccessString(access)} properties is {implementedKeys.Length}");
+            TestContext?.WriteLine($"\t\tImplemented properties:");
             OutputImplementedKeys(implementedKeys, expectedKeys);
-            Console.WriteLine($"\t\tExpected properties:");
+            TestContext?.WriteLine($"\t\tExpected properties:");
             OutputExpectedKeys(implementedKeys, expectedKeys);
 
             // If schema list is empty, then skip the test. (2 if statements are used to pass code coverage)
@@ -250,11 +250,11 @@ namespace Jlw.Utilities.Testing
         public virtual void Property_Value_Should_Match_When_Set_For_Value_Type(PropertySchema schema)
         {
             // If schema list is empty, then skip the test. 
-            if (schema is null) Console.WriteLine($"\t✓ schema is NULL. Skipping Test");
+            if (schema is null) TestContext?.WriteLine($"\t✓ schema is NULL. Skipping Test");
             if (schema is null) Assert.Inconclusive();
 
             // If not flagged, then skip the test. (2 if statements are used to pass code coverage)
-            if (!schema.CanTestValue) Console.WriteLine($"\t✓ Property is flagged to not test values. Skipping Test");
+            if (!schema.CanTestValue) TestContext?.WriteLine($"\t✓ Property is flagged to not test values. Skipping Test");
             if (!schema.CanTestValue) //Assert.Inconclusive();
                 return;
             string name = schema.Name;
@@ -272,7 +272,7 @@ namespace Jlw.Utilities.Testing
 
                 if ((origVal?.Equals(newValue) ?? false) || (prevVal?.Equals(newValue) ?? false) || newValue is null)
                 {
-                    Console.WriteLine($"Unable to generate random value for {schema.Type}");
+                    TestContext?.WriteLine($"Unable to generate random value for {schema.Type}");
                     if (schema.Type.IsValueType)
                         Assert.Inconclusive();
 
@@ -280,7 +280,7 @@ namespace Jlw.Utilities.Testing
                 }
 
                 // Values should be different
-                Console.WriteLine($"Previous Value: {prevVal ?? "<NULL>"}, New Value: {newValue}");
+                TestContext?.WriteLine($"Previous Value: {prevVal ?? "<NULL>"}, New Value: {newValue}");
 
                 //Assert.AreNotEqual(origVal, newValue, "Original value should not match random value");
                 Assert.AreNotEqual(prevVal, newValue, "Previous value should not match random value");
@@ -310,7 +310,7 @@ namespace Jlw.Utilities.Testing
             if (schema is null) Assert.Inconclusive();
 
             // If not flagged, then skip the test. (2 if statements are used to pass code coverage)
-            if (!schema.CanTestValue) Console.WriteLine($"\t✓ Property is flagged to not test values. Skipping Test");
+            if (!schema.CanTestValue) TestContext?.WriteLine($"\t✓ {schema.Name} Property is flagged to not test values. Skipping Test");
             if (!schema.CanTestValue) //Assert.Inconclusive();
                 return;
 
@@ -348,7 +348,7 @@ namespace Jlw.Utilities.Testing
             
                 if ((origVal?.Equals(newValue) ?? false) || (prevVal?.Equals(newValue) ?? false) || newValue is null)
                 {
-                    Console.WriteLine($"Unable to generate random value for {schema.Type}");
+                        TestContext?.WriteLine($"{schema.Name} - Unable to generate random value for {schema.Type}");
                     if (schema.Type.IsValueType)
                         Assert.Inconclusive();
                     
@@ -383,7 +383,7 @@ namespace Jlw.Utilities.Testing
                 if (ctor != null)
                 {
                     newValue = ctor.Invoke(null);
-                    Console.WriteLine($"Previous Value: <{prevVal ?? "NULL"}>, New Value: <{newValue ?? "NULL"}>");
+                    TestContext?.WriteLine($"Previous Value: <{prevVal ?? "NULL"}>, New Value: <{newValue ?? "NULL"}>");
 
                     // Set the property
                     AssertSetPropertyValueByName(sut, name, newValue);
@@ -412,9 +412,9 @@ namespace Jlw.Utilities.Testing
                 if (Nullable.GetUnderlyingType(schema.Type) != null || !schema.Type.IsValueType)
                 {
                     if (Nullable.GetUnderlyingType(schema.Type) != null || schema.Type == typeof(string))
-                        Console.WriteLine($"Previous Value: {prevVal ?? "<NULL>"}, New Value: <NULL>");
+                        TestContext.WriteLine($"Previous Value: {prevVal ?? "<NULL>"}, New Value: <NULL>");
                     else
-                        Console.WriteLine($"Previous Value: <{prevVal ?? "NULL"}>, New Value: <NULL>");
+                        TestContext.WriteLine($"Previous Value: <{prevVal ?? "NULL"}>, New Value: <NULL>");
 
                     // Set the property
                     AssertSetPropertyValueByName(sut, name, null);

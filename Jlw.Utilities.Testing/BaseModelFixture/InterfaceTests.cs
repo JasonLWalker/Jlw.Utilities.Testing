@@ -30,7 +30,7 @@ namespace Jlw.Utilities.Testing
             var types = t.GetInterfaces();
 
             Assert.IsNotNull(types);
-            Console.WriteLine($"\t✓ type list is not NULL");
+            TestContext?.WriteLine($"\t✓ type list is not NULL");
 
             string sImplemented = "";
             foreach (var k in types)
@@ -39,10 +39,10 @@ namespace Jlw.Utilities.Testing
             }
 
             Assert.IsTrue(types.Any(type.IsAssignableFrom), $"Does not implement {type}");
-            Console.WriteLine($"\t✓ implements interface {DataUtility.GetTypeName(type)}");
+            TestContext?.WriteLine($"\t✓ implements interface {DataUtility.GetTypeName(type)}");
 
             Assert.AreEqual(_implementedInterfaceTypes.Count(), types.Length, $"Number of implemented interfaces is incorrect. Should be {_implementedInterfaceTypes.Count()}. Interfaces Implemented:\n{sImplemented}");
-            Console.WriteLine($"\t✓ Number of interfaces is {_implementedInterfaceTypes.Count()}");
+            TestContext?.WriteLine($"\t✓ Number of interfaces is {_implementedInterfaceTypes.Count()}");
         }
 
 
@@ -59,7 +59,7 @@ namespace Jlw.Utilities.Testing
             var expectedKeys = GetExpectedInterfaceKeys().ToArray();
             var implementedKeys = GetImplementedInterfaceKeys().ToArray();
 
-            Console.WriteLine($"\t✓ Number of implemented interfaces is {implementedKeys.Length}");
+            TestContext?.WriteLine($"\t✓ Number of implemented interfaces is {implementedKeys.Length}");
             OutputImplementedInterfaces(implementedKeys, expectedKeys);
             OutputExpectedInterfaces(implementedKeys, expectedKeys);
 
@@ -104,7 +104,7 @@ namespace Jlw.Utilities.Testing
             // Output list to console for information purposes
             if (implementedKeys.Length > 0)
             {
-                Console.WriteLine($"\t\tInterfaces Implemented:");
+                TestContext?.WriteLine($"\t\tInterfaces Implemented:");
                 OutputImplementedKeys(implementedKeys, expectedKeys);
             }
         }
@@ -118,7 +118,7 @@ namespace Jlw.Utilities.Testing
         {
             if (expectedKeys.Length > 0)
             {
-                Console.WriteLine($"\t\tInterfaces Expected:");
+                TestContext?.WriteLine($"\t\tInterfaces Expected:");
                 OutputExpectedKeys(implementedKeys, expectedKeys);
             }
         }
