@@ -18,6 +18,7 @@ namespace Jlw.Utilities.Testing.UnitTests
 
         protected void InitInterfaces()
         {
+            AddInterface(typeof(IIntModel));
             AddInterface(typeof(IDataRecord));
         }
 

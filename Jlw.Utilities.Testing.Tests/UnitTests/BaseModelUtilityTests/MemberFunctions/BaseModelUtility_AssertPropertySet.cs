@@ -31,8 +31,8 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
             var o = AssertPropertySet(name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             var p = GetPropertyInfoByName(name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
             var val = p.GetValue(o);
-            Console.WriteLine($"{name} : {val}");
-            Assert.AreEqual(DataUtility.ParseAs(val.GetType(), "1234567890.1234567890"), val);
+            Console.WriteLine($"{name} : {val ?? "<NULL>"}");
+            Assert.AreEqual(DataUtility.ParseAs(val?.GetType(), "1234567890.1234567890"), val);
         }
 
         [TestMethod]

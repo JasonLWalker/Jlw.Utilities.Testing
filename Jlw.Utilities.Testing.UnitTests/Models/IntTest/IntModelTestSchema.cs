@@ -17,7 +17,16 @@ namespace Jlw.Utilities.Testing.UnitTests
                 var sut = new IntModel(n);
 
                 yield return new InstanceMemberTestData<IntModel>(sut, nameof(sut.PublicGet), (int)n);
+                yield return new InstanceMemberTestData<IntModel>(sut, nameof(sut.PublicGetSet), (int)n);
+                yield return new InstanceMemberTestData<IntModel>(sut, nameof(sut.PublicStaticGetSet), (int)n);
+
+                //yield return new InstanceMemberTestData<IntModel>(sut, nameof(sut.PublicSet), (int)n);
                 yield return new InstanceMemberTestData<IntModel>(sut, nameof(sut._public), (int)n);
+                yield return new InstanceMemberTestData<IntModel>(sut, nameof(sut._publicObject), (int)n);
+                yield return new InstanceMemberTestData<IntModel>(sut, nameof(sut._publicStatic), (int)n);
+
+                // Pick up any values not tested
+                foreach (var baseVal in base.InstanceMemberTestList) { yield return baseVal; }
             }
         }
 
@@ -33,7 +42,7 @@ namespace Jlw.Utilities.Testing.UnitTests
 
         protected void InitInterfaces()
         {
-            AddInterface(typeof(INullModel));
+            //AddInterface(typeof(INullModel));
             AddInterface(typeof(IIntModel));
         }
 
@@ -66,6 +75,7 @@ namespace Jlw.Utilities.Testing.UnitTests
 
             AddProperty(typeof(object), "PublicNoTest", Public, Public, false, false);
 
+            AddProperty(typeof(string), nameof(IntModel.GetHash), Public, null, false);
         }
 
         public IntModelTestSchema()
