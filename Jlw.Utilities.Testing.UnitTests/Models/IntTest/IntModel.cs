@@ -1,4 +1,5 @@
 ﻿using Jlw.Utilities.Data;
+using System.Collections.Generic;
 
 namespace Jlw.Utilities.Testing.UnitTests
 {
@@ -53,6 +54,11 @@ namespace Jlw.Utilities.Testing.UnitTests
         protected int ProtectedSet { set => _backerInt = value; }
         protected internal int ProtectedInternalSet { set => _backerInt = value; }
         internal int InternalSet { set => _backerInt = value; }
+        
+        public string GetHash
+        {
+            get => GenerateToken("token", _public.ToString(), PrivateGet);
+        }
 
         #region Constructors
         static IntModel() { }
@@ -74,5 +80,17 @@ namespace Jlw.Utilities.Testing.UnitTests
 
         private IntModel(long l) { }
         #endregion
+
+        protected string GenerateToken(string type, string id, int id2)
+        {
+            if (string.IsNullOrWhiteSpace(type) || string.IsNullOrWhiteSpace(id) || id2 <= 0)
+                return DataUtility.Md5Hash(DataUtility.GenerateSalt()); // Generate a random hash that will not be able to be matched.
+
+            var salt = type.ToLower() + "-" + _public + "-" + id2.ToString("D");
+
+            return DataUtility.Md5Hash(salt + id);
+        }
+
+
     }
 }
