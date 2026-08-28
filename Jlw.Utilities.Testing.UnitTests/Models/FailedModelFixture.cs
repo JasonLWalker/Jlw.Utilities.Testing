@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing.UnitTests
 {
-    [TestClass]
     public class FailedModelFixture<TModel, TSchema> : BaseModelFixture<TModel, TSchema> where TSchema : BaseModelSchema<TModel>, new() where TModel : class
     {
         public new static IEnumerable<object[]> ConstructorList => _constructorSchema.Select(o => new object[] { o });
