@@ -183,7 +183,7 @@ namespace Jlw.Utilities.Testing
             var m = p.GetMethod;
             object o = null;
             Assert.IsNotNull(m, $"'{sMemberName}' does not have a get accessor.");
-            Assert.ThrowsException<AssertSucceededException>(() =>
+            Assert.Throws<AssertSucceededException>(() =>
             {
                 object t = Activator.CreateInstance(typeof(TModel));
                 o = m.Invoke(t, new object[] { });
@@ -202,7 +202,7 @@ namespace Jlw.Utilities.Testing
             var m = p.SetMethod;
             object o = null;
             Assert.IsNotNull(m, $"'{sMemberName}' does not have a set accessor.");
-            Assert.ThrowsException<AssertSucceededException>(() =>
+            Assert.Throws<AssertSucceededException>(() =>
             {
                 m.Invoke(t, new object[] { DataUtility.ParseAs(p.PropertyType, "1234567890.1234567890") });
                 throw new AssertSucceededException($"Successfully set value {o}");
@@ -273,7 +273,7 @@ namespace Jlw.Utilities.Testing
         public void AssertSetPropertyValueByName(TModel o, string sMemberName, object value)
         {
             var p = AssertPropertyIsWritable(sMemberName);
-            Assert.ThrowsException<AssertSucceededException>(() =>
+            Assert.Throws<AssertSucceededException>(() =>
             {
                 p.SetValue(o, value);
                 throw new AssertSucceededException("");
@@ -289,7 +289,7 @@ namespace Jlw.Utilities.Testing
             object val = null;
             Assert.IsNotNull(p, $"{typeof(TModel)} does not contain a property with the name '{sMemberName}'.");
             AssertPropertyIsReadable(sMemberName);
-            Assert.ThrowsException<AssertSucceededException>(() =>
+            Assert.Throws<AssertSucceededException>(() =>
             {
                 val = p.GetValue(o);
                 throw new AssertSucceededException($"Successfully retrieved value {val}");

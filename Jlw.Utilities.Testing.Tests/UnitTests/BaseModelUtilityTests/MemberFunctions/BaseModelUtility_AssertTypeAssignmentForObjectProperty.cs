@@ -45,7 +45,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
 
         public void Should_Fail_ForNonexistentProperty(string name)
         {
-            var ex = Assert.ThrowsException<AssertFailedException>(() =>
+            var ex = Assert.Throws<AssertFailedException>(() =>
             {
                 AssertTypeAssignmentForObjectProperty(DefaultInstance, name, typeof(object), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                 throw new Exception($"the property '{name}' should not be found, but was.");
@@ -56,7 +56,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
         [TestMethod]
         public void Should_Fail_ForNullPropertyName()
         {
-            var ex = Assert.ThrowsException<ArgumentNullException>(() => AssertTypeAssignmentForObjectProperty(DefaultInstance, null, typeof(object), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
+            var ex = Assert.Throws<ArgumentNullException>(() => AssertTypeAssignmentForObjectProperty(DefaultInstance, null, typeof(object), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
             StringAssert.Contains(ex.Message, $"Value cannot be null.");
         }
 
