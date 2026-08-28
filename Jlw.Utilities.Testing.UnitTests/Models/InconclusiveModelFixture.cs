@@ -12,78 +12,87 @@ namespace Jlw.Utilities.Testing.UnitTests
         public new static IEnumerable<object[]> ImplementedInterfaceList => _implementedInterfaceTypes.Select(o => new object[] { o });
 
         [TestMethod]
-        [ExpectedException(typeof(AssertInconclusiveException))]
         [DataRow(Public)]
         [DataRow(Private | Static)]
         public override void Constructor_Count_Should_Match(AccessModifiers access)
         {
-            try
+            Assert.Throws<AssertInconclusiveException>(() =>
             {
-                base.Constructor_Count_Should_Match(access);
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("\n\t✓\tAssertion failed for incorrect constructor count. (This is the correct result)");
-                Console.WriteLine($"\n\tAssertion details: {ex.Message}");
-                throw;
-            }
+                try
+                {
+                    base.Constructor_Count_Should_Match(access);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(
+                        "\n\t✓\tAssertion failed for incorrect constructor count. (This is the correct result)");
+                    Console.WriteLine($"\n\tAssertion details: {ex.Message}");
+                    throw;
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AssertInconclusiveException))]
         [DynamicData(nameof(ConstructorList))]
         public override void Constructor_Should_Exist(ConstructorSchema schema)
         {
-            try
+            Assert.Throws<AssertInconclusiveException>(() =>
             {
-                base.Constructor_Should_Exist(schema);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("\n\t✓\tAssertion failed for constructor that doesn't exist. (This is the correct result)");
-                Console.WriteLine($"\n\tAssertion details: {ex.Message}");
-                throw;
-            }
+                try
+                {
+                    base.Constructor_Should_Exist(schema);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(
+                        "\n\t✓\tAssertion failed for constructor that doesn't exist. (This is the correct result)");
+                    Console.WriteLine($"\n\tAssertion details: {ex.Message}");
+                    throw;
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AssertInconclusiveException))]
         [DataRow(Public)]
         [DataRow(Private | Static)]
         public override void Constructor_Signatures_Should_Match(AccessModifiers access)
         {
-            try
+            Assert.Throws<AssertInconclusiveException>(() =>
             {
-                base.Constructor_Signatures_Should_Match(access);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("\n\t✓\tAssertion failed for incorrect constructor count. (This is the correct result)");
-                Console.WriteLine($"\n\tAssertion details: {ex.Message}");
-                throw;
-            }
+                try
+                {
+                    base.Constructor_Signatures_Should_Match(access);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(
+                        "\n\t✓\tAssertion failed for incorrect constructor count. (This is the correct result)");
+                    Console.WriteLine($"\n\tAssertion details: {ex.Message}");
+                    throw;
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AssertInconclusiveException))]
         public override void Interface_Count_Should_Match()
         {
-            CatchFailedAssertion(() =>
+            Assert.Throws<AssertInconclusiveException>(() =>
             {
-                base.Interface_Count_Should_Match();
-            }, "\n\t✓\tAssertion failed for incorrect constructor count. (This is the correct result)");
+                CatchFailedAssertion(() => { base.Interface_Count_Should_Match(); },
+                    "\n\t✓\tAssertion failed for incorrect constructor count. (This is the correct result)");
+            });
         }
 
 
         [TestMethod]
-        [ExpectedException(typeof(AssertInconclusiveException))]
         [DynamicData(nameof(ImplementedInterfaceList))]
         public override void Interface_Is_Assignable(Type type)
         {
-            CatchFailedAssertion(() =>
+            Assert.Throws<AssertInconclusiveException>(() =>
             {
-                base.Interface_Is_Assignable(type);
-            }, "\n\t✓\tAssertion failed for incorrect constructor count. (This is the correct result)");
+                CatchFailedAssertion(() => { base.Interface_Is_Assignable(type); },
+                    "\n\t✓\tAssertion failed for incorrect constructor count. (This is the correct result)");
+            });
         }
 
         protected void CatchFailedAssertion(Action fn, string message="")

@@ -29,7 +29,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
         [ReadWritePropertyNameSource(typeof(SampleModelForTesting), false, true)]
         public void Should_Fail_ForWriteonlyProperties(string name)
         {
-            var ex = Assert.ThrowsException<AssertFailedException>(() =>
+            var ex = Assert.Throws<AssertFailedException>(() =>
             {
                 AssertPropertyIsReadable(name);
                 throw new Exception($"the property '{name}' should fail, but didn't.");
@@ -47,7 +47,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
 
         public void Should_Fail_ForNonexistentProperty(string name)
         {
-            var ex = Assert.ThrowsException<AssertFailedException>(() =>
+            var ex = Assert.Throws<AssertFailedException>(() =>
             {
                 AssertPropertyIsReadable(name);
                 throw new Exception($"the property '{name}' should not be found, but was.");

@@ -31,7 +31,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
         [ReadWritePropertyNameSource(typeof(SampleModelForTesting), false, true)]
         public void Should_Fail_ForWriteonlyProperties(string name)
         {
-            var ex = Assert.ThrowsException<AssertFailedException>(() =>
+            var ex = Assert.Throws<AssertFailedException>(() =>
             {
                 object o = AssertGetPropertyValueByName(DefaultInstance, name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                 Console.WriteLine($"{name} : {o}");
@@ -50,7 +50,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
 
         public void Should_Fail_ForNonexistentProperty(string name)
         {
-            var ex = Assert.ThrowsException<AssertFailedException>(() =>
+            var ex = Assert.Throws<AssertFailedException>(() =>
             {
                 object o = AssertGetPropertyValueByName(DefaultInstance, name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                 Console.WriteLine($"{name} : {o}");
