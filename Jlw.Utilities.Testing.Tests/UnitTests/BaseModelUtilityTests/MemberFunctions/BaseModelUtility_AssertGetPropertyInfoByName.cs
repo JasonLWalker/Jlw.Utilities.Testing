@@ -199,7 +199,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
 
         public void Should_Fail_ForNonexistentProperty(string name)
         {
-            var ex = Assert.ThrowsException<AssertFailedException>(() =>
+            var ex = Assert.Throws<AssertFailedException>(() =>
             {
                 var p = AssertGetPropertyInfoByName(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
                 throw new Exception($"the property '{name}' should not be found, but was.");

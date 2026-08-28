@@ -15,7 +15,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
         [ReadWritePropertyNameSource(typeof(SampleModelForTesting), true, false)]
         public void Should_Fail_ForReadonlyProperties(string name)
         {
-            var ex = Assert.ThrowsException<AssertFailedException>(() =>
+            var ex = Assert.Throws<AssertFailedException>(() =>
             {
                 AssertPropertySet(name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                 throw new AssertSucceededException($"the property '{name}' should fail, but didn't.");
@@ -52,7 +52,7 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.BaseModelUtilityTests
 
         public void Should_Fail_ForNonexistentProperty(string name)
         {
-            var ex = Assert.ThrowsException<AssertFailedException>(() =>
+            var ex = Assert.Throws<AssertFailedException>(() =>
             {
                 object o = AssertPropertySet(name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                 Console.WriteLine($"{name} : {o}");
