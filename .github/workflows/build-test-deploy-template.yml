@@ -35,7 +35,11 @@ jobs:
       INPUT_VERSION_PREFIX: ${{ inputs.versionPrefix }}
       INPUT_VERSION_SUFFIX: ${{ inputs.versionSuffix }}
     permissions:
-      id-token: write  # enable GitHub OIDC token issuance for this job
+      contents: write        # Needed to push commits, create tags, or upload release assets
+      #pull-requests: write   # Needed to comment on or label PRs
+      #issues: write          # Needed to create/edit issues or comments
+      packages: write        # Needed to publish to GitHub Packages
+      id-token: write        # Needed for OIDC cloud authentication (AWS, GCP, Azure)
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
