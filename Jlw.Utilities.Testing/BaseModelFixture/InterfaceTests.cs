@@ -9,7 +9,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing
 {
+#pragma warning disable MSTEST0030
     public partial class BaseModelFixture<TModel, TSchema>
+#pragma warning restore MSTEST0030
     {
         /// <summary>
         /// Gets the interface types the model schema expects <typeparamref name="TModel"/> to implement.
@@ -49,7 +51,9 @@ namespace Jlw.Utilities.Testing
                 if (types.Length < 1)
                 {
                     TestContext?.WriteLine($"\t✓ No interfaces exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputInterfaceCountAndList();
@@ -93,7 +97,9 @@ namespace Jlw.Utilities.Testing
                 if (types.Length < 1)
                 {
                     TestContext?.WriteLine($"\t✓ No interfaces exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
 

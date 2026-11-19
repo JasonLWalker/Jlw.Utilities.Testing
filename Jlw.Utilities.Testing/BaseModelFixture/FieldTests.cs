@@ -57,7 +57,9 @@ namespace Jlw.Utilities.Testing
                 if (fields.Length < 1)
                 {
                     TestContext?.WriteLine($"\t✓ No {accessModifiers} fields exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
 
@@ -110,7 +112,9 @@ namespace Jlw.Utilities.Testing
                 if (!fields.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public fields exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputFieldCountAndList();
@@ -143,7 +147,9 @@ namespace Jlw.Utilities.Testing
                 if (!fields.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public fields exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputFieldCountAndList();
@@ -180,7 +186,9 @@ namespace Jlw.Utilities.Testing
                 if (!fields.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public fields exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 
@@ -224,7 +232,9 @@ namespace Jlw.Utilities.Testing
                 if (!implementedKeys.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No {access} fields exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 

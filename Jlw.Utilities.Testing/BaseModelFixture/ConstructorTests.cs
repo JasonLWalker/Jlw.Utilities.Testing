@@ -232,7 +232,9 @@ namespace Jlw.Utilities.Testing
                 else
                 {
                     TestContext?.WriteLine($"\t✓\tAll public properties and fields have been tested");
+#pragma warning disable MSTEST0032
                     Assert.IsTrue(true);
+#pragma warning restore MSTEST0032
                 }
                 return;
             }

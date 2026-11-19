@@ -20,9 +20,11 @@ namespace Jlw.Utilities.Testing
     /// </remarks>
     /// <typeparam name="TModel">The model type under test.</typeparam>
     /// <typeparam name="TSchema">The schema type that describes the expected members of <typeparamref name="TModel"/>.</typeparam>
+#pragma warning disable MSTEST0030
     public partial class BaseModelFixture<TModel, TSchema> : BaseModelUtility<TModel> 
         where TModel : class
         where TSchema : BaseModelSchema<TModel>, new()
+#pragma warning restore MSTEST0030
     {
         /// <summary>
         /// The schema instance that describes the expected members of <typeparamref name="TModel"/>.

@@ -85,7 +85,9 @@ namespace Jlw.Utilities.Testing
                 if (!props.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No {accessModifiers} properties exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputPropertyCountAndList(accessModifiers);
@@ -142,7 +144,9 @@ namespace Jlw.Utilities.Testing
                 if (!props.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public properties exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputPropertyCountAndList();
@@ -174,7 +178,9 @@ namespace Jlw.Utilities.Testing
                 if (!props.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public properties exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputPropertyCountAndList();
@@ -206,7 +212,9 @@ namespace Jlw.Utilities.Testing
                 if (!props.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public properties exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputPropertyCountAndList();
@@ -244,7 +252,9 @@ namespace Jlw.Utilities.Testing
                 if (!props.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public properties exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputPropertyCountAndList();
@@ -283,7 +293,9 @@ namespace Jlw.Utilities.Testing
                 if (!props.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public properties exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputPropertyCountAndList();
@@ -331,7 +343,9 @@ namespace Jlw.Utilities.Testing
                 if (!props.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public properties exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputPropertyCountAndList();
@@ -395,7 +409,9 @@ namespace Jlw.Utilities.Testing
                 if (!props.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No {access} properties exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputPropertyCountAndList(access);
@@ -505,7 +521,9 @@ namespace Jlw.Utilities.Testing
                 if (!props.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public properties exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputPropertyCountAndList();
@@ -632,7 +650,9 @@ namespace Jlw.Utilities.Testing
                     prevVal = AssertGetPropertyValueByName(sut, name, schema.BindingFlags);
 
                     // Do the values match?
+#pragma warning disable MSTEST0017
                     Assert.AreEqual(prevVal, null);
+#pragma warning restore MSTEST0017
 
                     var snapshot = new InstanceMemberSnapshot(sut);
                     snapshot.AssertAreSame(origSnapshot, excludeList);
