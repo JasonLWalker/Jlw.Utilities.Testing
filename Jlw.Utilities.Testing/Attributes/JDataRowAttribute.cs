@@ -28,19 +28,19 @@ public class JDataRowAttribute : DataRowAttribute
     /// </summary>
     /// <param name="data"> The data. </param>
     /// <remarks>This constructor is only kept for CLS compliant tests.</remarks>
-    public JDataRowAttribute(object? data) : this([data]) { }
+    public JDataRowAttribute(object data) : this([data]) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DataRowAttribute"/> class with an array of string arguments.
     /// </summary>
     /// <param name="stringArrayData"> The string array data. </param>
-    public JDataRowAttribute(string?[]? stringArrayData) : this([stringArrayData]) { }
+    public JDataRowAttribute(string[] stringArrayData) : this([stringArrayData]) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DataRowAttribute"/> class with an array of object arguments.
     /// </summary>
     /// <param name="data"> The data. </param>
-    public JDataRowAttribute(params object?[]? data) : base(data)
+    public JDataRowAttribute(params object[] data) : base(data)
     {
         for (int i = 0; i < data.Length; i++)
         {
@@ -147,6 +147,7 @@ public class JDataRowAttribute : DataRowAttribute
     }
 
     public object? ParseArgValue(string arg)
+    public object ParseArgValue(string arg)
     {
         switch (arg)
         {
@@ -222,7 +223,7 @@ public class JDataRowAttribute : DataRowAttribute
     /// </summary>
     /// <param name="s"></param>
     /// <returns>random string value formated as specified if the &lt;copyfrom&gt; meta tag is found, otherwise the original data</returns>
-    public object? ParseCopyArgValue(JValue jObj)
+    public object ParseCopyArgValue(JValue jObj)
     {
         string arg = jObj.Value?.ToString() ?? "";
 
