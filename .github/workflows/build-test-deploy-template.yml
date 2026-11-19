@@ -19,7 +19,7 @@ on:
             default: '-alpha'
             type: string
     secrets:
-        NUGET_KEY: 
+        NUGET_USER: 
             required: true
 
 
