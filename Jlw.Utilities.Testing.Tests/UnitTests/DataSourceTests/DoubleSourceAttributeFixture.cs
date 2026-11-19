@@ -50,13 +50,13 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.DataSourceTests
             {
                 
                 case Double.NegativeInfinity:
-                    Assert.AreEqual(o, Double.NegativeInfinity);
+                    Assert.AreEqual(Double.NegativeInfinity, o);
                     break;
                 case Double.PositiveInfinity:
-                    Assert.AreEqual(o, Double.PositiveInfinity);
+                    Assert.AreEqual(Double.PositiveInfinity, o);
                     break;
                 case Double.NaN:
-                    Assert.AreEqual(o, Double.NaN);
+                    Assert.AreEqual(Double.NaN, o);
                     break;
                 default:
                     Assert.IsTrue(d >= Double.MinValue, $"The value returned <{o}> is less than Double.MinValue <{Double.MinValue}>");
@@ -73,13 +73,13 @@ namespace Jlw.Utilities.Testing.Tests.UnitTests.DataSourceTests
             switch (d)
             {
                 case Double.NegativeInfinity:
-                    Assert.AreEqual(o, Double.NegativeInfinity);
+                    Assert.AreEqual(Double.NegativeInfinity, o);
                     break;
                 case Double.PositiveInfinity:
-                    Assert.AreEqual(o, Double.PositiveInfinity);
+                    Assert.AreEqual(Double.PositiveInfinity, o);
                     break;
                 case Double.NaN:
-                    Assert.AreEqual(o, Double.NaN);
+                    Assert.AreEqual(Double.NaN, o);
                     break;
                 default:
                     Assert.IsTrue(d <= Double.MaxValue, $"The value returned <{o}> is greater than Double.MaxValue <{Double.MaxValue}>");

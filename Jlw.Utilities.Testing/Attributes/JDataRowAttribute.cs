@@ -28,19 +28,19 @@ public class JDataRowAttribute : DataRowAttribute
     /// </summary>
     /// <param name="data"> The data. </param>
     /// <remarks>This constructor is only kept for CLS compliant tests.</remarks>
-    public JDataRowAttribute(object? data) : this([data]) { }
+    public JDataRowAttribute(object data) : this([data]) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DataRowAttribute"/> class with an array of string arguments.
     /// </summary>
     /// <param name="stringArrayData"> The string array data. </param>
-    public JDataRowAttribute(string?[]? stringArrayData) : this([stringArrayData]) { }
+    public JDataRowAttribute(string[] stringArrayData) : this([stringArrayData]) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DataRowAttribute"/> class with an array of object arguments.
     /// </summary>
     /// <param name="data"> The data. </param>
-    public JDataRowAttribute(params object?[]? data) : base(data)
+    public JDataRowAttribute(params object[] data) : base(data)
     {
         for (int i = 0; i < data.Length; i++)
         {
@@ -61,7 +61,15 @@ public class JDataRowAttribute : DataRowAttribute
     }
 
     
-    
+    /// <summary>
+    /// Parses a JSON configuration string and transforms it into a <see cref="JToken"/> object.
+    /// </summary>
+    /// <param name="jConfig">The JSON configuration string to parse.</param>
+    /// <returns>A <see cref="JToken"/> object representing the parsed and transformed JSON configuration.</returns>
+    /// <remarks>
+    /// This method processes the input JSON string by generating arguments and copying them into a new <see cref="JToken"/> object.
+    /// It is designed to handle special transformations or modifications required for the JSON data.
+    /// </remarks>
     public JToken ParseConfigJson(string jConfig)
     {
         var jObj = GenerateJArg(JToken.Parse(jConfig));
@@ -69,6 +77,15 @@ public class JDataRowAttribute : DataRowAttribute
         return CopyJArgs(jObj);
     }
 
+    /// <summary>
+    /// Recursively processes a <see cref="JToken"/> object, copying and replacing values based on specific conditions.
+    /// </summary>
+    /// <param name="jObj">The <see cref="JToken"/> object to process.</param>
+    /// <returns>The processed <see cref="JToken"/> object with copied and replaced values.</returns>
+    /// <remarks>
+    /// This method traverses the provided <see cref="JToken"/> object, including nested arrays and objects, 
+    /// and replaces values that match specific criteria (e.g., values starting with "&lt;copyfrom").
+    /// </remarks>
     public JToken CopyJArgs(JToken jObj)
     {
         if (jObj.HasValues)
@@ -108,6 +125,16 @@ public class JDataRowAttribute : DataRowAttribute
 
     }
 
+    /// <summary>
+    /// Recursively processes a <see cref="JToken"/> object, transforming its values based on specific rules or logic.
+    /// </summary>
+    /// <param name="jObj">The <see cref="JToken"/> object to process.</param>
+    /// <returns>A transformed <see cref="JToken"/> object with updated values.</returns>
+    /// <remarks>
+    /// This method traverses the input <see cref="JToken"/> object, including nested arrays and objects, 
+    /// and applies transformations to its values. It is designed to handle various <see cref="JToken"/> types, 
+    /// such as <see cref="JArray"/>, <see cref="JObject"/>, and <see cref="JValue"/>.
+    /// </remarks>
     public JToken GenerateJArg(JToken jObj)
     {
         if (jObj.HasValues)
@@ -146,7 +173,15 @@ public class JDataRowAttribute : DataRowAttribute
         return jObj;
     }
 
-    public object? ParseArgValue(string arg)
+    /// <summary>
+    /// Parses a string argument and returns a corresponding object based on specific patterns.
+    /// </summary>
+    /// <param name="arg">The string argument to parse.</param>
+    /// <returns>
+    /// An object representing the parsed value. This could be a random value (e.g., integer, boolean), 
+    /// a modified string, <c>null</c>, or the original string if no patterns match.
+    /// </returns>
+    public object ParseArgValue(string arg)
     {
         switch (arg)
         {
@@ -220,9 +255,8 @@ public class JDataRowAttribute : DataRowAttribute
     /// &lt;copyfrom:Id:toUpper&gt; - copies the value from the "Id" member of the root Json object, and converts the value to uppercase
     /// &lt;copyfrom:Address:toLower&gt; - copies the value from the "Address" member of the root Json object, and converts the value to lowercase
     /// </summary>
-    /// <param name="s"></param>
     /// <returns>random string value formated as specified if the &lt;copyfrom&gt; meta tag is found, otherwise the original data</returns>
-    public object? ParseCopyArgValue(JValue jObj)
+    public object ParseCopyArgValue(JValue jObj)
     {
         string arg = jObj.Value?.ToString() ?? "";
 

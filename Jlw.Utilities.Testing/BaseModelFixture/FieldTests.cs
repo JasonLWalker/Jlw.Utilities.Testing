@@ -12,13 +12,31 @@ namespace Jlw.Utilities.Testing
 {
     public partial class BaseModelFixture<TModel, TSchema>
     {
+        /// <summary>
+        /// Gets the field schemas defined on the model schema.
+        /// </summary>
         protected static IEnumerable<BaseModelUtility<TModel>.MemberSchema> _fieldSchema => modelSchema.FieldList;
 
+        /// <summary>
+        /// Static accessor to retrieve field schemas via DynamicDataAttribute argument pattern.
+        /// </summary>
         public static IEnumerable<object[]> FieldList => _fieldSchema.Select(o => new object[] { o });
 
+        /// <summary>
+        /// Gets a value indicating whether the field schema is missing or contains no non-null entries.
+        /// </summary>
         protected static bool IsFieldListEmpty => _fieldSchema?.Count(o => o != null) < 1;
 
         #region Field Tests
+        /// <summary>
+        /// Asserts that the number of fields on <typeparamref name="TModel"/> matches the number of schema entries
+        /// for the given access modifiers and binding flags.
+        /// </summary>
+        /// <remarks>
+        /// If no field schema is defined, the test passes when no matching fields exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="accessModifiers">The access level and static state to filter fields by.</param>
+        /// <param name="flattenHierarchy">Whether to include inherited fields in the lookup.</param>
         [TestMethod]
         [DataRow(Public)]
         [DataRow(Public | Static)]
@@ -39,7 +57,9 @@ namespace Jlw.Utilities.Testing
                 if (fields.Length < 1)
                 {
                     TestContext?.WriteLine($"\t✓ No {accessModifiers} fields exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
 
@@ -73,6 +93,13 @@ namespace Jlw.Utilities.Testing
             TestContext?.WriteLine($"\t✓ Number of fields is {nCount} for BindingFlags: {flags}, and AccessModifiers: {accessModifiers}");
         }
 
+        /// <summary>
+        /// Asserts that the field described by the schema exists on <typeparamref name="TModel"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="schema"/> is <c>null</c>, the test passes when no public fields exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="schema">The field schema to look up by name.</param>
         [TestMethod]
         [DynamicData(nameof(FieldList))]
         public virtual void Field_Should_Exist(MemberSchema schema)
@@ -85,7 +112,9 @@ namespace Jlw.Utilities.Testing
                 if (!fields.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public fields exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputFieldCountAndList();
@@ -99,6 +128,13 @@ namespace Jlw.Utilities.Testing
             TestContext?.WriteLine($"\t✓ property [{schema.Name}] exists with PropertyType.Attributes: {info.FieldType.Attributes}");
         }
 
+        /// <summary>
+        /// Asserts that the schema's field type is assignable from the actual type of the field on <typeparamref name="TModel"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="schema"/> is <c>null</c>, the test passes when no public fields exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="schema">The field schema whose type is compared against the actual field type.</param>
         [TestMethod]
         [DynamicData(nameof(FieldList))]
         public virtual void Field_Type_Is_Assignable(MemberSchema schema)
@@ -111,7 +147,9 @@ namespace Jlw.Utilities.Testing
                 if (!fields.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public fields exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 OutputFieldCountAndList();
@@ -129,6 +167,13 @@ namespace Jlw.Utilities.Testing
 
         }
 
+        /// <summary>
+        /// Asserts that the access modifiers of the field described by the schema match the actual field's attributes.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="schema"/> is <c>null</c>, the test passes when no public fields exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="schema">The field schema whose access level is compared against the actual field.</param>
         [TestMethod]
         [DynamicData(nameof(FieldList))]
         public virtual void Field_Access_Should_Match(MemberSchema schema)
@@ -141,7 +186,9 @@ namespace Jlw.Utilities.Testing
                 if (!fields.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No public fields exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 
@@ -157,6 +204,14 @@ namespace Jlw.Utilities.Testing
             TestContext?.WriteLine($"\t✓ field access modifiers match: {schema}");
         }
 
+        /// <summary>
+        /// Asserts that the implemented field signatures for the given access level match the expected field signatures, and vice versa.
+        /// </summary>
+        /// <remarks>
+        /// Signatures whose schema entry sets <c>CanTestSignature</c> to <c>false</c> are excluded from the comparison.
+        /// The test is inconclusive when no field schema is defined and fields exist.
+        /// </remarks>
+        /// <param name="access">The access level and static state to filter signatures by.</param>
         [TestMethod]
         [DataRow(Public)]
         [DataRow(Public | Static)]
@@ -177,7 +232,9 @@ namespace Jlw.Utilities.Testing
                 if (!implementedKeys.Any())
                 {
                     TestContext?.WriteLine($"\t✓ No {access} fields exist.");
+#pragma warning disable MSTEST0032
                     Assert.AreEqual(0, 0);
+#pragma warning restore MSTEST0032
                     return;
                 }
                 
@@ -209,6 +266,11 @@ namespace Jlw.Utilities.Testing
         #endregion
 
         #region Helper Methods
+        /// <summary>
+        /// Builds the distinct string representations of the schema's expected fields that match the given access level.
+        /// </summary>
+        /// <param name="access">The access level to filter the expected fields by.</param>
+        /// <returns>Distinct field schema strings.</returns>
         protected IEnumerable<string> GetExpectedFieldKeys(AccessModifiers access = AccessModifiers.Public)
         {
             var aReturn = new List<string>();
@@ -224,6 +286,11 @@ namespace Jlw.Utilities.Testing
             return aReturn.Distinct();
         }
 
+        /// <summary>
+        /// Builds the distinct signature keys of the fields implemented on <typeparamref name="TModel"/> that match the given access level.
+        /// </summary>
+        /// <param name="access">The access level to filter the implemented fields by.</param>
+        /// <returns>Distinct signatures in the form <c>access TypeName FieldName</c>.</returns>
         protected IEnumerable<string> GetImplementedFieldKeys(AccessModifiers access = AccessModifiers.Public)
         {
             var aReturn = new List<string>();
@@ -237,6 +304,10 @@ namespace Jlw.Utilities.Testing
             return aReturn.Distinct();
         }
 
+        /// <summary>
+        /// Writes the implemented and expected field counts and keys for the given access level to the test output.
+        /// </summary>
+        /// <param name="accessModifiers">The access level to report on.</param>
         protected void OutputFieldCountAndList(AccessModifiers accessModifiers = AccessModifiers.Public)
         {
             // Retrieve the list of unique implemented constructor signatures

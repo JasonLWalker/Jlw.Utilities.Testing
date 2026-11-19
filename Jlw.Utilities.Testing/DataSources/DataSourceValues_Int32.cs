@@ -5,6 +5,9 @@ namespace Jlw.Utilities.Testing.DataSources
 {
     public partial class DataSourceValues
     {
+        /// <summary>
+        /// 32-bit integer values used as test data, including zero, small positive numbers, and boundary values of several numeric types.
+        /// </summary>
         public static readonly object[] Int32Data =
         {
             0,
@@ -21,6 +24,10 @@ namespace Jlw.Utilities.Testing.DataSources
             Int16.MaxValue,
         };
 
+        /// <summary>
+        /// Key and expected value pairs for 32-bit integer tests. Each key is a value of another type, such as a number or string,
+        /// and the expected value is the integer it is expected to convert to, or <c>null</c>.
+        /// </summary>
         public static readonly KeyValuePair<object, int?>[] KvpObjectInt32Data = {
             new KeyValuePair<object, int?>(0, 0),
             new KeyValuePair<object, int?>(1, 1),

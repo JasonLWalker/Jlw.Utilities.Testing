@@ -2,7 +2,6 @@
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<LangVersion>12.0</LangVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -35,23 +34,21 @@
 		<DebugType>portable</DebugType>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-
 		<SignAssembly>false</SignAssembly>
 		<AssemblyOriginatorKeyFile />
-		
 		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
-
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MartinCostello.SqlLocalDb" Version="6.0.0" />
     <PackageReference Include="Jlw.Utilities.Data" Version="5.2.9362.8244" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.11">
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="11.0.0">
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.11" />
-    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="181.36.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="4.3.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="11.0.0" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="181.38.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.5.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="11.0.0" />
   </ItemGroup>
 
 	<ItemGroup>

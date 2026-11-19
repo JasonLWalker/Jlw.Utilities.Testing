@@ -5,6 +5,9 @@ namespace Jlw.Utilities.Testing.DataSources
 {
     public partial class DataSourceValues
     {
+        /// <summary>
+        /// Single-precision values used as test data, including zero, small positive numbers, and boundary values of several numeric types.
+        /// </summary>
         public static readonly float[] SingleData =
         {
             0,
@@ -27,6 +30,10 @@ namespace Jlw.Utilities.Testing.DataSources
             Single.PositiveInfinity,
         };
 
+        /// <summary>
+        /// Key and expected value pairs for single-precision tests. Each key is a value of another type, such as a number or string,
+        /// and the expected value is the single-precision value it is expected to convert to, or <c>null</c>.
+        /// </summary>
         public static readonly KeyValuePair<object, float?>[] KvpObjectSingleData = {
             new KeyValuePair<object, float?>(0, 0),
             new KeyValuePair<object, float?>(1, 1),

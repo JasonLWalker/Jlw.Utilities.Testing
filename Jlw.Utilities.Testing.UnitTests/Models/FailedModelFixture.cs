@@ -5,7 +5,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Jlw.Utilities.Testing.UnitTests
 {
+#pragma warning disable MSTEST0030
     public class FailedModelFixture<TModel, TSchema> : BaseModelFixture<TModel, TSchema> where TSchema : BaseModelSchema<TModel>, new() where TModel : class
+#pragma warning restore MSTEST0030
     {
         public new static IEnumerable<object[]> ConstructorList => _constructorSchema.Select(o => new object[] { o });
         public new static IEnumerable<object[]> ImplementedInterfaceList => _implementedInterfaceTypes.Select(o => new object[] { o });
