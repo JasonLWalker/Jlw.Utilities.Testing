@@ -5,6 +5,9 @@ namespace Jlw.Utilities.Testing.DataSources
 {
     public partial class DataSourceValues
     {
+        /// <summary>
+        /// 16-bit integer values used as test data, including zero, small positive numbers, and the minimum and maximum values.
+        /// </summary>
         public static readonly object[] Int16Data =
         {
             (Int16)0,
@@ -17,6 +20,10 @@ namespace Jlw.Utilities.Testing.DataSources
             Int16.MaxValue,
         };
 
+        /// <summary>
+        /// Key and expected value pairs for 16-bit integer tests. Each key is a value of another type, such as a number or string,
+        /// and the expected value is the 16-bit integer it is expected to convert to, or <c>null</c>.
+        /// </summary>
         public static readonly KeyValuePair<object, Int16?>[] KvpObjectInt16Data = {
             new KeyValuePair<object, Int16?>(0, 0),
             new KeyValuePair<object, Int16?>(1, 1),

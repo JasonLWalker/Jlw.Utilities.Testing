@@ -5,6 +5,9 @@ namespace Jlw.Utilities.Testing.DataSources
 {
     public partial class DataSourceValues
     {
+        /// <summary>
+        /// Nullable date and time values used as test data, including <c>null</c> and several boundary dates.
+        /// </summary>
         public static readonly DateTime?[] NullableDateTimeData =
         {
             null,
@@ -15,6 +18,9 @@ namespace Jlw.Utilities.Testing.DataSources
             DateTime.UtcNow, 
         };
 
+        /// <summary>
+        /// Date and time values used as test data, including boundary dates and the current date and time.
+        /// </summary>
         public static readonly DateTime[] DateTimeData =
         {
             DateTime.MinValue,
@@ -24,9 +30,19 @@ namespace Jlw.Utilities.Testing.DataSources
             DateTime.UtcNow, 
         };
 
+        /// <summary>
+        /// The local date and time captured when the class is first used, used as a test value.
+        /// </summary>
         public static readonly DateTime dtNow = DateTime.Now;
+        /// <summary>
+        /// The UTC date and time captured when the class is first used, used as a test value.
+        /// </summary>
         public static readonly DateTime dtUtcNow = DateTime.UtcNow;
 
+        /// <summary>
+        /// Key and expected value pairs for nullable date and time tests. Each key is a value of another type, such as a number or string,
+        /// and the expected value is the date it is expected to convert to, or <c>null</c>.
+        /// </summary>
         public static readonly KeyValuePair<object, DateTime?>[] KvpObjectNullableDateTimeData = {
             new KeyValuePair<object, DateTime?>(0, DateTime.MinValue),
             new KeyValuePair<object, DateTime?>(1, DateTime.MinValue),

@@ -5,6 +5,9 @@ namespace Jlw.Utilities.Testing.DataSources
 {
     public partial class DataSourceValues
     {
+        /// <summary>
+        /// Double values used as test data, including zero, small positive numbers, and boundary values of several numeric types.
+        /// </summary>
         public static readonly double[] DoubleData =
         {
             0,
@@ -30,6 +33,10 @@ namespace Jlw.Utilities.Testing.DataSources
             Double.Epsilon,
         };
 
+        /// <summary>
+        /// Key and expected value pairs for double tests. Each key is a value of another type, such as a number or string,
+        /// and the expected value is the double it is expected to convert to.
+        /// </summary>
         public static readonly KeyValuePair<object, double?>[] KvpObjectDoubleData = {
             new KeyValuePair<object, double?>(0, 0),
             new KeyValuePair<object, double?>(1, 1),

@@ -5,6 +5,9 @@ namespace Jlw.Utilities.Testing.DataSources
 {
     public partial class DataSourceValues
     {
+        /// <summary>
+        /// 64-bit integer values used as test data, including zero, small positive numbers, and boundary values of several numeric types.
+        /// </summary>
         public static readonly object[] Int64Data =
         {
             0,
@@ -23,6 +26,10 @@ namespace Jlw.Utilities.Testing.DataSources
             long.MaxValue,
         };
 
+        /// <summary>
+        /// Key and expected value pairs for 64-bit integer tests. Each key is a value of another type, such as a number or string,
+        /// and the expected value is the 64-bit integer it is expected to convert to, or <c>null</c>.
+        /// </summary>
         public static readonly KeyValuePair<object, long?>[] KvpObjectInt64Data = {
             new KeyValuePair<object, long?>(0, 0),
             new KeyValuePair<object, long?>(1, 1),

@@ -5,12 +5,19 @@ namespace Jlw.Utilities.Testing.DataSources
 {
     public partial class DataSourceValues
     {
+        /// <summary>
+        /// Boolean values used as test data: <c>false</c> and <c>true</c>.
+        /// </summary>
         public static readonly bool[] BoolData =
         {
             false,
             true
         };
 
+        /// <summary>
+        /// Key and expected value pairs for boolean tests. Each key is a value of another type, such as a number or string,
+        /// and the expected value is the boolean it is expected to convert to, or <c>null</c>.
+        /// </summary>
         public static readonly KeyValuePair<object, bool?>[] KvpObjectBoolData = {
             new KeyValuePair<object, bool?>(0, false),
             new KeyValuePair<object, bool?>(1, true),

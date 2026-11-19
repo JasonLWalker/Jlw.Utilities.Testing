@@ -4,6 +4,9 @@ namespace Jlw.Utilities.Testing.DataSources
 {
     public partial class DataSourceValues
     {
+        /// <summary>
+        /// Values of mixed types used as test data, including <c>null</c>, numbers, strings, dates, and booleans.
+        /// </summary>
         public static readonly object[] ObjectData =
         {
             null,

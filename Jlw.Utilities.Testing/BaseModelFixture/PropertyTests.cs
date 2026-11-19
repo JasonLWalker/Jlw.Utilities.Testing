@@ -14,10 +14,22 @@ namespace Jlw.Utilities.Testing
 {
     public partial class BaseModelFixture<TModel, TSchema>
     {
+        /// <summary>
+        /// Gets the property schemas defined on the model schema.
+        /// </summary>
         protected static IEnumerable<PropertySchema> _propertySchema => modelSchema.PropertySchemaList;//new List<PropertySchema>() { null };
 
+        /// <summary>
+        /// Static accessor to retrieve property schemas via DynamicDataAttribute argument pattern.
+        /// </summary>
         public static IEnumerable<object[]> PropertySchemaList => _propertySchema.Select(o => new object[] { o });
 
+        /// <summary>
+        /// Static accessor to retrieve property schemas that have both get and set accessors defined, for value tests.
+        /// </summary>
+        /// <remarks>
+        /// Returns a single <c>null</c> entry when no such schema exists, so the data-driven test runs and can be skipped.
+        /// </remarks>
         public static IEnumerable<object[]> PropertyValueList
         {
             get
@@ -28,6 +40,12 @@ namespace Jlw.Utilities.Testing
             }
         }
 
+        /// <summary>
+        /// Static accessor to retrieve value-type property schemas that have both get and set accessors defined.
+        /// </summary>
+        /// <remarks>
+        /// Returns a single <c>null</c> entry when no such schema exists, so the data-driven test runs and can be skipped.
+        /// </remarks>
         public static IEnumerable<object[]> ValueTypePropertyValueList
         {
             get
@@ -38,10 +56,22 @@ namespace Jlw.Utilities.Testing
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the property schema is missing or contains no non-null entries.
+        /// </summary>
         protected static bool IsPropertyListEmpty => _propertySchema?.Count(o => o != null) < 1;
 
         
         #region Property Tests
+        /// <summary>
+        /// Asserts that the number of properties on <typeparamref name="TModel"/> matches the number of schema entries
+        /// for the given access modifiers and binding flags.
+        /// </summary>
+        /// <remarks>
+        /// If no property schema is defined, the test passes when no matching properties exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="accessModifiers">The access level and static state to filter properties by.</param>
+        /// <param name="flattenHierarchy">Whether to include inherited properties in the lookup.</param>
         [TestMethod]
         [DataRow(Public)]
         [DataRow(Public | Static)]
@@ -93,6 +123,13 @@ namespace Jlw.Utilities.Testing
             TestContext?.WriteLine($"\t✓\tNumber of properties is {nCount} for BindingFlags: {flags}");
         }
 
+        /// <summary>
+        /// Asserts that the property described by the schema exists on <typeparamref name="TModel"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="schema"/> is <c>null</c>, the test passes when no public properties exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="schema">The property schema to look up by name.</param>
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Should_Exist(PropertySchema schema)
@@ -118,6 +155,13 @@ namespace Jlw.Utilities.Testing
             TestContext?.WriteLine($"\t✓ property [{schema.Name}] exists with PropertyType.Attributes: {info.PropertyType.Attributes}");
         }
 
+        /// <summary>
+        /// Asserts that the property described by the schema can be retrieved using the binding flags of that schema.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="schema"/> is <c>null</c>, the test passes when no public properties exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="schema">The property schema whose name and binding flags are used for the lookup.</param>
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Binding_Should_Match(PropertySchema schema)
@@ -143,6 +187,13 @@ namespace Jlw.Utilities.Testing
             TestContext?.WriteLine($"\t✓ property [{schema.Name}] retrieved with BindingFlags: {schema.BindingFlags}");
         }
 
+        /// <summary>
+        /// Asserts that the property type of the schema is assignable from the actual type of the property on <typeparamref name="TModel"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="schema"/> is <c>null</c>, the test passes when no public properties exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="schema">The property schema whose type is compared against the actual property type.</param>
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Type_Is_Assignable(PropertySchema schema)
@@ -173,6 +224,13 @@ namespace Jlw.Utilities.Testing
         }
 
 
+        /// <summary>
+        /// Asserts that the access level of the property described by the schema matches the access level of the actual property accessors.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="schema"/> is <c>null</c>, the test passes when no public properties exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="schema">The property schema whose access level is compared against the actual property.</param>
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Access_Should_Match(PropertySchema schema)
@@ -205,6 +263,14 @@ namespace Jlw.Utilities.Testing
             TestContext?.WriteLine($"\t✓ property access modifiers match: {schema}");
         }
 
+        /// <summary>
+        /// Asserts that the get accessor of the property described by the schema matches the expected attributes in the schema.
+        /// </summary>
+        /// <remarks>
+        /// If the schema or the property has no get accessor, the test asserts that both agree on its absence.
+        /// If <paramref name="schema"/> is <c>null</c>, the test passes when no public properties exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="schema">The property schema whose get accessor attributes are compared against the actual accessor.</param>
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Get_Accessor_Should_Match(PropertySchema schema)
@@ -245,6 +311,14 @@ namespace Jlw.Utilities.Testing
             TestContext?.WriteLine($"\t✓ property [{schema.Name}] attributes match: {schema.GetAttributes}");
         }
 
+        /// <summary>
+        /// Asserts that the set accessor of the property described by the schema matches the expected attributes in the schema.
+        /// </summary>
+        /// <remarks>
+        /// If the schema or the property has no set accessor, the test asserts that both agree on its absence.
+        /// If <paramref name="schema"/> is <c>null</c>, the test passes when no public properties exist and is inconclusive otherwise.
+        /// </remarks>
+        /// <param name="schema">The property schema whose set accessor attributes are compared against the actual accessor.</param>
         [TestMethod]
         [DynamicData(nameof(PropertySchemaList))]
         public virtual void Property_Set_Accessor_Should_Match(PropertySchema schema)
@@ -283,6 +357,14 @@ namespace Jlw.Utilities.Testing
             TestContext?.WriteLine($"\t✓ property [{schema.Name}] attributes match: {schema.SetAttributes}");
         }
 
+        /// <summary>
+        /// Asserts that the implemented property signatures for the given access level match the expected property signatures, and vice versa.
+        /// </summary>
+        /// <remarks>
+        /// Signatures whose schema entry sets <c>CanTestSignature</c> to <c>false</c> are excluded from the comparison.
+        /// The test is inconclusive when no property schema is defined and properties exist.
+        /// </remarks>
+        /// <param name="access">The access level and static state to filter signatures by.</param>
         [TestMethod]
         [DataRow(Public)]
         [DataRow(Public | Static)]
@@ -402,6 +484,15 @@ namespace Jlw.Utilities.Testing
         }
         */
 
+        /// <summary>
+        /// Asserts that setting a property on a new <typeparamref name="TModel"/> instance stores the assigned value,
+        /// and that setting it does not change any other member.
+        /// </summary>
+        /// <remarks>
+        /// Runs five iterations with random values, then tests a default instance of the property type, then tests <c>null</c>
+        /// for reference and nullable types. Properties flagged with <c>CanTestValue</c> set to <c>false</c> are skipped.
+        /// </remarks>
+        /// <param name="schema">The property schema to set and verify.</param>
         [TestMethod]
         [DynamicData(nameof(PropertyValueList))]
         public virtual void Property_Value_Should_Match_When_Set(PropertySchema schema)
@@ -554,6 +645,13 @@ namespace Jlw.Utilities.Testing
 
         #region Helper Methods
 
+        /// <summary>
+        /// Generates a random value of the given type that differs from both the previous and original values, retrying up to three times.
+        /// </summary>
+        /// <param name="t">The type of value to generate.</param>
+        /// <param name="prevVal">The previously generated value.</param>
+        /// <param name="origVal">The original value of the property.</param>
+        /// <returns>A random value of type <paramref name="t"/>. It may still equal one of the inputs if no distinct value was produced.</returns>
         protected object GetUniqueRandomValue(Type t, object prevVal, object origVal)
         {
             object newValue = origVal;
@@ -568,6 +666,11 @@ namespace Jlw.Utilities.Testing
             return newValue;
         }
 
+        /// <summary>
+        /// Builds the distinct string representations of the expected properties in the schema that match the given access level.
+        /// </summary>
+        /// <param name="access">The access level to filter the expected properties by.</param>
+        /// <returns>Distinct property schema strings.</returns>
         protected IEnumerable<string> GetExpectedPropertyKeys(AccessModifiers access = AccessModifiers.Public)
         {
             var aReturn = new List<string>();
@@ -583,6 +686,12 @@ namespace Jlw.Utilities.Testing
             return aReturn.Distinct();
         }
 
+        /// <summary>
+        /// Builds the distinct string representations of the properties implemented on <typeparamref name="TModel"/>
+        /// that match the given access level.
+        /// </summary>
+        /// <param name="access">The access level to filter the implemented properties by.</param>
+        /// <returns>Distinct property signatures.</returns>
         protected IEnumerable<string> GetImplementedPropertyKeys(AccessModifiers access = AccessModifiers.Public)
         {
             var aReturn = new List<string>();
@@ -599,6 +708,10 @@ namespace Jlw.Utilities.Testing
             return aReturn.Distinct();
         }
 
+        /// <summary>
+        /// Writes the implemented and expected property counts and keys for the given access level to the test output.
+        /// </summary>
+        /// <param name="accessModifiers">The access level to report on.</param>
         protected void OutputPropertyCountAndList(AccessModifiers accessModifiers = AccessModifiers.Public)
         {
             // Retrieve the list of unique implemented constructor signatures
