@@ -14,7 +14,7 @@ namespace Jlw.Utilities.Testing.Tests
             protected internal double _protectedInternalDouble = double.MinValue;
 
             public static int _publicStaticInt = int.MaxValue;
-            private static short _privateStaticShort = short.MaxValue;
+            //private static short _privateStaticShort = short.MaxValue;
             protected static long _protectedStaticLong = long.MaxValue;
             internal static sbyte _internalStaticSByte = sbyte.MaxValue;
             private protected static float _privateProtectedStaticFloat = float.MaxValue;
