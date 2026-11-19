@@ -14,17 +14,27 @@ namespace Jlw.Utilities.Testing
     public partial class BaseModelFixture<TModel, TSchema>
     {
         /// <summary>
-        /// Static backing field to store list of constructors
+        /// Gets the constructor schemas defined on the model schema, or <c>null</c> when none are defined.
         /// </summary>
         protected static IEnumerable<ConstructorSchema> _constructorSchema => modelSchema.ConstructorList;
 
+        /// <summary>
+        /// Gets a value indicating whether the constructor schema is missing or contains no non-null entries.
+        /// </summary>
         protected static bool IsConstructorListEmpty => _constructorSchema?.Count(o => o != null) < 1;
         /// <summary>
         /// Static accessor to retrieve schema list via DynamicDataAttribute argument pattern
         /// </summary>
         public static IEnumerable<object[]> ConstructorList => _constructorSchema.Select(o => new object[] { o });
 
+        /// <summary>
+        /// Static accessor to retrieve instance member test data via DynamicDataAttribute argument pattern.
+        /// </summary>
         public static IEnumerable<object[]> InstanceMemberTestList => modelSchema.InstanceMemberTestList.Select(o => new object[] { o });
+        /// <summary>
+        /// Names of instance members already verified by <see cref="Member_Should_Match_For_Instance"/>.
+        /// Used to detect public members that the schema did not cover.
+        /// </summary>
         protected static List<string> TestedInstanceMembersNames = new List<string>();
         
 
@@ -125,6 +135,14 @@ namespace Jlw.Utilities.Testing
 
         }
 
+        /// <summary>
+        /// Asserts that a constructor on <typeparamref name="TModel"/> matches the schema's access level and argument types.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="schema"/> is <c>null</c>, the test passes when only the default public constructor exists;
+        /// otherwise the test is inconclusive.
+        /// </remarks>
+        /// <param name="schema">The constructor schema to match against the model's constructors.</param>
         [TestMethod]
         [DynamicData(nameof(ConstructorList))]
         public virtual void Constructor_Should_Exist(ConstructorSchema schema)
@@ -163,6 +181,14 @@ namespace Jlw.Utilities.Testing
         }
 
         
+        /// <summary>
+        /// Asserts that an instance member's value on the system under test equals the expected value from the schema.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="data"/> is <c>null</c>, the test is inconclusive. If its <c>SystemUnderTest</c> is <c>null</c>,
+        /// the test reports public members not yet covered by the schema and is inconclusive if any remain.
+        /// </remarks>
+        /// <param name="data">The member name, system under test, and expected value to verify.</param>
         [TestMethod]
         [DynamicData(nameof(InstanceMemberTestList))]
         public void Member_Should_Match_For_Instance(InstanceMemberTestData<TModel> data)
@@ -236,6 +262,11 @@ namespace Jlw.Utilities.Testing
 
 
         #region Helper Methods
+        /// <summary>
+        /// Builds the distinct signature keys of the schema's expected constructors that match the given access level.
+        /// </summary>
+        /// <param name="access">The access level to filter the expected constructors by.</param>
+        /// <returns>Distinct signatures in the form <c>access TypeName(argTypes)</c>.</returns>
         protected IEnumerable<string> GetExpectedConstructorKeys(AccessModifiers access = AccessModifiers.Public)
         {
             var aReturn = new List<string>();
@@ -251,6 +282,11 @@ namespace Jlw.Utilities.Testing
             return aReturn.Distinct();
         }
 
+        /// <summary>
+        /// Builds the distinct signature keys of the constructors implemented on <typeparamref name="TModel"/> that match the given access level.
+        /// </summary>
+        /// <param name="access">The access level to filter the implemented constructors by.</param>
+        /// <returns>Distinct signatures in the form <c>access TypeName(argTypes)</c>.</returns>
         protected IEnumerable<string> GetImplementedConstructorKeys(AccessModifiers access = AccessModifiers.Public)
         {
             var aReturn = new List<string>();
@@ -265,6 +301,11 @@ namespace Jlw.Utilities.Testing
             return aReturn.Distinct();
         }
 
+        /// <summary>
+        /// Writes the implemented constructor keys to the test output, marked against the expected keys.
+        /// </summary>
+        /// <param name="implementedKeys">The signatures of the constructors implemented on the model.</param>
+        /// <param name="expectedKeys">The signatures of the constructors expected by the schema.</param>
         protected void OutputImplementedConstructors(string[] implementedKeys, string[] expectedKeys)
         {
             // Generate list of implemented constructors
@@ -277,10 +318,10 @@ namespace Jlw.Utilities.Testing
         }
 
         /// <summary>
-        /// Generate list of implemented constructors, and outputs results to console
+        /// Writes the expected constructor keys to the test output, marked against the implemented keys.
         /// </summary>
-        /// <param name="implementedKeys"></param>
-        /// <param name="expectedKeys"></param>
+        /// <param name="implementedKeys">The signatures of the constructors implemented on the model.</param>
+        /// <param name="expectedKeys">The signatures of the constructors expected by the schema.</param>
         protected void OutputExpectedConstructors(string[] implementedKeys, string[] expectedKeys)
         {
             // 
