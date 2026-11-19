@@ -34,6 +34,8 @@ jobs:
       INPUT_BUILD_CONFIG: ${{ inputs.buildConfig }}
       INPUT_VERSION_PREFIX: ${{ inputs.versionPrefix }}
       INPUT_VERSION_SUFFIX: ${{ inputs.versionSuffix }}
+    permissions:
+      id-token: write  # enable GitHub OIDC token issuance for this job
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
